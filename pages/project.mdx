@@ -1,0 +1,145 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../components/Image'
+
+# Project
+
+SkyU is a platform that helps you manage your Kubernetes applications and environments. In SkyU, you can create a project to manage your applications, environments and secrets.
+
+A Project in SkyU is always associated with a GitHub repository. This repository is used for GitOps and is managed by SkyU. You can also use your own repository for GitOps. You can learn more about GitOps in the [GitOps](/concepts/gitops) section.
+
+
+## Create a Project
+
+
+You can create a project by clicking on the `Create Project` button on the SkyU Console.
+
+
+<Image src="/assets/images/docs/create-project/viewing-org-level-projects.png" alt="Hello" width={1000} height={500} caption="Organization Overview" />
+
+
+
+
+<Steps>
+
+### General Details
+
+Fill the following details with appropriate information.
+
+| Field       | Description                                                                                                    | Example                |
+| ----------- | -------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| Name        | Name of the Project. This has to be unique across your organization and should not contain special characters. | test-project           |
+| Description | Provide a meaningful description  for your project                                                             | this is a test project |
+
+### Authenticate
+
+Authenticate with GitHub to create a new repository or select an existing repository for GitOps. 
+
+<Image src="/assets/images/docs/create-project/repo-auth.png" alt="Hello" width={500} height={500}  />
+
+This step will route you to the GitHub OAuth page where you can authenticate with your GitHub account and install the SkyU GitHub App to create a new repository or select an existing repository for GitOps.
+
+For most Projects, `Create New` would be the ideal option where SkyU will generate a new GitHub repository to GitOps
+
+### Configure GitOps
+
+Configure the GitOps repository with the following details.
+
+| Field          | Description                                                              |
+| -------------- | ------------------------------------------------------------------------ |
+| Github Account | Your Github Organization / Account                                       |
+| Repository     | The name of the repository which skyu would automatically create for you |
+| Branch         | Default branch for the repository                                        |
+
+
+You can learn more about GitOps in the [GitOps](/concepts/gitops) section.
+
+### Configure Secrets Store
+
+In this step, you have the options to select the preferred secret manager for your project. 
+
+Secret store is used to store sensitive information like API keys, passwords, configs etc in your project which cannot be committed into the gitops repository. You can choose between the SkyU Secret Manager or a Dedicated Secret Manager.
+
+| Secret Store                | Description                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------- |
+| `SkyU Secret Manager`       | Shared secret manager provided by SkyU. This is good for startups and testing demo projects |
+| `Dedicated Secret Manager`. | Dedicated Secret Manager lets you bring a secret manager you own from your infrastructure.  |
+
+
+#### Dedicated Secret Manager
+
+<Callout>
+Currently AWS Secret Manager is the only supported secret store. More stores will be supported soon.
+</Callout>
+
+| Field      | Description                                                                     |
+| ---------- | ------------------------------------------------------------------------------- |
+| Account ID | Your AWS Account ID. Please ensure that it matches the account ID your log into |
+| Region     | Region of your AWS Secret Manager                                               |
+| Role ARN   | Automatically filled.                                                           |
+
+Once you fill the details, click on `Create Role on AWS` to create the role in your AWS account.
+
+<Callout type="info">
+Make sure you are logged into your AWS console in a different tab in the same browser window before clicking the `Create Role on AWS` button.
+</Callout>
+
+
+<Image src="/assets/images/docs/create-project/external-secret-manager.png" alt="Hello" width={1000} height={500} caption="Create ARN" />
+
+
+<Callout type="info">
+You can also migrate from the SkyU Secret Manager to a dedicated secret manager later on as well. This is a one time process where all secrets stored in the SkyU Secret Manager will be migrated into your Dedicated Secret Manager.
+</Callout>
+
+### Create Environments
+
+This step can be used to configure the different Environments needed for the project. While you can proceed with the defaults, you can also proceed without environments.
+
+`Namespace` is the main namespace for the environment. You can also add additional namespaces for the environment. This is derived from the context of Kubernetes. But if you are not working with Kubernetes, you can proceed with the default namespaces.
+
+<Image src="/assets/images/docs/create-project/create-envs.png" alt="Hello" width={1000} height={500}  />
+ 
+ <Callout type="info">
+Clusters are not created during project creation. You can always add clusters to the environments later on.
+</Callout>
+
+<Callout type="info">
+ At least one Environment is needed to create an application in SkyU. If you did not configure Environments during project creation, you can always create new environments from the `Environments` tab in the SkyU console Aside Menu.
+</Callout>
+
+### Verify and Create
+
+You can use this step to finalize the Project creation, Continue or Go back.
+
+<Image src="/assets/images/docs/create-project/complete-creation.png" alt="Hello" width={1000} height={500}  />
+</Steps>
+
+
+ ## Project Overview
+
+Once the project is created, you will be able to see the project overview. The project overview will have the following sections.
+
+| Section             | Description                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Environment Summary | Summary of the resources running in your environments. Currently limited to Kubernetes insights only                           |
+| Recent Applications | Recently accessed applications                                                                                                 |
+| Documentation Wiki  | A Right panel which enables you to link any resources related to your project such as Document links, dashboards, articles etc |
+
+<Image src="/assets/images/docs/create-project/project-overview.png" alt="Hello" width={1000} height={500} caption="Project Overview" />
+ 
+## Delete a Project
+
+You can delete a project by clicking on the `Delete Project` button on the Organization Overview page.
+
+<Image src="/assets/images/docs/create-project/delete-project.png" alt="Hello" width={1000} height={500}  />
+
+By Deleting a project, you will lose all the configurations and data associated with the project. This action is irreversible.
+
+<Callout type="info">
+Your GitOps repo, Secrets, Kubernetes Clusters, Running Applications will not be deleted. You will have to manually delete them. Only resources associated with the project will be deleted that are stored in the SkyU database.
+</Callout>
+
+ 
+
+

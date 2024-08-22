@@ -8,6 +8,7 @@
         "type": "page"
     },
     "index": "Getting Started",
+    "project": "Projects",
     "concepts": "Concepts",
     "iam": "Identity and Access Management"
   
