@@ -1,0 +1,14 @@
+{
+    "Documentation": {
+        "title": "Documentation",
+        "type": "page"
+    },
+    "api": {
+        "title": "API",
+        "type": "page"
+    },
+    "index": "Getting Started",
+    "concepts": "Concepts",
+    "iam": "Identity and Access Management"
+  
+}

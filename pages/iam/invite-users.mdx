@@ -1,0 +1,175 @@
+import { Steps } from 'nextra/components'
+import { Callout } from 'nextra/components'
+import Image from '../../components/Image'
+
+One of the key concepts in SkyU IAM system is role inheritance. When a role is assigned to a user, team, or service account at a higher level (e.g., organization level), that role is automatically propagated to all child layers (projects and environments) within that hierarchy. This means that permissions granted at higher levels apply globally to all entities within that hierarchy.
+
+## Invite User to an Organization
+
+<Steps>
+
+### Navigate to Organization Level
+
+Navigate to the organization level using the org/project switcher on the top left corner of the page. Then click on the `IAM` section of the organization.
+
+
+<Image src="/assets/images/iam/navigate-to-org.png" alt="Hello" width={500} height={500} caption="Organization Switcher" />
+
+
+
+
+    
+  
+
+
+### Invite User
+
+Click on the `Invite` button and add the user email and the required permissions for that user within the organization.
+    
+<Callout type="info" >
+    You can add more than one user at a time by separating the email addresses with a comma.
+    Also you can add more than one role to a user by clicking on the 'Add Role' button.
+</Callout>
+
+<Image src="/assets/images/iam/org-member.png" alt="Hello" width={500} height={500} caption="Organization Roles" />
+ 
+   
+
+
+
+### Save Changes
+
+Click on the `Save` button to save the changes.
+
+<Callout type="info" >
+    User will be getting an invitation email to join SkyU. Make sure the user signs up using the same email address.
+</Callout>
+
+</Steps>
+
+## Invite User to a Project
+
+<Steps>
+
+### Navigate to Project Level
+
+Navigate to the project level using the org/project switcher on the top left corner of the page. Then click on the `IAM` section of the project.
+
+
+<Image src="/assets/images/iam/navigate-to-project.png" alt="Hello" width={500} height={500} caption="Project Selector" />
+ 
+
+   
+
+### Add User
+
+Click on the `Invite Users` button and add the user email and the required permissions for that user within the project.
+
+ <Callout type="info" >
+        You can only users who are already part of the organization.
+</Callout>
+
+<Image src="/assets/images/iam/project-permissions.png" alt="Hello" width={1000} height={500} caption="Project Permissions" />
+ 
+ <Callout type="info" >
+    You can even provide specific permissions to the user at the environment level by enabling environments as shown in the UI. By default all the environments are selected.
+</Callout>
+    
+### Save Changes
+
+Click on the `Save` button to save the changes.
+
+
+</Steps>
+
+##  Create a Team 
+<Callout type="info" >
+Teams are a way to group users together and assign permissions to the team. This way you can manage the permissions of a group of users at once.
+</Callout>
+
+Click on the `Teams` section on the IAM page. Then click on the Add Team button and provide a name for the team. Then add the user emails and the required permissions for that team.
+
+
+
+
+<Image src="/assets/images/iam/teams.png" alt="Hello" width={500} height={500} caption="Create a Team" />
+ 
+<Callout type="info" >
+ Teams can be created at the organization level and project level. The permissions assigned to the team will be inherited by all the users in that team.
+ </Callout>
+
+##  Create a Service Account
+
+Service accounts are a way to provide access to SkyU APIs through outside services such as Github actions. It is a way to authenticate and authorize the API calls to SkyU.
+
+<Callout type="info" >
+    Service accounts can be created at the organization level and project level. The permissions assigned to the service account will be inherited by all the users in that service account.
+ </Callout>
+
+Click on the `Service Accounts` section on the IAM page. Then click on the Add Service Account button and provide a name for that service account. Then add the required permissions for that service account.
+
+The service account you create here has access through out the organization and it do not have an expire time. You can use this for calling SkyU APIs through outside services such as Github actions.
+
+<Image src="/assets/images/iam/service-account.png" alt="Hello" width={500} height={500} caption="Create a Service Account" />
+
+<Callout type="info" >
+Once you create the service account, you will be provided with a `Service Account Key` which you can use to authenticate the API calls to SkyU. Make sure you save this key as it will not be shown again.
+ </Callout>
+ 
+
+
+## Common Scenarios
+
+
+### Give a user access to a specific project
+
+In this case, you want to give access to a user to a specific project only. The user will not have access to any other project in the organization. The user will have access to all the environments in that project.
+
+
+| Level        |  Permission  |
+| :----------- | :----------: |
+| Organization |   `Member`   |
+| Project      | (*) Any Role |
+
+ 
+
+
+- Navigate to Organization Level and then the IAM section of the left navigation bar.
+
+
+- Click on the `Invite` button and add the user email and the required permissions for that user within the organization.
+- Invite User to the organization with `Member` role. This will give the user access to the organization but not to any project.
+
+
+<Image src="/assets/images/iam/org-member.png" alt="Hello" width={500} height={500} caption="Organization Member Permission" />
+
+
+
+- Go to the project where you want to give access to the user.
+
+- Navigate to the IAM section of the project.
+- Click on the `Invite` button and add the user email and the required permissions for that user within the project.
+
+
+### Give a user access to a specific project and an Environment.
+
+In this case, you want to give access to a user to a specific project and an environment within that project. The user will not have access to any other project or environment in the organization.
+
+| Level        |  Permission  |
+| :----------- | :----------: |
+| Organization |   `Member`   |
+| Project      |   `Member`   |
+| Environment  | (*) Any Role |
+
+
+- Navigate to Organization Level and then the IAM section of the left navigation bar.
+
+
+- Click on the 'Invite' button and add the user email and the required permissions for that user within the organization.
+
+- Go to the project where you want to give access to the user.
+
+
+- Navigate to the IAM section of the project.
+- Click on the 'Invite' button and add the user email and the required permissions for that user within the project.
+- Enable the environments where you want to give access to the user.
