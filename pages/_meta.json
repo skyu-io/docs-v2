@@ -14,12 +14,10 @@
     "clusters": "Clusters",
     "applications": "Applications",
     "releases": "Releases",
-
     "helm": "Helm",
     "configs": "Configs",
     "observability": "Observability",
-
+    "infrastructure": "Infrastructure",
     "insights": "Insights",
     "integrations": "Integrations"
-  
 }

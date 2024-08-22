@@ -1,0 +1,206 @@
+import { Callout } from 'nextra/components'
+import Image from '../../components/Image'
+
+import { FileTree } from 'nextra/components'
+ 
+
+
+# GitOps
+
+GitOps is a way to do Kubernetes application delivery. It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, you can make changes to your applications and infrastructure by making changes to your Git repository. SkyU uses GitOps to manage your applications and infrastructure.
+
+
+## How SkyU uses GitOps
+
+Every project in SkyU is associated with a GitOps repository. This repository is used to store the Kubernetes manifests and other configuration files for your applications and infrastructure. SkyU uses this repository to deploy and manage your applications and infrastructure.
+
+When you create a project in SkyU, SkyU creates a GitOps repository for you. You can use this repository to store your Kubernetes manifests and other configuration files. You can also use your own repository for GitOps. You can learn more about how to use your own repository for GitOps in the [Projects](/projects/project-create) section.
+
+
+<Image src="/assets/images/root/gitops.png" alt="Hello" width={1000} height={500}  />
+
+
+## GitOps Repository
+
+The GitOps repository is where you store the Kubernetes manifests and other configuration files for your applications and infrastructure. SkyU uses this repository to deploy and manage your applications and infrastructure.
+
+The underlying technology used in this GitOps repository is Kustomize. Kustomize is a tool that lets you customize Kubernetes resources through a Kubernetes-style configuration file. You can learn more about Kustomize in the [Kustomize](https://kustomize.io/) website.
+
+
+<Callout type="info">
+Just because the GitOps folder structure is Kustomize, it does not mean you have to use Kustomize. You can use any templating engine or configuration management tool that you are comfortable with to work with SkyU
+</Callout>
+
+The folder structure of the GitOps repository is as follows:
+
+
+<FileTree>
+  <FileTree.Folder name="kustomize" defaultOpen>
+    <FileTree.Folder name="base" defaultOpen>
+      <FileTree.Folder name="(*)-application" defaultOpen>
+        <FileTree.File name="(*).yaml" />
+      </FileTree.Folder >
+      <FileTree.File name="(*).yaml" />
+    </FileTree.Folder>
+    <FileTree.Folder name="overlays" defaultOpen>
+      <FileTree.Folder name="dev" defaultOpen>
+        <FileTree.Folder name="(*)-application" defaultOpen >
+          <FileTree.File name="(*)-patch.yaml" />
+        </FileTree.Folder>
+        <FileTree.File name="(*).yaml" />
+      </FileTree.Folder>
+      <FileTree.Folder name="staging">
+        <FileTree.Folder name="(*)-application">
+          <FileTree.File name="(*)-patch.yaml" />
+        </FileTree.Folder>
+        <FileTree.File name="(*).yaml" />
+      </FileTree.Folder>
+      <FileTree.Folder name="prod">
+        <FileTree.Folder name="(*)-application">
+          <FileTree.File name="(*)-patch.yaml" />
+        </FileTree.Folder>
+        <FileTree.File name="(*).yaml" />
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.Folder name="helm" defaultOpen>
+    <FileTree.Folder name="cluster" defaultOpen>
+        <FileTree.Folder name="(*)-{ClusterID}" defaultOpen>
+            <FileTree.Folder name="(*)-chart" defaultOpen>
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+    <FileTree.Folder name="environment" defaultOpen>
+            <FileTree.Folder name="(*)-{EnvironmentID}" defaultOpen>
+            <FileTree.Folder name="(*)-chart" defaultOpen>
+            </FileTree.Folder>
+        </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.File name="README.md" />
+</FileTree>
+
+ 
+ You can create PRs to this repository to make changes to your applications and infrastructure. SkyU will automatically deploy these changes to your environments. 
+ 
+ If you want to make direct changes to GitOps, please go to `GitOps` in the left navigation bar of the SkyU Console. make the necessary changes and press `Save` to deploy the changes to the environment.
+
+
+
+<Image src="/assets/images/root/gitops-view.png" alt="Hello" width={1000} height={500}  />
+
+## Kustomize File Merge
+
+SkyU uses Kustomize to manage the Kubernetes manifests in the GitOps repository. Kustomize allows you to customize Kubernetes resources through a Kubernetes-style configuration file. 
+
+When you create a project in SkyU, SkyU creates a GitOps repository for you. This repository contains the base and overlay folders. The base folder contains the base Kubernetes manifests for your applications and infrastructure. The overlay folders contain the environment-specific configurations for your applications and infrastructure.
+
+When you deploy an application or infrastructure in SkyU, SkyU merges the base and overlay folders using Kustomize. This allows you to customize the Kubernetes resources for different environments without duplicating the base Kubernetes manifests.
+
+After the initial merge, it would go through another transform via a SkyU Kustomize transform plugin to add the necessary configurations for the SkyU platform to manage the resources.
+
+<Image src="/assets/images/root/kustomize-merge.png" alt="Hello" width={1000} height={500}  />
+
+## Rollbacks and Change History
+
+Since everything is committed to Git, you can easily rollback configs and go through the change history. SkyU also provides a detailed change history for each environment in the project. You can view the change history by going to the `Releases` tab in the environment details page.
+
+<Callout type="info">
+If SkyU UI does not provide a control to change a specific configuration, you can always make the changes in the GitOps repository and create a PR to deploy the changes to the environment.
+</Callout>
+
+## SkyU Kustomize Transform Plugin
+
+SkyU uses a Kustomize transform plugin to add the necessary configurations for the SkyU platform to manage the resources. This plugin is automatically applied to the merged Kubernetes manifests before deploying them to the environment.
+
+<Image src="/assets/images/root/merging-example.png" alt="Hello" width={1000} height={500}  />
+
+The manifest spec for the plugin is as follows:
+
+```yaml
+spec:
+  type: "Deployment" # Job, CronJob, Deployment
+  applicationContainers:
+    - name: "app-container-1"
+      applicationPorts:
+        - protocol: "TCP"
+          port: 8080
+          targetPort: 8080
+          apiSpec:
+            gitPath: "path/to/api/repo"
+            urlPath: "/api/v1"
+      imageRegistry: "docker.io"
+      imageTag: "latest"
+      cpuRequestMili: 500
+      cpuLimitMili: 1000
+      memoryRequestMb: 512
+      memoryLimitMb: 1024
+      command:
+        - "/start.sh"
+      args:
+        - "--config=/etc/config.yaml"
+      healthChecks:
+        - initialDelaySeconds: 10
+          timeoutSeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+          httpGet:
+            path: "/healthz"
+            port: 8080
+            httpHeaders:
+              - name: "Authorization"
+                value: "Bearer token"
+            scheme: "HTTP"
+      configMounts:
+        - mountPath: "/etc/config.yaml"
+          isFile: true
+          configMapName: "app-config"
+          key: "config.yaml"
+      imagePullPolicy: "IfNotPresent"
+      credentialId: "docker-registry-cred"
+      imagePullSecretName: "docker-secret"
+      commitDetails:
+        commitHash: "abcd1234"
+        commitTime: "2024-08-22T12:34:56Z"
+        commitUser: "john.doe"
+        commitMessage: "Initial commit"
+        commitAvatar: "https://example.com/avatar.png"
+  minReplicas: 2
+  maxReplicas: 5
+  terminationGracePeriodSeconds: 30
+  nodeSelector:
+    disktype: "ssd"
+  serviceType: "ClusterIP"
+  namespace: "default"
+  cronTab: "*/5 * * * *"
+  suspend: false
+  ttlSecondsAfterFinished: 3600
+  serviceAccountName: "app-service-account"
+  name: "my-application"
+  version: "v1.0.0"
+  labels:
+    app: "my-application"
+    environment: "production"
+  horizontalAutoScalingRules:
+    - ruleType: "cpu"
+      percentage: 80
+    - ruleType: "memory"
+      percentage: 70
+  volumes:
+    - name: "app-volume"
+      type: "pvc"
+      pvc:
+        claimName: "app-pvc"
+        yamlFilePath: "path/to/pvc.yaml"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+```
+
+
+## IAC Repository
+
+A separate repository is used to store the infrastructure as code templates. This repository is linked to the project during project creation. The infrastructure as code repository is used to store the infrastructure templates for your project. You can use this repository to store the Terraform, CloudFormation, or any other infrastructure as code templates for your project.
+
+More information on how to use the IAC repository can be found in the [Infrastructure](/infrastructure) section.
