@@ -1,4 +1,31 @@
+import { useRouter } from 'next/router'
+import { useConfig } from 'nextra-theme-docs'
+
+
 export default {
+    useNextSeoProps: () => {
+        return {
+            titleTemplate: '%s – SkyU Documentation'
+        }
+    },
+    head: () => {
+        const { asPath, defaultLocale, locale } = useRouter()
+        const { frontMatter } = useConfig()
+        const url =
+            'https://docs.skyu.io' +
+            (defaultLocale === locale ? asPath : `/${locale}${asPath}`)
+
+        return (
+            <>
+                <meta property="og:url" content={url} />
+                <meta property="og:title" content={frontMatter.title || 'SkyU'} />
+                <meta
+                    property="og:description"
+                    content={frontMatter.description || 'SkyU: The Next Generation Internal Developer Platform'}
+                />
+            </>
+        )
+    },
     logo: (
         <>
             <svg width="100" height="32" viewBox="0 0 251 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,6 +47,7 @@ export default {
             </span> */}
         </>
     ),
+    title: 'SkyU',
     project: {
         link: 'https://github.com/skyu-io/docs-v2'
     },
