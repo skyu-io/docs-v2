@@ -1,8 +1,8 @@
 {
-    "introduction": "Introduction",
+    "iam-introduction": "Introduction",
     "invite-users": "Invite Users",
     "custom-roles": "Create Custom Roles",
-    "2fa": "Setup 2FA",
-    "ldap": "Configure SSO",
+    "setup-2FA": "Setup 2FA",
+    "setup-sso": "Configure SSO",
     "audit-logs": "Audit Logs"
 }

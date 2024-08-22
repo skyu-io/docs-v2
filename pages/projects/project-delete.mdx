@@ -1,0 +1,16 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../components/Image'
+
+## Delete a Project
+
+Navigate to `Settings` on the left sidebar of the SkyU Console. 
+You can delete a project by clicking on the `Delete Project` button on the `Settings` page.
+
+
+
+By Deleting a project, you will lose all the configurations and data associated with the project. This action is irreversible.
+
+<Callout type="info">
+Your GitOps repo, Secrets, Kubernetes Clusters, Running Applications will not be deleted. You will have to manually delete them. Only resources associated with the project will be deleted that are stored in the SkyU database.
+</Callout>

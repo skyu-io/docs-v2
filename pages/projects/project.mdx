@@ -1,6 +1,6 @@
 import { Callout } from 'nextra/components'
 import { Steps } from 'nextra/components'
-import Image from '../components/Image'
+import Image from '../../components/Image'
 
 # Project
 
@@ -115,31 +115,4 @@ You can use this step to finalize the Project creation, Continue or Go back.
 <Image src="/assets/images/docs/create-project/complete-creation.png" alt="Hello" width={1000} height={500}  />
 </Steps>
 
-
- ## Project Overview
-
-Once the project is created, you will be able to see the project overview. The project overview will have the following sections.
-
-| Section             | Description                                                                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Environment Summary | Summary of the resources running in your environments. Currently limited to Kubernetes insights only                           |
-| Recent Applications | Recently accessed applications                                                                                                 |
-| Documentation Wiki  | A Right panel which enables you to link any resources related to your project such as Document links, dashboards, articles etc |
-
-<Image src="/assets/images/docs/create-project/project-overview.png" alt="Hello" width={1000} height={500} caption="Project Overview" />
  
-## Delete a Project
-
-You can delete a project by clicking on the `Delete Project` button on the Organization Overview page.
-
-<Image src="/assets/images/docs/create-project/delete-project.png" alt="Hello" width={1000} height={500}  />
-
-By Deleting a project, you will lose all the configurations and data associated with the project. This action is irreversible.
-
-<Callout type="info">
-Your GitOps repo, Secrets, Kubernetes Clusters, Running Applications will not be deleted. You will have to manually delete them. Only resources associated with the project will be deleted that are stored in the SkyU database.
-</Callout>
-
- 
-
-

@@ -8,8 +8,18 @@
         "type": "page"
     },
     "index": "Getting Started",
-    "project": "Projects",
+    "projects": "Projects",
     "concepts": "Concepts",
-    "iam": "Identity and Access Management"
+    "iam": "Identity and Access Management",
+    "clusters": "Clusters",
+    "applications": "Applications",
+    "releases": "Releases",
+
+    "helm": "Helm",
+    "configs": "Configs",
+    "observability": "Observability",
+
+    "insights": "Insights",
+    "integrations": "Integrations"
   
 }
