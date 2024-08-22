@@ -22,11 +22,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/iam/2fa": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/iam/2fa.js"
-    ],
     "/iam/custom-roles": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

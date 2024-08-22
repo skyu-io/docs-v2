@@ -3,8 +3,7 @@
   "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
   "/iam/invite-users": "pages/iam/invite-users.js",
+  "/iam/ldap": "pages/iam/ldap.js",
   "/iam/introduction": "pages/iam/introduction.js",
-  "/iam/custom-roles": "pages/iam/custom-roles.js",
-  "/iam/2fa": "pages/iam/2fa.js",
-  "/iam/ldap": "pages/iam/ldap.js"
+  "/iam/custom-roles": "pages/iam/custom-roles.js"
 }

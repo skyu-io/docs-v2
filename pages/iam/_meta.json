@@ -3,5 +3,6 @@
     "invite-users": "Invite Users",
     "custom-roles": "Create Custom Roles",
     "2fa": "Setup 2FA",
-    "ldap": "Configure SSO"
+    "ldap": "Configure SSO",
+    "audit-logs": "Audit Logs"
 }
