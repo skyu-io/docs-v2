@@ -22,6 +22,21 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/concepts/heirachy": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/concepts/heirachy.js"
+    ],
+    "/iam/2fa": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/iam/2fa.js"
+    ],
+    "/iam/audit-logs": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/iam/audit-logs.js"
+    ],
     "/iam/custom-roles": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -36,11 +51,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/iam/invite-users.js"
-    ],
-    "/iam/ldap": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/iam/ldap.js"
     ]
   },
   "ampFirstPages": []
