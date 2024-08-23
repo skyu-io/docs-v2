@@ -1,23 +1,17 @@
 {
-    "Documentation": {
+    "index": {
+        "title": "Home",
+        "type": "page"
+        
+    },
+    "docs": {
         "title": "Documentation",
         "type": "page"
     },
     "api": {
         "title": "API",
         "type": "page"
-    },
-    "index": "Getting Started",
-    "projects": "Projects",
-    "concepts": "Concepts",
-    "iam": "Identity and Access Management",
-    "clusters": "Clusters",
-    "applications": "Applications",
-    "releases": "Releases",
-    "helm": "Helm",
-    "configs": "Configs",
-    "observability": "Observability",
-    "infrastructure": "Infrastructure",
-    "insights": "Insights",
-    "integrations": "Integrations"
+    }
+ 
+     
 }
