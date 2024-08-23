@@ -4,7 +4,7 @@ import Image from '../../../components/Image'
 
 # Docker Registry
 
-SkyU supports 
+Docker Image Registry is a service that stores and manages Docker images for your organization. It allows you to push and pull images from the registry to your local machine or cloud environment. SkyU supports linking Docker Image Registry credentials to your project to enable seamless integration with your CI/CD pipelines.
 
 ## Create Docker Registry Credential
 
@@ -16,6 +16,7 @@ To initiate linking Docker integrations with your project, first, select a proje
 
 <Image src="/assets/images/tutorials/image-registry/docker-registry/selection.png" alt="Hello" width={1000} height={500}  />
 
+
  
 
 Click on `+ Integration` to introduce a new Docker Image Registry credential into your project.
@@ -25,23 +26,32 @@ When linking a Docker Image Registry resource, you are required to provide the f
 
 <Image src="/assets/images/tutorials/image-registry/docker-registry/add-docker-cred.png" alt="Hello" width={1000} height={500}  />
 
+<Callout type="info">
+For the Registry URL, adhere to the format `docker.io/username`, where username is the username associated with your Docker account. Ensure `not` to append a `/` at the end of the URL.
+</Callout>
 
+| Field            | Description                                                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name             | Name of the Docker Image Registry Credential. This is for your reference.                                                                           |
+| Registry URL     | The URL of the Docker Image Registry.  If it is Dockerhub please add `docker.io/`. If it is a private docker registry, please add the relavent URL                                                                   |
+| Username         | The username associated with your Docker account.                                                                                                   |
+| Password / Token | The token associated with your Docker account Please refer [Create Dockerhub Token](https://docs.docker.com/security/for-developers/access-tokens/) |
+
+Finally select `Create` button to save the credential.
  
+
 
 </Steps>
 
 
 
-## 01 - Add Credential
-
-
-> NOTE<br/>
-> For the Registry URL, adhere to the format docker.io/username, where username is the username associated with your Docker account. Ensure `not` to append a `/` at the end of the URL.
-
-Finally select `Create` button to save the credential.
-
-## 02 - Edit Credential
+## Update Credential
 
 Any Docker Image Registry credential you've added can be modified later through the image registries list page.
 
 ![](/assets/images/tutorials/image-registry/docker-registry/edit-docker-cred.png)
+
+
+## ImagePullSecret Lifecycle in Kubernetes
+
+Once you've linked a Docker Image Registry credential to your project, SkyU automatically creates a Kubernetes Secret for the credential. This secret is used to pull images from the registry to your Kubernetes cluster.

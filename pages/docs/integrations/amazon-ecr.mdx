@@ -64,3 +64,9 @@ After creating the role on AWS, you will be redirected to the stack creation pag
 Any Amazon Elastic Container Registry credential you've added can be modified later through the image registries list page.
 
 Furthermore, you can update permissions for the ARN via AWS Control Plane manually.
+
+## Pull Images from Amazon Elastic Container Registry in EKS
+
+SkyU does not create an ImagePullSecret for Amazon Elastic Container Registry, because ECR ImagePullSecrets are short lived. Instead, you can use the IAM role created in the previous step to pull images from ECR.
+
+Please refer to the [AWS Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_EKS.html) for more information on how to pull images from ECR to EKS.
