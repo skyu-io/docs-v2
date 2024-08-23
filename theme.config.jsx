@@ -63,6 +63,10 @@ export default {
                 . All rights reserved
             </span>
         )
+    },
+    sidebar: {
+        defaultMenuCollapseLevel: 0,
+        autoCollapse: false
     }
     // ... other theme options
 }

@@ -1,8 +1,8 @@
 {
  
     "index": "Getting Started",
-    "projects": "Projects",
     "concepts": "Concepts",
+    "projects": "Projects",
     "iam": "Identity and Access Management",
     "clusters": "Clusters",
     "applications": "Applications",
