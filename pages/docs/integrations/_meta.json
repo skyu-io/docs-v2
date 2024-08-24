@@ -2,6 +2,7 @@
     "docker-registry": "Docker Registry",
     "amazon-ecr": "Amazon ECR",
     "github-ghcr": "GitHub Container Registry",
+    "amazon-eks": "Amazon EKS",
     "sentry": "Sentry",
     "chatgpt": "ChatGPT"
 }

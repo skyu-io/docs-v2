@@ -1,0 +1,24 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Continuous Deployment
+
+SkyU supports Continuous Deployment (CD) to automate the deployment process of your applications. Continuous Deployment is a software development practice where code changes are automatically built, tested, and deployed to production environments. This practice allows developers to release code changes more frequently and with less manual intervention.
+
+SkyU CD pipelines are integrated with Github Actions and a Custom Job Runner in Kubernetes.
+
+<Callout type="info">
+SkyU CD Job Runner is purely for Kubernetes Deployments only. For other types of deployments, Github Actions are automatically generated and triggered by SkyU.
+</Callout>
+
+
+## Kubernetes Deployments with SkyU
+
+Github Actions are automatically generated and triggered by SkyU for Kubernetes Deployments. Github Action then triggers the SkyU Job Runner to deploy the application to the Kubernetes Cluster.
+
+SkyU Job Runner would generate the yamls using Kustomize and apply them to the Kubernetes Cluster.
+
+<Image src="/assets/images/concepts/k8s-cd.png"   width={1000} height={500}  />
+
+
+You can learn more about Kustomize usage and File Merging in the [Gitops](/docs/concepts/gitops) section.

@@ -1,0 +1,95 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+
+
+# Cluster
+
+SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console.
+
+Read more about the [SkyU Cluster Agent](/docs/concepts/cluster-connection).
+
+## Connecting a Kubernetes Cluster
+
+To connect a Kubernetes Cluster to SkyU, follow these steps:
+
+<Steps>
+
+###  Navigate to the `Clusters`.
+Navigate to the `Clusters` section in the SkyU Console on the left-hand side menu. and Click on the `Add Cluster` button.
+
+### Fill Cluster Details
+
+
+Fill the following details with appropriate information.
+
+| Field       | Description                                                                                                  | Example                                   |
+| ----------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Name        | Name of the Cluster. Enter the same cluster name as it appears on AWS / Google / Azure if it's in the cloud. | docker-desktop                            |
+| Description | Provide a meaningful description  for your cluster                                                           | this cluster is created for test purposes |
+
+
+### Select Cluster Provider
+
+Currently, SkyU asks you to select the cloud provider where your cluster is hosted. We support the following providers:
+- **AWS** : EKS Clusters
+- **Other** : GKE, AKS, Digital Ocean, Linode, etc.
+- **Local** : Minikube, Docker Desktop, etc.
+
+#### AWS EKS 
+If you are connecting an AWS EKS Cluster, you need to provide the following permissions to SkyU to manage the cluster.
+
+We require this so we can easily connect to cloud watch logs and metrics, and also to manage the cluster.
+
+| Field               | Description                                   |
+| ------------------- | --------------------------------------------- |
+| Region              | The region where your EKS cluster is hosted.  |
+| Provider Credential | The AWS credential to access the EKS cluster. |
+
+To add a Cloud provider credential, please refer to the [AWS EKS Connect](/docs/integrations/amazon-eks) for more information.
+
+
+### Select Environments
+
+Attach the cluster to the environments you want to manage with SkyU. You can attach the cluster to multiple environments.
+You can also attach the cluster to environments later.
+
+
+
+<Image src="/assets/images/clusters/cluster-create-envs.png"   width={1000} height={500}  />
+
+You can read more about [Environments and Kubernetes Clusters](/docs/concepts/heirachy) in the concepts section.
+
+ 
+
+
+### Connect Command
+
+Now the Cluster has been registered with SkyU. You can now connect the cluster to SkyU by running the command provided in the console.
+
+<Image src="/assets/images/clusters/create-command.png"   width={1000} height={500}  />
+
+When you run the command, the SkyU Agent will be installed on the cluster. The agent will sync the cluster state with the SkyU Console.
+
+<Callout type="info">
+Please ensure that you have kubectl access to the cluster before running the command.
+</Callout>
+
+
+
+</Steps>
+
+
+## Image Resgitry Whitelisting
+
+For SkyU Agent to communicate with the SkyU Console, you need to whitelist the following domains in your firewall or network settings.
+
+
+
+- `*.skyu.io`
+- `gcr.io`
+- `public.ecr.aws`
+- `docker.io`
+
+ You can read more about the [SkyU Agent](/docs/concepts/cluster-agent) in the concepts section.

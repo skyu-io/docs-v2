@@ -47,7 +47,6 @@ export default {
             </span> */}
         </>
     ),
-    title: 'SkyU',
     project: {
         link: 'https://github.com/skyu-io/docs-v2'
     },
@@ -65,7 +64,7 @@ export default {
         )
     },
     sidebar: {
-        defaultMenuCollapseLevel: 0,
+        defaultMenuCollapseLevel: 1,
         autoCollapse: false
     }
     // ... other theme options

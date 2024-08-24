@@ -1,0 +1,68 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+
+
+# Troubleshoot Cluster Connection
+
+SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console.
+
+Read more about the [SkyU Cluster Agent](/docs/concepts/cluster-agent).
+
+
+<Image src="/assets/images/clusters/agent-disconnect.png"   width={1000} height={500}  />
+
+<Callout type="info">
+If you have just connected a cluster and it is not showing up in the SkyU Console, please wait for a few minutes. The agent might still be syncing the cluster state with the SkyU Console.
+</Callout>
+
+
+## Troubleshooting Steps
+
+If you are facing issues with the cluster connection, follow these steps to troubleshoot the connection:
+
+<Steps>
+
+### Ensure the Agent is installed
+
+The correct command to install the agent is available in the cluster connection page.
+
+```bash 
+kubectl get pods -n skyu-system -l cluster={cluster_id}
+```
+
+### Restart the SkyU Agent
+
+The correct command to restart the agent is available in the cluster connection page.
+
+```bash 
+kubectl delete pods -n skyu-system -l  cluster={cluster_id}
+```
+
+### Re-install the SkyU Agent
+
+Apply the agent install command again to re-install the agent. This is available in the cluster connection page.
+
+
+ 
+### Check the logs of the SkyU Agent pods
+
+The correct command to check the logs of the agent is available in the cluster connection page.
+
+```bash 
+kubectl logs  -n skyu-system -l cluster={cluster_id}
+```
+
+### Ensure that your cluster and pods have internet access
+
+Grant firewall access for the SkyU agent to reach `https://socket.skyu.io`.
+<Callout type="info">
+The agent requires an outbound connection to the SkyU Console. It does not require any inbound connections. The protocol is Websockets over HTTPS.
+</Callout>
+
+
+### Contact our support team
+If you have support plans enabled, you will get a faster response. Reach out to our support team with the logs and details of the issue.
+
+</Steps>

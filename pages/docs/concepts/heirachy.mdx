@@ -11,10 +11,10 @@ The following diagram depicts the high-level resources and their relationships i
 <Image src="/assets/images/docs/concepts/heirachy.png"   width={1000} height={500}  />
 
 
-Each level of heirachy, Oragnization, Project and Environment, has its own access control and permissions. You can learn more about this in the [Identity and Access Management](/iam/introduction) section.
+Each level of heirachy, Oragnization, Project and Environment, has its own access control and permissions. You can learn more about this in the [Identity and Access Management](/docs/iam/iam-introduction) section.
 
 
-## Projects and Kubernetes Clusters
+## Environments and Kubernetes Clusters
 
 Each Project in SkyU can have multiple Kubernetes Clusters associated with it. These clusters can be used to deploy applications and services. Kubernetes clusters are associated with an environment through namespaces. 
 
@@ -25,11 +25,11 @@ Each Project in SkyU can have multiple Kubernetes Clusters associated with it. T
 A Kubernetes Cluster can be shared across multiple environments.
 </Callout>
 
-More information on how to connect a Kubernetes Cluster to SkyU can be found in the [Cluster Connection](/concepts/cluster-connection) section.
+More information on how to connect a Kubernetes Cluster to SkyU can be found in the [Cluster Agent](/docs/concepts/cluster-agent) section.
 
 ## Projects and Secret Management
 
-Each Project in SkyU can have only one Secret Manager associated with it regardless of the number of environments. The Secret Manager can be either the SkyU Secret Manager or a Dedicated Secret Manager. You can learn more about this in the [Secret Management](/concepts/secret-management) section.
+Each Project in SkyU can have only one Secret Manager associated with it regardless of the number of environments. The Secret Manager can be either the SkyU Secret Manager or a Dedicated Secret Manager. You can learn more about this in the [Secret Management](/docs/concepts/secret-management) section.
 
 
 ## Applications and Container Registries

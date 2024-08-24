@@ -1,6 +1,9 @@
 {
     "heirachy": "Resource Heirachy",
     "secret-management": "Secret Management",
-    "cluster-connection": "Cluster Connection",
-    "gitops": "GitOps"
+    "cluster-agent": "Cluster Agent",
+
+    "gitops": "GitOps",
+    "continous-deployment": "Continous Deployment",
+    "ai": "Artificial Intelligence"
 }

@@ -1,0 +1,26 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Cluster State
+
+SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console.
+
+Read more about the [SkyU Cluster Agent](/docs/concepts/cluster-agent).
+
+## Cluster State Overview
+
+In SkyU Context, what Cluster State means is the kubernetes resources deployed in the cluster via the SkyU Agent.
+
+There could be times where SkyU Agent is not able to sync the cluster state with the SkyU Console. This could be due to various reasons like network issues, agent issues, etc. When this happens, the cluster state in the SkyU Console and the actual cluster state might not match.
+
+## Resync Cluster State
+
+If your agent has been down for a while or you see that the cluster state in the SkyU Console is not up-to-date, you can resync the cluster by navigating to the relavent cluster and going to the `Activity` section and switch to `Resource Cache` tab.
+
+In the `Resource Cache` section, you will see a `Resync` button. Click on the `Resync` button to resync the cluster state.
+
+<Image src="/assets/images/clusters/state-resync.png"   width={1000} height={500}  />
+
+
+
+## Troubleshoot CD Jobs
