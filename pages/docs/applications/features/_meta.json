@@ -1,0 +1,12 @@
+{
+    "overview-application": "Application Overview",
+    "kubernetes-application": "Kubernetes Configs",
+    "pipelines-application": "Pipelines",
+    "security-application": "Security",
+    "testing-application": "Testing",
+    "gitops-application": "GitOps",
+    "metrics-application": "Metrics",
+    "logs-application": "Logs"
+
+
+}

@@ -1,0 +1,8 @@
+{
+    "source-to-kubernetes-deployment": {
+        "title": "Source Code to Kubernetes Deployment",
+        "theme": {
+            "layout": "full"
+        }
+    }
+}

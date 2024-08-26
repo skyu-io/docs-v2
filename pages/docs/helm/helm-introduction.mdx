@@ -1,0 +1,43 @@
+# Helm Charts
+
+SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources. 
+
+There are 3 Kinds of Helm Charts that SkyU supports:
+
+1. **Cluster Helm Charts** 
+
+    These are Helm Charts that are installed to the entire cluster. These are typically used for deploying monitoring tools, storage classes, service meshes, etc.
+   
+
+2. **Environment Helm Charts**  
+
+    These are Helm Charts that are specific to an environment. These are typically used for deploying infrastructure components like Ingress Controllers, Cert Managers, Databases, etc.
+
+    These don't support promotions across environments. However, CI/CD can be used to deploy these Helm Charts into specific environments.
+
+
+3. **User Helm Charts**  
+
+    These are Helm Charts that are specific to an application. These are typically used for deploying applications like Web Applications, APIs, etc. 
+    
+    These support CI/CD and Promotions across environments.
+
+
+## Helm Lifecycle
+
+SkyU uses FluxCD to manage the Helm Charts. FluxCD is a tool that automates the deployment of applications to Kubernetes clusters. FluxCD watches the GitOps repository for changes to the Helm Charts and automatically deploys the changes to the Kubernetes cluster.
+
+You can learn more about FluxCD in the [FluxCD](https://fluxcd.io/) website.
+
+
+## Curated Helm Charts
+
+SkyU provides a curated list of Helm Charts that you can use to deploy applications to your Kubernetes clusters. These Helm Charts are maintained by the SkyU team and are available in the SkyU Console. You can use these Helm Charts to deploy applications like Prometheus, Grafana, Nginx, etc.
+
+
+
+
+ 
+
+
+

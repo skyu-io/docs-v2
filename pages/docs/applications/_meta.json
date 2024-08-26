@@ -1,0 +1,11 @@
+{
+    "application-introduction": "Introduction",
+    "features": "Features",
+    "starter-templates": {
+        "title": "Starter Templates",
+        "theme": {
+            "layout": "full"
+        }
+    },
+    "custom-templates": "Custom Templates"
+}
