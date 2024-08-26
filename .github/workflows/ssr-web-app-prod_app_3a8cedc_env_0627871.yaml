@@ -1,0 +1,444 @@
+name: ssr-web-app-prod_app_3a8cedc_env_0627871 Pipeline (Skyu Generated)
+'on':
+  push:
+    tags:
+      - v*
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
+  workflow_dispatch: {}
+  repository_dispatch:
+    types: pipeline_4ff34c95-c567-42a4-845c-e81fca243b5f
+env:
+  ENCODED_PIPELINE_SECRET: ${{secrets.DOCSV2_SSRWEBAPPPROD_APP_3A8CEDC_ENV_0627871}}
+  COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
+  BRANCH_NAME: >-
+    ${{github.event.client_payload.branchName || github.event.branch ||
+    github.ref_name}}
+  DEPLOY_STEP_SHOULD_DEPLOY: 'false'
+jobs:
+  code-scan:
+    name: Code Scan
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: 'Run :: Checkout repository for Code Scan'
+        uses: actions/checkout@v4
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: 'Run :: Install Semgrep, Scan and Print'
+        run: >-
+          docker run -i -v "${PWD}:/src" semgrep/semgrep semgrep /src --json
+          --quiet > semgrep_results.json
+      - name: 'Run :: Upload Code Scan Report'
+        run: |2-
+
+                  SARIF_FILE="semgrep_results.json"
+                  if [ -n "$SARIF_FILE" ]; then
+                    cat "$SARIF_FILE" > ${{ env.COMMIT_ID }}-code-scan-report.sarif
+                    echo "Uploading CodeQL Results to S3 :: ${{ env.COMMIT_ID }}-code-scan-report.sarif"
+           
+                    response=$(curl -X POST -F 'file=@${{ env.COMMIT_ID }}-code-scan-report.sarif' -F 'provider=aws' -F 'resourceType=code-scan-report' -F 'cloudStoragePath=/${{ env.PIPELINE_APPLICATION_ID }}/code-scan-reports/'  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-auth-by: sa' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'Content-Type: multipart/form-data'  "${{ env.S3_UPLOAD_ENDPOINT }}")
+
+                    if echo "$response" | grep -q '"success":true'; then
+                      echo "SUCCESS :: $response"
+                    else
+                      echo "FAILED :: $response"
+                    fi
+
+                  else
+                      echo "SARIF file not found."
+                  fi
+  _status-pending:
+    name: ' Status Pending'
+    permissions: write-all
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: Pipeline Started
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |2-
+
+              context=$(echo "$CONTEXT_JSON" | jq -c . | base64)
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/PENDING?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              if echo "$response" | grep -q '"success":true'; then
+                echo "SUCCESS :: $response"
+              else
+                echo "FAILED :: $response"
+              fi
+              
+  _status_testing:
+    name: ' Status Testing'
+    permissions: write-all
+    runs-on: ubuntu-latest
+    needs:
+      - _status-pending
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: Pipeline Testing
+        run: |2-
+
+              # NOTE: Do not remove this job even if you don't have tests at the moment.
+              echo "Hello Tests from SkyU"
+              
+  _release-info:
+    name: ' Release Info'
+    permissions: write-all
+    runs-on: ubuntu-latest
+    if: ${{ github.event.client_payload.releaseData }}
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: Pipeline Release
+        env:
+          RELEASE_ID: ${{ github.event.client_payload.releaseData.releaseId }}
+          PIPELINE_ID: ${{ github.event.client_payload.releaseData.pipelineId }}
+          RUN_ID: ${{ github.run_id }}
+          APPLICATION_ID: ${{ github.event.client_payload.releaseData.appId }}
+          USER_NAME: ${{ github.repository_owner }}
+          REPOSITORY: ${{ github.repository }}
+          COMMIT_USER: ${{ github.event.head_commit.author.name }}
+          COMMIT_MESSAGE: ${{ github.event.client_payload.commitMessage }}
+          COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+        run: |2-
+
+              echo "Pipeline Release Information"
+              echo "////////////////////////////"
+              echo "releaseId         : $RELEASE_ID"
+              echo "pipelineId        : $PIPELINE_ID"
+              echo "pipelineRunId     : $RUN_ID"
+              echo "applicationId     : $APPLICATION_ID"
+              echo "versionId         : ${{ env.DEPLOYMENT_APP_VERSION_ID }}"
+              echo "credentialId      : ${{ env.PIPELINE_CREDENTIAL_ID }}"
+              echo "userName          : $USER_NAME"
+              echo "repositoryName    : $REPOSITORY"
+              echo "commitId          : ${{ env.COMMIT_ID }}"
+              echo "commitHash        : ${{ env.COMMIT_ID }}"
+              echo "commitAvatar      : https://github.com/$COMMIT_USER.png"
+              echo "commitTime        : $COMMIT_TIME"
+              echo "commitMessage     : $COMMIT_MESSAGE"
+              echo "commitUser        : $COMMIT_USER"
+              echo "shouldDeploy      : ${{ env.DEPLOY_STEP_SHOULD_DEPLOY }}"
+              echo "containerName     : ${{ env.DEPLOYMENT_CONTAINER_NAME }}"
+              echo "imageRegistryURL  : ${{ env.IMAGE_NAME }}",
+              # Storing Release Information for Deployment
+              response=$(curl -X POST -d "releaseId=$RELEASE_ID&pipelineId=$PIPELINE_ID&pipelineRunId=$RUN_ID&versionId=${{ env.DEPLOYMENT_APP_VERSION_ID }}&applicationId=${{ github.event.client_payload.releaseData.appId }}&credentialId=${{ env.PIPELINE_CREDENTIAL_ID }}&userName=$USER_NAME&repositoryName=$REPOSITORY&commitId=${{ env.COMMIT_ID }}&commitData[commitHash]=${{ env.COMMIT_ID }}&commitData[commitAvatar]=https://github.com/$COMMIT_USER.png&commitData[commitTime]=$COMMIT_TIME&commitData[commitMessage]=$COMMIT_MESSAGE&commitData[commitUser]=$COMMIT_USER&shouldDeploy=${{ env.DEPLOY_STEP_SHOULD_DEPLOY }}&containerName=${{ env.DEPLOYMENT_CONTAINER_NAME }}&imageRegistryURL=${{ env.IMAGE_NAME }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/release/pipeline")
+              if echo "$response" | grep -q '"success":true'; then
+                echo "SUCCESS :: $response"
+              else
+                echo "FAILED :: $response"
+              fi
+              
+  build-ssr-web-app:
+    name: Build Ssr Web App
+    permissions: write-all
+    runs-on: ubuntu-latest
+    needs:
+      - _status_testing
+    steps:
+      - name: Start
+        run: |2-
+
+              echo " Starting GitHub Action!" && 
+              echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
+              
+      - name: 'Run :: Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: 'Run :: Checkout Specific Commit'
+        env:
+          COMMIT_ID: ${{ github.event.client_payload.commitId }}
+          BRANCH_NAME: ${{ github.event.client_payload.branchName }}
+        if: >-
+          ${{ github.event.client_payload.commitId != null ||
+          github.event.client_payload.branchName != null }}
+        run: |2-
+
+              echo "Starting the checkout process..."
+              git fetch --all
+              if [ -n "$COMMIT_ID" ]; then
+                echo "Commit ID provided: $COMMIT_ID"
+                git checkout $COMMIT_ID || true
+                echo "Checked out to commit ID: $COMMIT_ID"
+              elif [ -n "$BRANCH_NAME" ]; then
+                echo "Branch name provided: $BRANCH_NAME"
+                git checkout $BRANCH_NAME || true
+                echo "Checked out to branch: $BRANCH_NAME"
+              else
+                echo "Skipping checkout..."
+              fi
+            
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: 'Run :: Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.roleARN }}
+          role-session-name: skyu-pipeline-assume-role-session
+          aws-region: ${{ env.region }}
+      - name: 'Run :: Initialize AWS Amplify'
+        env:
+          REPOSITORY: ${{ github.repositoryUrl }}
+        id: initialize-amplify
+        run: |2-
+
+              echo "Fetching Amplify Apps"
+              app_list=$(aws amplify list-apps --no-paginate --region ${{ env.region }})
+              app_id=$(echo "$app_list" | jq -r '.apps[] | select(.name == "${{ env.APPLICATION_NAME }}")' | jq -r .appId)
+
+              build_spec='{
+                "version": 1,
+                "frontend": {
+                  "phases": {
+                    "preBuild": {
+                      "commands": [
+                        "${{ env.APP_INSTALL_DEPS_PRE_COMMAND }}",
+                        "${{ env.APP_INSTALL_DEPS_COMMAND }}"
+                      ]
+                    },
+                    "build": {
+                      "commands": [
+                        "${{ env.APP_BUILD_COMMAND }}"
+                      ]
+                    }
+                  },
+                  "artifacts": {
+                    "baseDirectory": "${{ env.APP_BUILD_FOLDER }}",
+                    "files": [
+                      "**/*"
+                    ]
+                  }
+                }
+              }'
+
+              if [ -n "$app_id" ]; then
+                echo "Amplify App already exists. Updating..."
+
+                production_branch=$(echo "$app_list" | jq -r '.apps[] | select(.name == "${{ env.APPLICATION_NAME }}")' | jq -r .productionBranch.branchName)
+                echo "Production Branch: $production_branch"
+                echo "productionBranch=$production_branch" >> $GITHUB_OUTPUT
+
+                aws amplify update-app         --app-id "$app_id"         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         --iam-service-role-arn "${{ env.roleARN }}"         --build-spec "$build_spec" 
+              else
+                echo "Initializing new Amplify App"
+                formattedRepoUrl=$(echo "$REPOSITORY" | sed 's|git://|https://|') 
+                echo "Formatted Repository URL: $formattedRepoUrl"
+                create_app=$(
+                  aws amplify create-app         --name ${{ env.APPLICATION_NAME }}         --platform WEB_COMPUTE         --repository $formattedRepoUrl         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         --access-token ${{ env.pat }}         --region ${{ env.region }}         --iam-service-role-arn ${{ env.roleARN }}         --build-spec "$build_spec"       )
+                app_id=$(echo $create_app | jq -r '.app.appId')
+              fi
+              
+              echo "App ID: $app_id"
+              echo "appId=$app_id" >> $GITHUB_OUTPUT
+              
+      - name: 'Run :: Update SSR Application Data'
+        run: |2-
+
+              appId=${{ steps.initialize-amplify.outputs.appId }}
+              echo "App ID: $appId"
+
+              response=$(curl -X POST -d "amplifyAppId=$appId"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-application-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.API_GATEWAY_BASEURL }}/resource-service/application-data/${{ env.PIPELINE_APPLICATION_ID }}/ssr-amplify")
+
+              if echo "$response" | grep -q '"success":true'; then
+                echo "SUCCESS :: $response"
+              else
+                echo "FAILED :: $response"
+                exit 1
+              fi
+              
+      - name: 'Run :: Publish to AWS Amplify'
+        run: |2-
+
+              appId=${{ steps.initialize-amplify.outputs.appId }}
+              productionBranch=${{ steps.initialize-amplify.outputs.productionBranch }}
+
+              if [ "$productionBranch" != null ]; then 
+                if [ "$productionBranch" != "$BRANCH_NAME" ]; then
+                  echo "Production Branch has Changed"
+                  echo "Deleting Previous Production Branch"
+                  aws amplify delete-branch --app-id $appId --branch-name $productionBranch
+                
+                else 
+                  echo "Production Branch Remains the Same"
+                fi
+              else
+                echo "Production Branch Not found"
+              fi
+
+              echo "Creating Deployment branch"
+              aws amplify create-branch --stage PRODUCTION --app-id $appId --branch-name $BRANCH_NAME || true
+
+              echo "Checking for pending job on branch $BRANCH_NAME"
+              while true; do
+                jobs=$(aws amplify list-jobs --app-id $appId --branch-name "$BRANCH_NAME" --output "json" --no-paginate)
+                pending_jobs=$(echo $jobs | jq '.jobSummaries | map(select(.status | IN("FAILED", "SUCCEED", "CANCELLED") | not))') 
+                pending_job_count=$(echo $pending_jobs | jq 'length')
+                echo "Pending Jobs: $pending_job_count"
+
+                if [ "$pending_job_count" -gt 0 ]; then
+                    echo "$pending_job_count Pending Job(s) found on branch $BRANCH_NAME. Waiting..."
+                    sleep 10  
+                else
+                  echo "All Pending Jobs done... Proceeding"
+                  break
+                fi
+              done
+
+              echo "Starting Amplify Job"
+              aws amplify start-job --app-id $appId --branch-name $BRANCH_NAME --job-type RELEASE
+              
+  _status-success:
+    name: ' Status Success'
+    permissions: write-all
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
+    runs-on: ubuntu-latest
+    needs:
+      - code-scan
+      - _status_testing
+      - build-ssr-web-app
+      - deploy
+    if: ${{ !(failure() || cancelled()) }}
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: Pipeline Success
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |2-
+
+              context=$(echo "$CONTEXT_JSON" | jq -c . | base64)
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/SUCCESS?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              
+  _status-failed:
+    name: ' Status Failed'
+    permissions: write-all
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
+    runs-on: ubuntu-latest
+    needs:
+      - code-scan
+      - _status_testing
+      - build-ssr-web-app
+      - deploy
+    if: ${{ failure() || cancelled() }}
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: Pipeline Failed
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |2-
+
+              context=$(echo "$CONTEXT_JSON" | jq -c . | base64)
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/FAILED?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              
+  deploy:
+    name: Deploy
+    permissions: write-all
+    runs-on: ubuntu-latest
+    needs:
+      - build-ssr-web-app
+    if: github.event.client_payload.releaseData == null
+    steps:
+      - name: 'Run :: Decoding Secrets'
+        run: |2-
+
+                if [ ! -x "$(command -v jq)" ]; then
+                  echo "jq not found, installing..."
+                  sudo apt-get update
+                  sudo apt-get install -y jq
+                fi
+                echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
+                
+      - name: 'Run :: Deploy and Notify Resource Service'
+        env:
+          RUN_ID: ${{ github.run_id }}
+          SHA: ${{ github.sha }}
+          COMMIT_USER: ${{ github.event.head_commit.author.name }}
+          COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+          COMMIT_MESSAGE: >-
+            ${{ github.event.head_commit.message ||
+            github.event.client_payload.commitMessage }}
+        run: |2-
+              
+              response=$(curl -X PATCH -d "imageRegistryURL=${{ env.IMAGE_NAME }}&appVersionId=${{ env.DEPLOYMENT_APP_VERSION_ID }}&tag=${{ env.COMMIT_ID }}&containerName=${{ env.DEPLOYMENT_CONTAINER_NAME }}&shouldDeploy=${{env.DEPLOY_STEP_SHOULD_DEPLOY}}&pipelineRunId=$RUN_ID&commitDetails[commitHash]=$SHA&commitDetails[commitAvatar]=https://github.com/$COMMIT_USER.png&commitDetails[commitTime]=$COMMIT_TIME&commitDetails[commitMessage]=$COMMIT_MESSAGE&commitDetails[commitUser]=$COMMIT_USER"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-application-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.DEPLOYMENT_ENDPOINT }}")
+              
+              status_code=$?
+
+              if [ $status_code -eq 0 ]; then
+                if echo "$response" | grep -q '"success":true'; then
+                  echo "SUCCESS :: $response"
+                else
+                  echo "FAILED :: $response"
+                  exit 1
+                fi
+              else
+                echo "Failed to deploy. HTTP status code: $status_code"
+                exit 1
+              fi
+            
