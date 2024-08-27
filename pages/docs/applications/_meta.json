@@ -2,11 +2,12 @@
     "application-introduction": "Introduction",
     "application-catalog": "Catalog",
     "features": "Features",
+    "kubernetes": {
+        "title": "Kubernetes"
+        
+    },
     "starter-templates": {
-        "title": "Starter Templates",
-        "theme": {
-            "layout": "full"
-        }
+        "title": "Starter Templates"
     },
     "custom-templates": "Custom Templates"
 }

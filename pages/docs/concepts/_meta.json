@@ -4,6 +4,7 @@
     "cluster-agent": "Cluster Agent",
 
     "gitops": "GitOps",
+    "kustomize-transformer": "Kustomize Transformer",
     "continous-deployment": "Continous Deployment",
     "ai": "Artificial Intelligence"
 }

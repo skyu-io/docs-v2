@@ -17,7 +17,7 @@ export default {
 
         return (
             <>
-                <meta charset="UTF-8" />
+                <meta charSet="UTF-8" />
                 <link
                     rel="apple-touch-icon"
                     sizes="180x180"

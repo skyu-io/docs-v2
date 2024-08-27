@@ -1,0 +1,103 @@
+
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../../components/Image'
+
+# Kubernetes Spec
+
+This section provides the kubernetes configuration of the application. You can view the kubernetes configuration of the application and change the configurations per environment.
+
+You can read more about the SkyU Kubernetes Spec in [Kustomize Transformer](/docs/concepts/kustomize-transformer) section.
+
+
+
+## Containers
+
+The containers section provides the container configurations of the application. This is configured for you at the creation of the application automatically. However, you can add more containers to your application depending on your requirements.
+
+<Image src="/assets/images/applications/container-view.png" alt="Hello" width={500} height={500}  />
+
+The Slider enables you to update the resources allocated to the container. You can update the CPU and Memory allocated to the container by sliding the slider.
+Left corner of the slider gives `Request` value and right corner gives `Limit` value.
+
+
+Following is the container configuration of the application.
+
+<Steps>
+
+### Container Details
+
+1. Click on the `Create Container` button.
+2. Fill out the container details.
+
+
+| Field                      | Description                                                                                                                                                  | Example |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| Name                       | Name of the Container. This has to be unique across your application and should not contain special characters.                                              | busybox |
+| Image Pull Policy          | `Always` would pull the image always when a pod starts up. `IfNotPresent` will only pull the image if it is not available in the kubernetes node             | Always  |
+| Image Registry URL         | The URL of the image registry where the image is stored.                                                                                                     | busybox |
+| Tag                        | The tag of the image. This is the version of the image that will be used to create the container.                                                            | latest  |
+| Image Registry Credentials | The credentials to access the image registry. If it's not a public image please refer [Integrations](/docs/integrations/docker-registry) to add a credential | public  |
+
+
+<Image src="/assets/images/applications/create-container.png" alt="Hello" width={500} height={500}  />
+
+ 
+### Resource Allocation
+
+You can allocate resources to the container by specifying the limits and requests for the container. This will ensure that the container does not consume more resources than allocated.
+
+| Field          | Description                                                                  | Example |
+| -------------- | ---------------------------------------------------------------------------- | ------- |
+| CPU Request    | The amount of CPU allocated to the container. This is in millicores.         | 100m    |
+| Memory Request | The amount of memory allocated to the container. This is in bytes.           | 100Mi   |
+| CPU Limit      | The maximum amount of CPU that the container can use. This is in millicores. | 100m    |
+| Memory Limit   | The maximum amount of memory that the container can use. This is in bytes.   | 100Mi   |
+
+
+<Image src="/assets/images/applications/container-resources.png" alt="Hello" width={1000} height={500}  />
+
+You can `disable` limits for the container by toggling the switch. This will allow the container to use the resources as needed.
+
+<Callout type="info">
+Be mindful when  having a huge difference between the request and limit values. This can lead to performance issues in the cluster. Generally, the request value should be equal to the limit value or about 20% less than the limit value.
+</Callout>
+
+### Port Specification
+
+You can specify the ports that the container will listen on. This is useful when you want to expose the container to the outside world.
+
+| Field        | Description                                                                 | Example |
+| ------------ | --------------------------------------------------------------------------- | ------- |
+| Port         | The port number that the container will listen on. This is a numeric value. | 80      |
+| Service port | The port number that the service will listen on. This is a numeric value.   | 80      |
+| Protocol     | The protocol that the port will use. This can be either TCP or UDP.         | TCP     |
+
+<Callout type="info">
+Ideally Port and Service port should be the same. However, you can specify different ports if needed.
+</Callout>
+
+### Command and Arguments
+
+You can specify the command and arguments that the container will run when it starts up. This is useful when you want to run a specific command when the container starts.
+
+- ***Command***: The command that the container will run when it starts up. This is a string value. This will override the default command defined in the Dockerfile.
+- ***Arguments***: The arguments that the command will use when it runs. This is a string value. This will override the default arguments defined in the Dockerfile.
+
+<Callout type="info">
+If your dockerfile has an `ENTRYPOINT` defined, only the arguments will be overridden. If the dockerfile has a `CMD` defined, the command and arguments will be overridden.
+</Callout>
+
+</Steps>
+
+
+## Health Checks
+
+Health checks are used to determine the health of the container. This is useful when you want to ensure that the container is running as expected.
+
+
+## Scaling
+
+
+## Service Account
