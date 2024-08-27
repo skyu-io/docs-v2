@@ -1,8 +1,8 @@
 name: ssr-web-app-prod_app_3a8cedc_env_0627871 Pipeline (Skyu Generated)
 'on':
   push:
-    tags:
-      - v*
+    branches:
+      - main
     paths-ignore:
       - .github/workflows/**
       - .trivyignore
