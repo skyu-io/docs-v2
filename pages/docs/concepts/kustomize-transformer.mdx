@@ -51,81 +51,95 @@ The manifest spec for the  `skyu-transform` plugin is as follows:
 
 ```yaml
 spec:
-  type: "Deployment" # Job, CronJob, Deployment
+  type: string # Job, CronJob, Deployment
   applicationContainers:
-    - name: "app-container-1"
+    - name: string
       applicationPorts:
-        - protocol: "TCP"
-          port: 8080
-          targetPort: 8080
+        - protocol: string
+          port: 0
+          targetPort: 0
           apiSpec:
-            gitPath: "path/to/api/repo"
-            urlPath: "/api/v1"
-      imageRegistry: "docker.io"
-      imageTag: "latest"
-      cpuRequestMili: 500
-      cpuLimitMili: 1000
-      memoryRequestMb: 512
-      memoryLimitMb: 1024
+            gitPath: string
+            urlPath: string
+      imageRegistry: string
+      imageTag: string
+      cpuRequestMili: 0
+      cpuLimitMili: 0
+      memoryRequestMb: 0
+      memoryLimitMb: 0
       command:
-        - "/start.sh"
+        - string
       args:
-        - "--config=/etc/config.yaml"
+        - string
       healthChecks:
-        - initialDelaySeconds: 10
-          timeoutSeconds: 5
-          periodSeconds: 15
-          successThreshold: 1
-          failureThreshold: 3
+        - initialDelaySeconds: 0
+          timeoutSeconds: 0
+          periodSeconds: 0
+          successThreshold: 0
+          failureThreshold: 0
           httpGet:
-            path: "/healthz"
-            port: 8080
+            path: string
+            port: 0
             httpHeaders:
-              - name: "Authorization"
-                value: "Bearer token"
-            scheme: "HTTP"
+              - name: string
+                value: string
+            scheme: string
+          tcpSocket:
+            port: 0
+          exec:
+            command:
+              - string
+          grpc:
+            port: 0
+            service: string
+          probeType:
+            - string # readinessProbe, livenessProbe, startupProbe
       configMounts:
-        - mountPath: "/etc/config.yaml"
-          isFile: true
-          configMapName: "app-config"
-          key: "config.yaml"
-      imagePullPolicy: "IfNotPresent"
-      credentialId: "docker-registry-cred"
-      imagePullSecretName: "docker-secret"
+        - mountPath: string
+          isFile: false
+          configMapName: string
+          secretName: string
+          key: string
+          isEnv: false
+      imagePullPolicy: string
+      credentialId: string
+      imagePullSecretName: string
       commitDetails:
-        commitHash: "abcd1234"
-        commitTime: "2024-08-22T12:34:56Z"
-        commitUser: "john.doe"
-        commitMessage: "Initial commit"
-        commitAvatar: "https://example.com/avatar.png"
-  minReplicas: 2
-  maxReplicas: 5
-  terminationGracePeriodSeconds: 30
+        commitHash: string
+        commitTime: string
+        commitUser: string
+        commitMessage: string
+        commitAvatar: string
+  minReplicas: 0
+  maxReplicas: 0 # default replica count
+  terminationGracePeriodSeconds: 0
   nodeSelector:
-    disktype: "ssd"
-  serviceType: "ClusterIP"
-  namespace: "default"
-  cronTab: "*/5 * * * *"
+    key: string
+  serviceType: string # todo
+  namespace: string
+  cronTab: string
   suspend: false
-  ttlSecondsAfterFinished: 3600
-  serviceAccountName: "app-service-account"
-  name: "my-application"
-  version: "v1.0.0"
+  ttlSecondsAfterFinished: 0
+  serviceAccountName: string
+  name: string
+  version: string
   labels:
-    app: "my-application"
-    environment: "production"
+    key: string
   horizontalAutoScalingRules:
-    - ruleType: "cpu"
-      percentage: 80
-    - ruleType: "memory"
-      percentage: 70
+    - ruleType: string # cpu, memory
+      percentage: 0
   volumes:
-    - name: "app-volume"
-      type: "pvc"
+    - name: string
+      type: string
       pvc:
-        claimName: "app-pvc"
-        yamlFilePath: "path/to/pvc.yaml"
+        claimName: string
+        yamlFilePath: string
+      hostPath:
+        path: string
+      nfs:
+        server: string
+        path: string
       volumeMounts:
-        - containerName: "app-container-1"
-          mountPath: "/data"
+        - containerName: string
+          mountPath: string
 ```

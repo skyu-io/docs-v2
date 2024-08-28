@@ -8,9 +8,11 @@ import Image from '../../../../components/Image'
 
 This section provides the kubernetes configuration of the application. You can view the kubernetes configuration of the application and change the configurations per environment.
 
-You can read more about the SkyU Kubernetes Spec in [Kustomize Transformer](/docs/concepts/kustomize-transformer) section.
+You can read more about the **SkyU Kubernetes Spec** in [Kustomize Transformer](/docs/concepts/kustomize-transformer) section.
 
-
+<Callout type="info">
+To directly edit the spec, open `Edit YAML` in the top right corner of the page. This will open the spec in the editor where you can make changes to the spec.
+</Callout>
 
 ## Containers
 
@@ -39,6 +41,8 @@ Following is the container configuration of the application.
 | Image Registry URL         | The URL of the image registry where the image is stored.                                                                                                     | busybox |
 | Tag                        | The tag of the image. This is the version of the image that will be used to create the container.                                                            | latest  |
 | Image Registry Credentials | The credentials to access the image registry. If it's not a public image please refer [Integrations](/docs/integrations/docker-registry) to add a credential | public  |
+| Init Container             | If the container is an init container. This is a boolean value. Init Containers are used to run setup tasks before the main container starts. This is useful when you want to run a task before the main container starts.                                                                                             | false   |
+
 
 
 <Image src="/assets/images/applications/create-container.png" alt="Hello" width={500} height={500}  />
@@ -90,6 +94,7 @@ If your dockerfile has an `ENTRYPOINT` defined, only the arguments will be overr
 </Callout>
 
 </Steps>
+
 
 
 ## Health Checks
@@ -192,3 +197,104 @@ If you simply want to increase the number of replicas without any scaling, you c
 You can configure the service account for the application in the service account section. This is useful when you want to give the application specific permissions in the cluster.
 
 Refer to the [Service Account](/docs/environments/service-accounts) section for more information on service accounts.
+
+## Volume Mounts
+
+You can configure the volume mounts for the application the Kubernetes Spec. Click `Edit YAML` at the top right corner of the page and edit the spec with relavent volume details.
+
+Following is an example of volume mounts in the spec.
+
+```yaml
+  volumes:
+    - name: "app-volume"
+      type: "pvc"
+      pvc:
+        claimName: "app-pvc"
+        yamlFilePath: "path/to/pvc.yaml"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+```
+
+There are few volume types that you can use in the spec.
+
+### EmptyDir
+
+EmptyDir is a temporary storage that is created when a Pod is assigned to a Node. It exists as long as the Pod is running on that Node. When a Pod is removed from the Node for any reason, the data in the EmptyDir is deleted forever.
+
+<Callout type="info">
+EmptyDir is useful when you want to share storage / data between containers in the same pod.
+</Callout>
+
+```yaml
+  volumes:
+    - name: "app-volume"
+      type: "emptyDir"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+        - containerName: "app-container-2"
+          mountPath: "/data"
+```
+
+### Persistent Volume Claim
+
+Persistent Volume Claim (PVC) is used to request storage resources from the cluster. The storage resources are provisioned based on the storage class and the storage capacity requested in the PVC.
+
+<Callout type="info">
+Persistent Volume Claim is useful when you want to store data that needs to persist even after the pod is deleted. Make sure to have a storage class configured in the cluster.
+</Callout>
+
+<Callout>
+Most PVCs are ReadWriteOnce, meaning they can only be mounted to a single node. If you need to share the volume between multiple nodes, you can use ReadWriteMany or ReadOnlyMany PVCs.
+</Callout>
+
+Please create a PVC under GitOps in the environment before referring them in the spec. UX for this is coming soon.
+
+```yaml
+  volumes:
+    - name: "app-volume"
+      type: "pvc"
+      pvc:
+        claimName: "app-pvc"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+```
+
+### NFS
+
+NFS is a network file system that allows you to mount a remote file system on your local machine. You can use NFS to mount a remote file system to your pod. This is `ReadWriteMany` by default.
+
+This is commonly used with deployments that need to share data between multiple pods.
+
+```yaml
+  volumes:
+    - name: "app-volume"
+      type: "nfs"
+      nfs:
+        server: "nfs-server-ip",
+        path: "/path/to/nfs"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+```
+
+### HostPath
+
+HostPath is used to mount a directory from the host node's filesystem into your pod. This is useful when you want to access the host node's filesystem from the pod.
+
+<Callout type="info">
+HostPath is useful when you want to access the host node's filesystem from the pod. This is not recommended in production environments.
+</Callout>
+
+```yaml
+  volumes:
+    - name: "app-volume"
+      type: "hostPath"
+      hostPath: 
+        path: "/path/to/host"
+      volumeMounts:
+        - containerName: "app-container-1"
+          mountPath: "/data"
+```
