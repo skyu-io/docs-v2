@@ -1,4 +1,6 @@
 {
-    "helm-introduction": "Introduction"
+    "helm-introduction": "Introduction",
+    "cluster-charts": "Cluster Charts",
+    "curated-charts": "Curated Charts"
 
 }
