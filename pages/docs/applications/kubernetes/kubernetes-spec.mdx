@@ -96,8 +96,99 @@ If your dockerfile has an `ENTRYPOINT` defined, only the arguments will be overr
 
 Health checks are used to determine the health of the container. This is useful when you want to ensure that the container is running as expected.
 
+There are three types of health checks that you can configure for the container.
+
+- ***Liveness Probe***: This is used to determine if the container is running. If the liveness probe fails, the container will be restarted.
+- ***Readiness Probe***: This is used to determine if the container is ready to accept traffic. If the readiness probe fails, the container will not receive traffic.
+- ***Startup Probe***: This is used to determine if the container is ready to accept traffic. If the startup probe fails, the container will not receive traffic. This is used to delay the readiness probe until the container is ready to accept traffic.
+
+In SkyU, you can put the same configuration for all 3 at once or create seperate configurations for each.
+
+The following are the configurations for the health checks.
+
+<Steps>
+
+### General Details
+
+Select the container for which you want to configure the probe and select the types of probes you want to configure.
+
+<Image src="/assets/images/applications/container-health.png" alt="Hello" width={500} height={500}  />
+
+### Configure Probe
+
+You can configure how the probe will check the health of the container in this section.
+
+You have the following options to configure the probe.
+
+#### HTTP GET Request
+
+This is used to determine the health of the container by making an HTTP request to the container. This only supports `GET` requests.
+
+| Field        | Description                                                              | Example |
+| ------------ | ------------------------------------------------------------------------ | ------- |
+| Path         | The path that the probe will request. This is a string value.            | /health |
+| Port         | The port that the probe will request. This is a numeric value.           | 80      |
+| HTTP Headers | The headers that the probe will send. This is a list of key-value pairs. |         |
+
+#### TCP Socket
+
+This is used to determine the health of the container by making a TCP connection to the container.
+
+| Field | Description                                                    | Example |
+| ----- | -------------------------------------------------------------- | ------- |
+| Port  | The port that the probe will request. This is a numeric value. | 80      |
+
+
+#### Command
+
+This is used to determine the health of the container by running a command inside the container.
+
+
+#### Configure Frequency
+
+You can configure how often the probe will check the health of the container in this section.
+
+
+
+| Field             | Description                                                                | Example |
+| ----------------- | -------------------------------------------------------------------------- | ------- |
+| Initial Delay     | The amount of time to wait before starting the probe. This is in seconds.  | 10      |
+| Timeout           | The amount of time to wait for the probe to complete. This is in seconds.  | 5       |
+| Period            | The amount of time to wait between probes. This is in seconds.             | 15      |
+| Success Threshold | The number of successful probes required to mark the container as healthy. | 1       |
+| Failure Threshold | The number of failed probes required to mark the container as unhealthy.   | 3       |
+
+<Image src="/assets/images/applications/container-health-frequency.png" alt="Hello" width={500} height={500}  />
+
+<Callout type="info">
+If your container goes into a crashloop, or health check starts failing you can increase the `Initial Delay` to give the container more time to start up before the probe starts.
+</Callout>
+</Steps>
+
 
 ## Scaling
 
+SkyU supports Kubernetes Horizontal Pod Autoscaler (HPA) to scale the application based on the resource utilization. You can configure the HPA for the application in the scaling section.
+
+<Image src="/assets/images/applications/container-scaling.png" alt="Hello" width={1000} height={500}  />
+
+If you want to scale the application based on the resource utilization, you can configure the following fields.
+
+| Field           | Description                                                               | Example |
+| --------------- | ------------------------------------------------------------------------- | ------- |
+| Min Replicas    | The minimum number of replicas that the application will have.            | 1       |
+| Max Replicas    | The maximum number of replicas that the application will have.            | 10      |
+| CPU Utilization | The target CPU utilization percentage that the application will scale on. | 80%     |
+| Memory Usage    | The target Memory Usage the application will scale on.                    | 500Mi   |
+
+
+<Callout type="info">
+If you simply want to increase the number of replicas without any scaling, you can do so by updating the min and max number to be the same under scaling.
+</Callout>
+
 
 ## Service Account
+
+You can configure the service account for the application in the service account section. This is useful when you want to give the application specific permissions in the cluster.
+
+Refer to the [Service Account](/docs/environments/service-accounts) section for more information on service accounts.

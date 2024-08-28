@@ -9,6 +9,7 @@
     "releases": "Releases",
     "helm": "Helm",
     "configs": "Configs",
+    "environments": "Environments",
     "observability": "Observability",
     "infrastructure": "Infrastructure",
     "insights": "Insights",
