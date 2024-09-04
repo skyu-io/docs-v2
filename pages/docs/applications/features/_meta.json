@@ -1,7 +1,5 @@
 {
     "overview-application": "Overview",
-    "kubernetes-application": "Kubernetes",
-    "pipelines-application": "Pipelines",
     "security-application": "Security",
     "testing-application": "Testing",
     "gitops-application": "GitOps",

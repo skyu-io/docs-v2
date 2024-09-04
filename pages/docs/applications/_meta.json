@@ -6,6 +6,10 @@
         "title": "Kubernetes"
         
     },
+    "pipelines": {
+        "title": "Pipelines"
+        
+    },
     "starter-templates": {
         "title": "Starter Templates"
     },

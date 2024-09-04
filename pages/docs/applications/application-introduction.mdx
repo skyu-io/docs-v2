@@ -9,14 +9,10 @@ Application, in the context of SkyU is a set of CI/CD pipelines, configurations,
 
 Depending on the application type, following pipelines will be created.
 
-  | Pipeline            | Description                                                                                                     |
-  | ------------------- | --------------------------------------------------------------------------------------------------------------- |
-  | CI Pipelines        | For any application that connects to SkyU which requires building would automatically have CI Pipelines         |
-  | CD Pipelines        | For any application that connects to SkyU which requires deployment would automatically have CD Pipelines       |
-  | Promotion Pipelines | For any application that connects to SkyU which requires promotion would automatically have Promotion Pipelines |
-  | PR Pipelines        | For any application that connects to SkyU which requires PR checks would automatically have PR Pipelines       |
-  | AI Suggestions      | For any application that connects to SkyU which requires AI suggestions would automatically have AI Pipelines   |
-
+  | Pipeline              | Description                                                                                                                                                                                                                                                         |
+  | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | Environment Pipelines | is pipeline is configured for each environment in the application. It is triggered when a new version of the application is deployed to the environment. The pipeline can be used to run tests, perform validations, and deploy the application to the environment. |
+  | PR Pipelines          | For any application that connects to SkyU which requires PR checks would automatically have PR Pipelines                                                                                                                                                            |
 
   Each pipeline is specific to your application type and target environment. You can customize the pipelines as per your requirements.
 
