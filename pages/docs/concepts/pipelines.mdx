@@ -1,0 +1,28 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Pipelines
+
+SkyU Pipelines leverage the power of GitHub Actions to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest.
+
+## Github Source Control
+
+If you are using GitHub as your source control, SkyU will automatically create a GitHub Action workflow file for you. This file will be created in the `.github/workflows` folder in your repository. You can customize this file to add or remove steps as per your requirements.
+
+## Bitbucket Source Control
+
+If you are using Bitbucket as your source control, SkyU will still use Github Actions to run the pipelines. In this case, SkyU needs a Github Repository from your end to run the pipelines. You can provide the Github Repository details in the SkyU console under Project Settings.
+
+<Image src="/assets/images/concepts/pipeline-repo.png" alt="Hello" width={1000} height={500}  />
+
+You can enable Support for Bitbucket simply by providing the Github Repository details in the SkyU console under Project Settings.
+
+The following diagram depicts the high-level flow of triggering a Github Action from a Bitbucket Source Repository.
+
+<Image src="/assets/images/concepts/bitbucket-flow.png" alt="Hello" width={1000} height={500}  />
+
+As shown in the diagram, the Bitbucket Source Repository triggers a webhook to the SkyU Console through the Bitbucket Pipeline. The SkyU Console then triggers the Github Action in the Github Repository and runs the pipeline.
+
+<Callout type="info">
+In the event of merge checks, the Bitbucket Pipeline will wait for the Github Action to complete before proceeding with the merge.
+</Callout>
