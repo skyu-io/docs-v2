@@ -1,13 +1,16 @@
 {
     "index": {
         "title": "Home",
-        "type": "page"
-        
+        "type": "page",
+        "href": "/",
+        "theme": {
+            "layout": "raw",
+            "footer": false,
+            "navbar": false
+        }
     },
     "docs": {
         "title": "Documentation",
         "type": "page"
-    }
- 
-     
+    }     
 }
