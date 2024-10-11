@@ -1,0 +1,182 @@
+[
+  {
+    "route": "/docs/alerts/connect-ms-teams",
+    "title": "Connect Microsoft Teams",
+    "description": "Microsoft Teams can be connected to receive alert notifications directly within a designated channel. By integrating Microsoft Teams with the alert management system, teams can ensure that critical incidents and alerts are communicated promptly."
+  },
+  {
+    "route": "/docs/applications/application-catalog",
+    "title": "Application Catalog",
+    "description": "SkyU provides a wide range of application templates that you can use to build your projects. These applications are designed to help you get started quickly and easily. You can choose from a variety of templates like web applications, mobile applications, APIs, and more."
+  },
+  {
+    "route": "/docs/applications/application-introduction",
+    "title": "Applications",
+    "description": "Anything that you deploy in SkyU is an application. An application can be a microservice, a web application, a mobile application, or any other type of software that you want to deploy. Applications are the building blocks of your projects in SkyU."
+  },
+  {
+    "route": "/docs/applications/features/overview-application",
+    "title": "Application Overview",
+    "description": "Once you have created an application in SkyU, you can view the application details in the Application Overview page. The Application Overview page provides a summary of the application, its details, and its status. You can also view the application's deployment history, logs, and metrics."
+  },
+  {
+    "route": "/docs/applications/kubernetes/ingress",
+    "title": "Ingress",
+    "description": "Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource."
+  },
+  {
+    "route": "/docs/applications/kubernetes/kubernetes-app-introduction",
+    "title": "Kubernetes Configuration",
+    "description": "In SkyU applications that have kubernetes configurations, you can view and change configurations per environment in the `Kubernetes` section in the left side menu. The options you see may differ according to the application template type."
+  },
+  {
+    "route": "/docs/applications/kubernetes/kubernetes-spec",
+    "title": "Kubernetes Spec",
+    "description": "This section provides the kubernetes configuration of the application. You can view the kubernetes configuration of the application and change the configurations per environment."
+  },
+  {
+    "route": "/docs/applications/kubernetes/runtime",
+    "title": "Runtime",
+    "description": "This section provides the runtime information of the application. You can view the running pods, logs and events of the application."
+  },
+  {
+    "route": "/docs/applications/pipelines/introduction-pipelines",
+    "title": "Application Pipelines",
+    "description": "SkyU Application Pipelines are a powerful way to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest."
+  },
+  {
+    "route": "/docs/applications/pipelines/pipeline-design",
+    "title": "Pipeline Design",
+    "description": "Pipeline Design is the place where you can define the steps for your pipeline. You can define the steps in the pipeline using the YAML configuration. You can also use the visual editor to define the steps in the pipeline."
+  },
+  {
+    "route": "/docs/applications/pipelines/pipeline-steps",
+    "title": "Pipeline Steps",
+    "description": "SkyU Pipelines have a few default steps that are executed in the pipeline. You can configure the build variables for those steps in this section."
+  },
+  {
+    "route": "/docs/applications/starter-templates/source-to-kubernetes-deployment",
+    "title": "Source Code to Kubernetes Deployment",
+    "description": "This application type is able to take your source code —particularly those designed as `Microservices` or `APIs`, and those involving long-running background tasks— and deploying it as a set of scalable, manageable services within a Kubernetes environment."
+  },
+  {
+    "route": "/docs/clusters/agent-configuration",
+    "title": "Agent Configuration",
+    "description": "SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console."
+  },
+  {
+    "route": "/docs/clusters/cluster-state",
+    "title": "Cluster State",
+    "description": "SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console."
+  },
+  {
+    "route": "/docs/clusters/connect-cluster",
+    "title": "Cluster",
+    "description": "SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console."
+  },
+  {
+    "route": "/docs/clusters/toubleshoot-agent",
+    "title": "Troubleshoot Cluster Connection",
+    "description": "SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console."
+  },
+  {
+    "route": "/docs/concepts/ai",
+    "title": "Artificial Intelligence",
+    "description": "SkyU has a number of AI features which are designed to help you run and debug your workloads. These features are integrated with OpenAI's GPT-4 and other AI models to provide you with the best possible experience."
+  },
+  {
+    "route": "/docs/concepts/cluster-agent",
+    "title": "Cluster Agent",
+    "description": "SkyU Console allows you to connect to an existing Kubernetes Cluster. This works by installing the SkyU Agent on the Kubernetes Cluster. The SkyU Agent is a lightweight agent that runs on the Kubernetes Cluster and communicates with the SkyU Console. The agent is responsible for syncing the Kubernetes Cluster state with the SkyU Console."
+  },
+  {
+    "route": "/docs/concepts/continous-deployment",
+    "title": "Continuous Deployment",
+    "description": "SkyU supports Continuous Deployment (CD) to automate the deployment process of your applications. Continuous Deployment is a software development practice where code changes are automatically built, tested, and deployed to production environments. This practice allows developers to release code changes more frequently and with less manual intervention."
+  },
+  {
+    "route": "/docs/concepts/gitops",
+    "title": "GitOps",
+    "description": "GitOps is a way to do Kubernetes application delivery. It works by using Git as a single source of truth for declarative infrastructure and applications. With GitOps, you can make changes to your applications and infrastructure by making changes to your Git repository. SkyU uses GitOps to manage your applications and infrastructure."
+  },
+  {
+    "route": "/docs/concepts/heirachy",
+    "title": "Resource Heirachy",
+    "description": "The following diagram depicts the high-level resources and their relationships in the SkyU Console."
+  },
+  {
+    "route": "/docs/concepts/kustomize-transformer",
+    "title": "SkyU Kustomize Transformer",
+    "description": "SkyU uses a Kustomize transform plugin to add the necessary configurations for the SkyU platform to manage the resources. This plugin is automatically applied to the merged Kubernetes manifests before deploying them to the environment."
+  },
+  {
+    "route": "/docs/concepts/pipelines",
+    "title": "Pipelines",
+    "description": "SkyU Pipelines leverage the power of GitHub Actions to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest."
+  },
+  {
+    "route": "/docs/concepts/secret-management",
+    "title": "Secret Management",
+    "description": "Secret management is a critical aspect of any application. It is important to store sensitive information like API keys, passwords, configs etc in a secure manner. These secrets should not be committed into the gitops repository. SkyU provides two options for secret management:"
+  },
+  {
+    "route": "/docs/environments/service-accounts",
+    "title": "Kubernetes Service Accounts",
+    "description": "In SkyU, you can create Kubernetes Service Accounts to provide an identity for processes that run in a Pod. Service accounts are used to authenticate and authorize the processes running in a Pod."
+  },
+  {
+    "route": "/docs/helm/cluster-charts",
+    "title": "Cluster Helm Charts",
+    "description": "SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources."
+  },
+  {
+    "route": "/docs/helm/helm-introduction",
+    "title": "Helm Charts",
+    "description": "SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources."
+  },
+  {
+    "route": "/docs/index",
+    "title": "Getting Started",
+    "description": "<Callout type=\"info\" >"
+  },
+  {
+    "route": "/docs/infrastructure/deploy-rds",
+    "title": "Deploy RDS instance - Postgres",
+    "description": "In this guide, we will walk you through the process of deploying an RDS instance in AWS using SkyU Platform."
+  },
+  {
+    "route": "/docs/integrations/amazon-ecr",
+    "title": "Amazon Elastic Container Registry",
+    "description": "SkyU supports Amazon Elastic Container Registry as an image registry for your projects. This guide will walk you through the process of linking your Amazon Elastic Container Registry to your SkyU project."
+  },
+  {
+    "route": "/docs/integrations/amazon-eks",
+    "title": "Connect EKS Cluster",
+    "description": "To connect an Amazon EKS Cluster to SkyU, you need to provide the following permissions to SkyU to manage the cluster."
+  },
+  {
+    "route": "/docs/integrations/docker-registry",
+    "title": "Docker Registry",
+    "description": "Docker Image Registry is a service that stores and manages Docker images for your organization. It allows you to push and pull images from the registry to your local machine or cloud environment. SkyU supports linking Docker Image Registry credentials to your project to enable seamless integration with your CI/CD pipelines."
+  },
+  {
+    "route": "/docs/integrations/sentry",
+    "title": "Sentry",
+    "description": "Sentry is an open-source error tracking tool that helps developers monitor and fix crashes in real time. Sentry provides a platform for monitoring and fixing application crashes and errors. It provides a real-time view of errors and crashes in your application, and allows you to fix them as they occur."
+  },
+  {
+    "route": "/docs/projects/project-create",
+    "title": "Project",
+    "description": "SkyU is a platform that helps you manage your Kubernetes applications and environments. In SkyU, you can create a project to manage your applications, environments and secrets."
+  },
+  {
+    "route": "/docs/projects/project-features",
+    "title": "Project Features",
+    "description": "Project Settings allows you to manage the configurations and settings of a project. You can access the project settings by clicking on the `Settings` tab on the left sidebar of the SkyU Console."
+  },
+  {
+    "route": "/docs/support",
+    "title": "Support",
+    "description": "SkyU provides a comprehensive support system to help you get the most out of your SkyU experience."
+  }
+]

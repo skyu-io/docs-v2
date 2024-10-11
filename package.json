@@ -5,17 +5,38 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-search-index": "node scripts/generateSearchIndex.js",
     "dev": "next dev",
-    "build": "next build"
+    "build": "npm run generate-search-index && next build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@portabletext/react": "^3.1.0",
+    "@radix-ui/react-accordion": "^1.2.1",
+    "@sanity/client": "^6.22.1",
+    "@sanity/image-url": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "fs": "0.0.1-security",
+    "gray-matter": "^4.0.3",
+    "groq": "^3.60.0",
+    "lucide-react": "^0.447.0",
     "next": "^14.2.6",
     "nextjs-google-analytics": "^2.3.7",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-highlight-words": "^0.20.0",
+    "sharp": "^0.33.5",
+    "tailwind-merge": "^2.5.3",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/react-highlight-words": "^0.20.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
   }
 }
