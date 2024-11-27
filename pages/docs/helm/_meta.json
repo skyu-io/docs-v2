@@ -1,5 +1,6 @@
 {
     "helm-introduction": "Introduction",
+    "service-repositories": "Service Repositories",
     "cluster-charts": "Cluster Charts",
     "curated-charts": "Curated Charts"
 

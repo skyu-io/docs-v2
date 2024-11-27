@@ -1,0 +1,115 @@
+
+import { Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+import { Steps } from 'nextra/components'
+
+# Service Repositories
+
+Service Repositories are user created custom Helm Charts that are specific to an application. These  consist of a collection of microservices that are deployed together. These are typically used for deploying applications like Web Applications, APIs, etc.
+
+These support CI/CD and Promotions across environments.
+
+## CI/CD Lifecycle
+
+A Service Repository is pointed to a Git Repository. The Helm Chart is stored in the Git Repository.
+
+When setting up CI/CD for a Helm Chart, usually the process would be each microservice in the Helm Chart would have its own CI/CD pipeline. The CI/CD pipeline would build the Docker Image and push it to a Docker Registry. The Helm Chart would then be updated with the new Docker Image tag and pushed to the Git Repository.
+
+SkyU enables this by the following workflow.
+
+1. **Service Repository**: The Helm Chart is stored in a Git Repository. The Git Repository is connected to SkyU.
+2. **Docker Helm Application**: Each microservice in the Helm Chart has its own Docker Helm Application. The Docker Helm Application is connected to a Git Repository which contains the source code for the microservice.
+3. **Override Values**: The CI/CD pipeline for the Docker Helm Application would update the Helm Chart with the new Docker Image tag and push it to the Git Repository.
+
+
+<Image src="/assets/images/helm/helm-cicd.png"   width={1000} height={500}  />
+
+Read more about adding a Docker Helm Application in the [Docker Helm Application](/docs/helm/docker-helm-application) section.
+
+## Promotions
+
+When promoting these helm charts across environments, You only need to promote the relavent microservices that have changed in Docker Helm Application. The Helm Chart would automatically be updated with the new Docker Image tag and pushed to the Git Repository.
+
+This is available in the [Project Releases](/docs/releases) section.
+
+
+## Creating a Service Repository
+
+<Steps>
+
+### Navigate to Helm > Service Repositories
+
+Navigate to the `Service Repositories` section in the SkyU Console under the `Helm` Main Menu. Click on the `Create Service Repository` button.
+
+### Fill General Details
+
+| Field       | Description                                                                                                   | Example                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Name        | Name of the Application. This has to be unique across your project and should not contain special characters. | test-helm                  |
+| Description | Provide a meaningful description  for your application                                                        | this is a test application |
+
+
+
+### Authenticate
+This template needs the source code to build and deploy the application.
+Authenticate with GitHub to connect an existing repository for the application. 
+
+This step will route you to the GitHub OAuth page where you can authenticate with your GitHub account and install the SkyU GitHub App to select an existing repository for GitOps.
+
+
+### Select Repository
+
+Select the repository which holds the application code.
+
+| Field          | Description                                                                                                 |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| Github Account | Your Github Organization / Account                                                                          |
+| Repository     | The repositor which holds the application code                                                              |
+| Branch         | Default branch for the repository. `main` is usally the default branch. Pipeline yamls will be stored here. |
+
+
+<Image src="/assets/images/applications/repo-selector.png"   width={500} height={500}  />
+
+### Configure Namespaces
+
+You can configure the namespaces per environment in this step defining the `namespace` in which the application is going to be deployed. These will be prefilled with the standard conventions which you can override.
+
+<Image src="/assets/images/applications/namepsace-selector.png"   width={500} height={500}  />
+
+### Config Values
+
+In this section we require you to provide necessary information to deploy the Helm Chart. 
+
+| Field      | Description                                         | Example          |
+| ---------- | --------------------------------------------------- | ---------------- |
+| Chart Path | Path to the Helm Chart in the Git Repository.       | charts/test-helm |
+| PAT Token  | Personal Access Token to access the Git Repository. | 1234567890       |
+
+### Helm Values
+
+SkyU provides a UI for you to add the default values for the Helm Chart and specific values for each environment which are committed to the Git Repository.
+
+<Callout type="info">
+You can further override these values in each environment once the application is created.
+</Callout>
+
+<Image src="/assets/images/helm/helm-values-step.png"   width={500} height={500}  />
+
+### Secret Overrides
+
+You can add secret overrides for the Helm Chart in this step. These secrets are stored securely in the SkyU Vault and are injected into the Helm Chart during deployment.
+<Image src="/assets/images/helm/helm-secret-overrides-step.png"   width={500} height={500}  />
+
+
+### Deploy Rules
+
+In this step, you can configure what values can be overridden to deploy microservices in the Helm Chart. This is useful when promoting the Helm Chart across environments.
+Typically these are the Docker Image tags.
+
+<Image src="/assets/images/helm/helm-deploy-rules.png"   width={500} height={500}  />
+
+
+
+</Steps>
+
+

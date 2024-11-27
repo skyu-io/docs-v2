@@ -4,23 +4,25 @@ SkyU supports Helm charts for deploying applications to Kubernetes clusters. Hel
 
 There are 3 Kinds of Helm Charts that SkyU supports:
 
-1. **Cluster Helm Charts** 
+1. **Service Repositories** 
+   
+    These are Helm Charts that are specific to an application. These are typically used for deploying applications like Web Applications, APIs, etc. 
+    
+    These support CI/CD and Promotions across environments.
 
-    These are Helm Charts that are installed to the entire cluster. These are typically used for deploying monitoring tools, storage classes, service meshes, etc.
+    
    
 
-2. **Environment Helm Charts**  
+2. **Env Packages**  
 
     These are Helm Charts that are specific to an environment. These are typically used for deploying infrastructure components like Ingress Controllers, Cert Managers, Databases, etc.
 
     These don't support promotions across environments. However, CI/CD can be used to deploy these Helm Charts into specific environments.
 
 
-3. **User Helm Charts**  
+3. **Cluster Add-ons**  
 
-    These are Helm Charts that are specific to an application. These are typically used for deploying applications like Web Applications, APIs, etc. 
-    
-    These support CI/CD and Promotions across environments.
+   These are Helm Charts that are installed to the entire cluster. These are typically used for deploying monitoring tools, storage classes, service meshes, etc.
 
 
 ## Helm Lifecycle
