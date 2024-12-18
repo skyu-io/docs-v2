@@ -78,4 +78,38 @@ If you are using cert-manager, you don't  need to create a secret manually. Cert
 </Steps>
 
 
+## Common Ingress Use Cases
+
+### Multi Service Routing with NGINX Ingress
+
+Ingress can be used to route traffic to multiple services based on the host name and path. You can create multiple rules in the Ingress to route traffic to different services based on the host name and path.
+
+Here are the annotations you can use to create an Ingress with NGINX Ingress Controller:
+
+| Annotation                    | Description                                                                                         | Value|
+| -----------------------------  | --------------------------------------------------------------------------------------------- | ---- |
+
+| `nginx.ingress.kubernetes.io/rewrite-target`| The value of this annotation is a regular expression that will be used to rewrite the URL. The Ingress controller will rewrite the URL based on the regular expression. | `/$2 `|
+| `nginx.ingress.kubernetes.io/use-regex`| This annotation is used to specify that the rewrite-target annotation should be treated as a regular expression. | `'true'` |
+| `nginx.ingress.kubernetes.io/permanent-redirect-code`| This annotation is used to specify the HTTP status code for permanent redirect. | `301` |
+
+Once these annotations are added, you can create multiple rules in the Ingress to route traffic to different services based on the host name and path.
+if you have a service running on the path `/service1` and another service running on the path `/service2`, you can create an Ingress with the following rules:
+
+```yaml
+  Path Type: ImplementationSpecific
+  Path: /service1(/|$)(.*)
+  Service Name: service1
+  Service Port: 80
+```
+
+```yaml
+  Path Type: ImplementationSpecific
+  Path: /service2(/|$)(.*)
+  Service Name: service2
+  Service Port: 80
+```
+
+
+
 
