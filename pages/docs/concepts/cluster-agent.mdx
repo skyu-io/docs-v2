@@ -25,3 +25,13 @@ More information on how to connect a Kubernetes Cluster to SkyU can be found in 
 The following diagram depicts the high-level resources and their relationships in the SkyU Agent Deployment.
 
 <Image src="/assets/images/concepts/cluster-resources.png" alt="Hello" width={1000} height={500}  />
+
+## Kubernetes Shell
+
+SkyU Console provides a Kubernetes Shell that allows you to interact with the Kubernetes Cluster directly from the SkyU Console. The Kubernetes Shell is a web-based terminal that allows you to run `kubectl` commands on the Kubernetes Cluster.
+
+<Image src="/assets/images/concepts/shell-access.png" alt="Hello" width={1000} height={500}  />
+
+<Callout type="info">
+Shell can only be accessed if the User is given shell permissions at project level or environment level at SkyU RBAC level. When the user is given shell permissions, automatically SkyU Creates roles and rolebindings in the Kubernetes Cluster to provide access to the user.
+</Callout>

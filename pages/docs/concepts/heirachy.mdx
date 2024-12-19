@@ -16,6 +16,8 @@ Each level of heirachy, Oragnization, Project and Environment, has its own acces
 
 ## Environments and Kubernetes Clusters
 
+### Shared Clusters
+
 Each Project in SkyU can have multiple Kubernetes Clusters associated with it. These clusters can be used to deploy applications and services. Kubernetes clusters are associated with an environment through namespaces. 
 
 <Image src="/assets/images/docs/concepts/environments-clusters.png"   width={1000} height={500}  />
@@ -24,6 +26,21 @@ Each Project in SkyU can have multiple Kubernetes Clusters associated with it. T
 <Callout type="info" >
 A Kubernetes Cluster can be shared across multiple environments.
 </Callout>
+
+### Multi-Cluster Environments
+
+More than onbe Kubernetes Clusters can be assigned to a single environment. This is useful when you want to deploy the same application across multiple clusters.
+
+
+<Image src="/assets/images/concepts/multi-cluster.png"   width={300} height={100}  />
+
+The usecases for the the above would be:
+
+- Deploying the same application across multiple regions.
+- Deploying the same application across multiple cloud providers.
+- Setting up a disaster recovery environment.
+- Enabling your development team to spin up local clusters for development and sync them with dev environment locally for dev testing.
+
 
 More information on how to connect a Kubernetes Cluster to SkyU can be found in the [Cluster Agent](/docs/concepts/cluster-agent) section.
 
