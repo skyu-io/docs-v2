@@ -1,5 +1,6 @@
 {
     "introduction-pipelines": "Introduction",
     "pipeline-design": "Design",
-    "pipeline-steps": "Steps"
+    "pipeline-steps": "Steps",
+    "pipeline-runs": "Runs"
 }
