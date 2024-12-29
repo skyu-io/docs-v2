@@ -1,7 +1,7 @@
 import { Callout } from 'nextra/components'
 import Image from '../../../../components/Image'
 
-# Application Pipelines
+# Pipeline Workflows
 
 SkyU Application Pipelines are a powerful way to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest.
 
@@ -32,3 +32,9 @@ There are few types of pipelines that you can create in SkyU:
 - **PR Pipeline**: This pipeline is triggered when a pull request is created for the application. It can be used to run tests, perform validations, and deploy the application to a temporary environment for testing.
 - **AI Suggested Code Pipeline**: This pipeline is there to fix your code by analyzing crash reports and logs. This pipeline needs to be enabled manually and triggered manually.
 
+
+## Rebuild Pipelines
+
+SkyU continuosly updates the pipeline templates for the applications. When there is a new version for the pipeline template, SkyU will give you an option to update the pipeline template for the application. You can choose to update the pipeline template or keep the existing pipeline template.
+
+If there are any issues with the pipeline, the recommended action is to rebuild the pipeline. This will update the pipeline template and fix the issues with the pipeline.
