@@ -163,6 +163,13 @@ Deploy Lambda from Zip is a step that deploys the Lambda function from a zip fil
 | buildEnvironmentVersion   | The version of the build environment. `latest`, `specific version`                     |
 | lambdaFunctionUrlAuthType | The authentication type for the Lambda function URL. `AWS_IAM`, `ANONYMOUS` , `NONE  ` |
 
+
+
+
+## Frequently Asked Questions
+
+#### How do I add .npmrc file to a lambda build?
+
 In the Deploy Lambda from Zip step, you sometimes need .npmrc file to authenticate with the npm registry. You can create the .npmrc file in the pipeline using the following command in `installDepsCommand` field.
 
 if you want to add lines to the .npmrc file, like the following:
@@ -178,4 +185,16 @@ you can use the following command in the `installDepsCommand` field.
 echo "//npm.pkg.github.com/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc && echo "@skyu-io:registry=https://npm.pkg.github.com" >> .npmrc && yarn install
 ```
 
-Please note that the `NPM_AUTH_TOKEN` is an environment variable that you need to set in the pipeline configuration.
+Please note that the `NPM_AUTH_TOKEN` is an environment variable that you need to set in the pipeline configuration. You can set the environment variable in the `Environment Variables` section in the pipeline configuration.
+
+
+#### I have a private npm package that I want to use in the docker build. How do I authenticate with the npm registry?
+
+In your Dockerfile you need to add the following lines to authenticate with the npm registry.
+
+```
+ARG NPM_AUTH_TOKEN
+RUN echo "//npm.pkg.github.com/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc && echo "@skyu-io:registry=https://npm.pkg.github.com" >> .npmrc
+```
+
+You can set the `NPM_AUTH_TOKEN` as a build argument in the Dockerfile. You can set the build argument in the `dockerBuildArgs` field in the `Build and Push` step in the pipeline configuration.
