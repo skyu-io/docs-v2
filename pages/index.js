@@ -4,21 +4,27 @@ import FeatureArticles from "@/components/FeaturedArticles";
 import Hero from "@/components/Hero";
 import Wrapper from "@/components/Wrapper";
 import { postQuery } from "@/lib/queries";
-import client from "@/lib/sanityClient";
+import { client, isSanityConfigured } from "@/lib/sanityClient";
 
 export default function HomePage({ articles }) {
+
   return (
     <Wrapper>
       <Hero />
       <CardContainer />
       <FAQSection />
-      <FeatureArticles articles={articles} />
+      {isSanityConfigured && <FeatureArticles articles={articles} />}
     </Wrapper>
   );
 }
 
 export async function getStaticProps() {
-  const articles = await client.fetch(postQuery);
+
+  if (!isSanityConfigured) {
+    return { props: { data: null } };
+  }
+
+  const articles = await client?.fetch(postQuery);
 
   return {
     props: {
