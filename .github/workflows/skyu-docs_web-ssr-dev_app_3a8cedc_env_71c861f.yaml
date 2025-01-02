@@ -1,5 +1,11 @@
 name: skyu-docs_web-ssr-dev_app_3a8cedc_env_71c861f Pipeline (Skyu Generated)
 'on':
+  push:
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_f1f6eeee-31b8-4432-a6b9-7f99512d7007
@@ -18,6 +24,34 @@ jobs:
     steps:
       - name: 'Run :: Checkout repository for Code Scan'
         uses: actions/checkout@v4
+      - name: 'Run :: Checkout Specific Commit'
+        env:
+          COMMIT_ID: ${{ github.event.client_payload.commitId }}
+          BRANCH_NAME: ${{ github.event.client_payload.branchName }}
+        if: >-
+          ${{ github.event.client_payload.commitId != null ||
+          github.event.client_payload.branchName != null }}
+        run: |2-
+
+              echo "Starting the checkout process..."
+              git fetch --all
+              if [ -n "$COMMIT_ID" ]; then
+                echo "Commit ID provided: $COMMIT_ID"
+                git checkout $COMMIT_ID || true
+                echo "Checked out to commit ID: $COMMIT_ID"
+              elif [ -n "$BRANCH_NAME" ]; then
+                echo "Branch name provided: $BRANCH_NAME"
+                git checkout $BRANCH_NAME || true
+                echo "Checked out to branch: $BRANCH_NAME"
+
+                #Updating the commit Id
+                ACTUAL_COMMIT_ID=$(git rev-parse HEAD)
+                echo "Changing CommitId: $ACTUAL_COMMIT_ID"
+                echo "COMMIT_ID=$ACTUAL_COMMIT_ID" >> $GITHUB_ENV
+              else
+                echo "Skipping checkout..."
+              fi
+            
       - name: 'Run :: Decoding Secrets'
         run: |2-
 
@@ -57,6 +91,7 @@ jobs:
     env:
       CONTEXT_JSON: ${{ toJson(github) }}
     runs-on: ubuntu-latest
+    needs: []
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -184,6 +219,7 @@ jobs:
     name: ' Release Info'
     permissions: write-all
     runs-on: ubuntu-latest
+    needs: []
     if: ${{ github.event.client_payload.releaseData }}
     steps:
       - name: 'Run :: Start'
@@ -337,7 +373,9 @@ jobs:
           aws-region: ${{ env.region }}
       - name: 'Run :: Initialize AWS Amplify'
         env:
-          REPOSITORY: ${{ github.repositoryUrl }}
+          REPOSITORY: >-
+            ${{ github.event.client_payload.externalRepo.externalRepoUrl ||
+            github.repositoryUrl }}
         id: initialize-amplify
         run: |2-
 
@@ -377,13 +415,22 @@ jobs:
                 echo "Production Branch: $production_branch"
                 echo "productionBranch=$production_branch" >> $GITHUB_OUTPUT
 
-                aws amplify update-app         --app-id "$app_id"         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         --iam-service-role-arn "${{ env.roleARN }}"         --build-spec "$build_spec" 
+                aws amplify update-app         --app-id "$app_id"         --platform ${{ env.AMPLIFY_PLATFORM }}         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         --iam-service-role-arn "${{ env.roleARN }}"         --build-spec "$build_spec" 
               else
                 echo "Initializing new Amplify App"
                 formattedRepoUrl=$(echo "$REPOSITORY" | sed 's|git://|https://|') 
                 echo "Formatted Repository URL: $formattedRepoUrl"
+                externalRepoUrl=${{ github.event.client_payload.externalRepo.externalRepoUrl }}
+                if [ -n "$externalRepoUrl" ]; then
+                  token_flag="--oauth-token"
+                  access_token=${{ github.event.client_payload.externalRepo.externalRepoAppToken }}
+                else
+                  token_flag="--access-token"
+                  access_token=${{ env.pat }}
+                fi
+
                 create_app=$(
-                  aws amplify create-app         --name ${{ env.APPLICATION_NAME }}         --platform WEB_COMPUTE         --repository $formattedRepoUrl         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         --access-token ${{ env.pat }}         --region ${{ env.region }}         --iam-service-role-arn ${{ env.roleARN }}         --build-spec "$build_spec"       )
+                  aws amplify create-app         --name ${{ env.APPLICATION_NAME }}         --platform ${{ env.AMPLIFY_PLATFORM }}         --repository $formattedRepoUrl         --environment-variables "Branch=$BRANCH_NAME,Commit=$COMMIT_ID${{ env.AMPLIFY_ENV_VARS }}"         $token_flag $access_token         --region ${{ env.region }}         --iam-service-role-arn ${{ env.roleARN }}         --build-spec "$build_spec"       )
                 app_id=$(echo $create_app | jq -r '.app.appId')
               fi
               
@@ -415,7 +462,7 @@ jobs:
                 if [ "$productionBranch" != "$BRANCH_NAME" ]; then
                   echo "Production Branch has Changed"
                   echo "Deleting Previous Production Branch"
-                  aws amplify delete-branch --app-id $appId --branch-name $productionBranch
+                  aws amplify delete-branch --app-id $appId --branch-name $productionBranch || true
                 
                 else 
                   echo "Production Branch Remains the Same"
@@ -583,6 +630,15 @@ jobs:
 
               context=$(echo "$CONTEXT_JSON" | jq --arg sha "$COMMIT_ID" '.sha = $sha' | jq -c . | base64)
               response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/FAILED?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+
+              # Triggering SkyU Alerts
+              response=$(curl -X POST -d "labels[alertname]=pipelineFailed&labels[pipelineId]=${{ env.PIPELINE_ID }}&message=Pipeline Failed&messageTitle=Pipeline ${{ env.PIPELINE_ID }} Failed&status=firing"  -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.FIRE_SKYU_ALERT_EP }}?organizationId=${{ env.PIPELINE_ORGANIZATION_ID }}&projectId=${{ env.PIPELINE_PROJECT_ID }}&environmentId=${{ env.PIPELINE_ENVIRONMENT_ID }}&token=${{ env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}&authBy=sa")
+
+              if echo "$response" | grep -q '"success":true'; then
+                echo "SUCCESS :: $response"
+              else
+                echo "FAILED :: $response"
+              fi
               
   deploy:
     name: Deploy
