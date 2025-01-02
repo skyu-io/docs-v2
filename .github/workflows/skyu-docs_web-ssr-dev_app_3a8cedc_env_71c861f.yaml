@@ -1,5 +1,11 @@
 name: skyu-docs_web-ssr-dev_app_3a8cedc_env_71c861f Pipeline (Skyu Generated)
 'on':
+  push:
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_f1f6eeee-31b8-4432-a6b9-7f99512d7007
