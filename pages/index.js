@@ -19,17 +19,20 @@ export default function HomePage({ articles }) {
 }
 
 export async function getStaticProps() {
+  let articles = null;
 
-  if (!isSanityConfigured) {
-    return { props: { data: null } };
+  if (isSanityConfigured && client) {
+    try {
+      articles = await client.fetch(postQuery);
+    } catch (error) {
+      console.error("Error fetching articles from Sanity:", error);
+      articles = null;
+    }
   }
-
-  const articles = await client?.fetch(postQuery);
 
   return {
     props: {
       articles,
     },
-    revalidate: 60,
   };
 }
