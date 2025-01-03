@@ -78,4 +78,80 @@ If you are using cert-manager, you don't  need to create a secret manually. Cert
 </Steps>
 
 
+## Common Ingress Use Cases
 
+### NGINX Ingress Controller
+
+#### Multi Service Routing
+
+Ingress can be used to route traffic to multiple services based on the host name and path. You can create multiple rules in the Ingress to route traffic to different services based on the host name and path.
+
+Here are the annotations you can use to create an Ingress with NGINX Ingress Controller:
+
+| Annotation                                            | Description                                                                                                                                                             | Value    |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `nginx.ingress.kubernetes.io/rewrite-target`          | The value of this annotation is a regular expression that will be used to rewrite the URL. The Ingress controller will rewrite the URL based on the regular expression. | `/$2 `   |
+| `nginx.ingress.kubernetes.io/use-regex`               | This annotation is used to specify that the rewrite-target annotation should be treated as a regular expression.                                                        | `'true'` |
+| `nginx.ingress.kubernetes.io/permanent-redirect-code` | This annotation is used to specify the HTTP status code for permanent redirect.                                                                                         | `301`    |
+
+Once these annotations are added, you can create multiple rules in the Ingress to route traffic to different services based on the host name and path.
+if you have a service running on the path `/service1` and another service running on the path `/service2`, you can create an Ingress with the following rules:
+
+```yaml
+  Path Type: ImplementationSpecific
+  Path: /service1(/|$)(.*)
+  Service Name: service1
+  Service Port: 80
+```
+
+```yaml
+  Path Type: ImplementationSpecific
+  Path: /service2(/|$)(.*)
+  Service Name: service2
+  Service Port: 80
+```
+
+#### WebSocket Support
+
+Ingress can be used to route WebSocket traffic to services. You can create an Ingress with the following annotations to enable WebSocket support:
+
+| Annotation                                          | Description                                                                                           | Value      |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------- |
+| `nginx.ingress.kubernetes.io/websocket-services`    | This annotation is used to specify the services that should be treated as WebSocket services.         | `service1` |
+| `nginx.ingress.kubernetes.io/proxy-read-timeout`    | This annotation is used to specify the timeout for reading a response from the proxied server.        | `3600`     |
+| `nginx.ingress.kubernetes.io/proxy-send-timeout`    | This annotation is used to specify the timeout for sending a request to the proxied server.           | `3600`     |
+| `nginx.ingress.kubernetes.io/proxy-connect-timeout` | This annotation is used to specify the timeout for establishing a connection with the proxied server. | `3600`     |
+
+
+
+
+#### Handle Large Request Body 
+
+Ingress can be used to handle large request bodies. You can create an Ingress with the following annotations to handle large request bodies:
+
+| Annotation                                    | Description                                                                                         | Value  |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------ |
+| `nginx.ingress.kubernetes.io/proxy-body-size` | This annotation is used to specify the maximum size of the request body that the server can accept. | `500m` |
+
+
+
+#### SSL Passthrough 
+
+Sometimes, you may want to route SSL traffic to the services directly. This means you will be mounting certificates directly inside your container. You can create an Ingress with the following annotation to route SSL traffic to the services directly:
+
+| Annotation                                    | Description                                                                                            | Value  |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------ |
+| `nginx.ingress.kubernetes.io/ssl-passthrough` | This annotation is used to specify that the Ingress should route SSL traffic to the services directly. | `true` |
+
+### AWS ALB Ingress Controller
+
+#### Websocket Suppprt
+
+Ingress can be used to route WebSocket traffic to services. You can create an Ingress with the following annotations to enable WebSocket support:
+
+| Annotation                                           | Description                                                                  | Value                                                              |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `alb.ingress.kubernetes.io/target-type`              | This annotation is used to specify the target type for the ALB.              | `ip`                                                               |
+| `alb.ingress.kubernetes.io/listen-ports`             | This annotation is used to specify the ports that the ALB should listen on.  | `[{"HTTPS": 443}]`                                                 |
+| `alb.ingress.kubernetes.io/target-group-attributes`  | This annotation is used to specify the target group attributes for the ALB.  | `stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60` |
+| `alb.ingress.kubernetes.io/load-balancer-attributes` | This annotation is used to specify the load balancer attributes for the ALB. | `idle_timeout.timeout_seconds=600`                                 |

@@ -1,8 +1,14 @@
 {
-    "source-to-kubernetes-deployment": {
-        "title": "Source Code to Kubernetes Deployment",
-        "theme": {
-            "layout": "full"
-        }
+  "source-to-kubernetes-deployment": {
+    "title": "Source Code to Kubernetes Deployment",
+    "theme": {
+      "layout": "full"
     }
+  },
+  "sam-deployment": {
+    "title": "Source Code to AWS Serveless Application Model (SAM) Deployment",
+    "theme": {
+      "layout": "full"
+    }
+  }
 }
