@@ -1,0 +1,95 @@
+import { Callout } from 'nextra/components';
+import { Steps } from 'nextra/components';
+import Image from '../../../../components/Image';
+
+# Source Code to AWS Docker Lambda Function Deployment
+
+This application type is designed to deploy your source code to AWS Lambda by building it as a Docker image. This allows you to package your application in a custom runtime and manage it as a container.
+
+## Application Features
+
+- **Application Overview**: Deploy your source code to AWS Lambda as a Docker container using this template.
+- **Custom Docker Configurations**: Add your custom Docker configurations for the Lambda runtime.
+- **Pipelines**: Build and push your Docker image to Amazon Elastic Container Registry (ECR) and deploy to AWS Lambda.
+- **Security Scans**: Perform vulnerability scans on the Docker image before deployment.
+- **Environment Variables**: Configure environment variables for the Docker container within the application settings.
+
+## Getting Started
+
+<Steps>
+
+### Choose Application Type
+
+Navigate to the `Applications` section of your project. Click on the `+ Create Application` button to create a new application. Select `Source Code to AWS Docker Lambda Function` application type from the catalog.
+
+<Image src="/assets/images/tutorials/app-creation/docker-to-lambda/select.png" width={1000} height={500} />
+
+### Fill General Details
+
+| Field       | Description                                                                                                   | Example                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| Name        | Name of the Application. This has to be unique across your project and should not contain special characters. | docker-lambda-app               |
+| Description | Provide a meaningful description for your application                                                        | This is a Docker Lambda function. |
+
+### Authenticate
+
+This template requires the source code to build the Docker image and deploy the application. Authenticate with GitHub to connect an existing repository for the application.
+
+### Select Repository
+
+Select the GitHub repository containing your application source code.
+
+| Field          | Description                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------- |
+| Github Account | Your Github Organization / Account                                                                      |
+| Repository     | The repository which holds the application code                                                         |
+| Branch         | Default branch for the repository. `main` is usually the default branch. Pipeline YAMLs will be stored here. |
+
+<Image src="/assets/images/applications/repo-selector.png" width={500} height={500} />
+
+### Configure Pipeline Triggers
+
+Set up the triggers for your deployment pipeline, including events such as `push` or specific branch updates.
+
+| Field    | Description                                                      | Default |
+| -------- | ---------------------------------------------------------------- | ------- |
+| On       | Pipeline Trigger Event                                           | push    |
+| Branches | Multiple inputs for branch names or a regex. (Optional)          | main    |
+| Tags     | Multiple inputs for tag names or a regex    (Optional)           |         |
+| Paths    | To trigger on specific path changes in a repository   (Optional) |         |
+
+<Callout type="info">
+Each environment will have a different set of triggers. You can configure the triggers for each environment. Learn more in the [Pipelines](/docs/concepts/pipeline) section.
+</Callout>
+
+### Add Docker Configurations
+
+Define any environment variables and Docker-specific configurations for your Lambda container. These variables will be securely stored and injected into the container at runtime.
+
+### AWS Lambda Function Configuration
+
+Provide the details for your Lambda deployment, including the Docker image settings, runtime environment, memory allocation, and other Lambda-specific configurations.
+
+| **Field**                      | **Description**                                                                                                   | **Example**                              |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **AWS Region**                 | The region where your Lambda function will be deployed.                                                          | `us-east-1`                              |
+| **List Integrations**          | Select or create a new credential to link your AWS account.                                                      | `Create New Credential`                  |
+| **Lambda Name**                | Name for your Lambda (ReadOnly)function.                                                                  | `my-docker-lambda`                       |
+| **Lambda Description**         | (Optional) Add a meaningful description for your Lambda function.                                                | `Docker-based Lambda`                    |
+| **Lambda Memory Size**         | Allocate memory (in MB) for the Lambda function.                                                                 | `512`                                    |
+| **Lambda Timeout**             | (Optional) Specify the maximum runtime duration (in seconds) for the function.                                   | `10`                                     |
+| **Lambda Ephemeral Storage**   | (Optional) Define storage space for the Lambda function.                                                         | `512`                                    |
+| **Lambda Function URL Auth Type** | (Optional) Select the authentication type for the Lambda function URL.                                         | `Select Function URL AuthType`           |
+| **Environment Variables**      | (Optional) Define key-value pairs for environment-specific configurations.                                        | `Add Environment Variable`               |
+| **Image Repository Name**      | The ECR repository name for the Docker image (ReadOnly)                                                            | `929382548107.dkr.ecr.us-east-1.amazonaws.com/tst123` |
+
+
+<Image src="/assets/images/tutorials/app-creation/docker-to-lambda/config.png" width={500} height={500} />
+
+### Create Application
+
+Once you have filled in all the details, click on the `Create` button to create the application.
+
+<Image src="/assets/images/tutorials/app-creation/docker-to-lambda/create.png" width={500} height={500} />
+
+</Steps>
