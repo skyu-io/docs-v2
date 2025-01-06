@@ -1,0 +1,72 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../../components/Image'
+
+# Amazon Elastic Container Registry
+
+SkyU supports Amazon Elastic Container Registry as an image registry for your projects. This guide will walk you through the process of linking your Amazon Elastic Container Registry to your SkyU project.
+
+
+## Create Amazon Elastic Container Registry Credential
+
+<Steps>
+
+### Navigate to Project Settings
+To initiate linking Docker integrations with your project, first, select a project within your organization. Navigate to `Settings` -> `Integrations` ->`Image Registries` to view all existing image registry credentials.
+
+Click on `+ Integration` to introduce a new Amazon Elastic Container Registry credential into your project.
+
+### Add Credential
+When linking a Amazon Elastic Container Registry resource, you are required to provide the following details:
+<Image src="/assets/images/tutorials/image-registry/amazon-ecr/add-amazon-ecr.png" alt="Hello" width={300} height={500}  />
+
+<Callout type="info">
+`ECRFullAccess` policy is required for the role to be able to access the Amazon Elastic Container Registry.
+</Callout>
+
+| Field                 | Description                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| Name                  | Name of the Amazon Elastic Container Registry Credential. This is for your reference. |
+| ARN to be accessed by | Select `ECR Access`                                                                   |
+| Account ID            | Your AWS Account ID. Please ensure that it matches the account ID your log into       |
+
+
+
+Make sure you click the `Create Role on AWS` button to actually create the role on AWS. (You will be redirected to do this)
+
+<Callout type="info">
+Make sure you are logged into your AWS account's console in a different tab in th same browser as the SkyU console before clicking the `Create Role on AWS` button.
+</Callout>
+
+### Run the Stack
+After creating the role on AWS, you will be redirected to the stack creation page. Click on `Create Stack` to create the stack.
+
+<Image src="/assets/images/tutorials/image-registry/amazon-ecr/create-stack.png" alt="Hello" width={700} height={500}  />
+ 
+
+| Field         | Description                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| Name          | `Automatically Filled` Name of the Amazon Elastic Container Registry Credential. This is for your reference. |
+| AccountID     | `Automatically Filled` SkyU Control Plane ID for ARN                                                         |
+| GithubOrgName | Your Github Organization / Account                                                                           |
+
+ <Callout type="info">
+ Fill the `GithubOrgName` with your Github organization name. As an example, if your repo is in a personal account, the repo URL would be something like `https://github.com/git-username/repo-name`. In which case the `GithubOrgName` would be 'git-username'.
+ </Callout>
+</Steps>
+
+
+
+
+
+## Update Credential
+
+Any Amazon Elastic Container Registry credential you've added can be modified later through the image registries list page.
+
+Furthermore, you can update permissions for the ARN via AWS Control Plane manually.
+
+## Pull Images from Amazon Elastic Container Registry in EKS
+
+SkyU does not create an ImagePullSecret for Amazon Elastic Container Registry, because ECR ImagePullSecrets are short lived. Instead, you can use the IAM role created in the previous step to pull images from ECR.
+
+Please refer to the [AWS Documentation](https://docs.aws.amazon.com/AmazonECR/latest/userguide/ECR_on_EKS.html) for more information on how to pull images from ECR to EKS.

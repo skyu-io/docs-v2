@@ -1,0 +1,86 @@
+import Image from '../../../../components/Image'
+import { Callout } from 'nextra/components'
+
+# Project Features
+
+Project Settings allows you to manage the configurations and settings of a project. You can access the project settings by clicking on the `Settings` tab on the left sidebar of the SkyU Console.
+
+
+## Repsoitories
+
+In the repositories section, you can view the GitOps Repository and Infrastructure Repository associated with the project.
+
+<Image src="/assets/images/docs/create-project/project-repositories.png" alt="Hello" width={1000} height={500}  />
+
+If you want to change the GitOps Repository, Please contact the SkyU support team by raising a ticket.
+
+## Features
+
+In the features section, you can enable  the features for the project. Once enabled, you cannot disable the features.
+
+<Image src="/assets/images/docs/create-project/project-features.png" alt="Hello" width={1000} height={500}  />
+
+### Webapps
+
+Webapps feature allows you to deploy web applications in the project. This works by deploying the web applications to an S3 bucket. You need to link an AWS account to the project to enable this feature per environment.
+
+<Image src="/assets/images/docs/create-project/enable-webapp.png" alt="Hello" width={300} height={500}  />
+
+As shown in the above screenshot, you need to connect AWS account per environment to enable the feature. If AWS account is not connected, please click `Create New Credential` to connect the account.
+
+
+<Image src="/assets/images/docs/create-project/create-cred.png" alt="Hello" width={300} height={500}  />
+
+| Field                 | Description                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
+| Name                  | Name of the AWS Credential. This is for your reference.                         |
+| ARN to be accessed by | Select `Web App Configuration`                                                  |
+| Account ID            | Your AWS Account ID. Please ensure that it matches the account ID your log into |
+
+<Callout type="info">
+Make sure ARN to be accessed by is set to `Web App Configuration` to enable the Webapps feature.
+</Callout>
+
+Once you fill the details, click on `Create Role on AWS` to create the role in your AWS account.
+
+<Callout type="info">
+Make sure you are logged into your AWS console in a different tab in the same browser window before clicking the `Create Role on AWS` button.
+</Callout>
+
+### Infrastructure as Code
+
+
+Infrastructure as Code feature allows you to deploy infrastructure through pre-built templates. For this, you need to link another GitHub repository to your project to store the infrastructure templates.
+
+When you click `Enable Feature` it'll create a new GitOps Repository for keeping your infrastructure terraform modules and GitHub actions workflows.
+
+<Image src="/assets/images/tutorials/infrastructure/enable-feature.png" alt="Hello" width={300} height={500}  />
+
+
+### Migrate to Dedicated Secret Manager
+
+If you want to migrate from SkyU Secret Manager to a Dedicated Secret Manager, you can do so by clicking on the `Migrate to Dedicated Secret Manager` button.
+<Callout>
+Currently AWS Secret Manager is the only supported secret store. More stores will be supported soon.
+</Callout>
+
+<Image src="/assets/images/docs/create-project/migrate-secret-manager.png" alt="Hello" width={300} height={500}  />
+
+
+
+| Field      | Description                                                                     |
+| ---------- | ------------------------------------------------------------------------------- |
+| Account ID | Your AWS Account ID. Please ensure that it matches the account ID your log into |
+| Region     | Region of your AWS Secret Manager                                               |
+| Role ARN   | Automatically filled.                                                           |
+
+Once you fill the details, click on `Create Role on AWS` to create the role in your AWS account.
+
+<Callout type="info">
+Make sure you are logged into your AWS console in a different tab in the same browser window before clicking the `Create Role on AWS` button.
+</Callout>
+
+
+## Integrations
+
+In the integrations section, you can view the integrations associated with the project. You can also add new integrations to the project.

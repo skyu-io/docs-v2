@@ -1,0 +1,23 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../../../components/Image'
+
+# Kubernetes Configuration
+
+In SkyU applications that have kubernetes configurations, you can view and change configurations per environment in the `Kubernetes` section in the left side menu. The options you see may differ according to the application template type.
+
+
+### Supported Application Templates
+
+The following application templates support kubernetes configurations:
+
+- **Source Code to Deployment**: This template allows you to deploy your source code to a kubernetes cluster.
+- **Source Image to Deployment**: This template allows you to deploy your docker image to a kubernetes cluster.
+- **Source Code to Kubernetes Cron Job**: This template allows you to deploy your source code to a kubernetes cluster as a cronjob.
+- **Helm Chart from Source Repository**: This template allows you to deploy a helm chart from a source repository to a kubernetes cluster.
+
+
+### Manual Deploy Trigger
+
+You can manually trigger a deployment to the kubernetes cluster by clicking the `Trigger Deploy` button in the top gray bar. This will trigger a CD run to re-deploy the application to the kubernetes cluster.
+
+If you feel your changes are not reflecting in the kubernetes cluster, you can manually trigger a deployment to the kubernetes cluster.

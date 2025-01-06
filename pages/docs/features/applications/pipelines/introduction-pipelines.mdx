@@ -1,0 +1,40 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../../../components/Image'
+
+# Pipeline Workflows
+
+SkyU Application Pipelines are a powerful way to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest.
+
+For Each Application, automatically following pipelines are created:
+
+- **Environment Pipeline**: This pipeline is configured for each environment in the application. It is triggered when a new version of the application is deployed to the environment. The pipeline can be used to run tests, perform validations, and deploy the application to the environment.
+- **PR Pipeline**: This pipeline is triggered when a pull request is created for the application. It can be used to run tests, perform validations, and deploy the application to a temporary environment for testing.
+
+
+<Image src="/assets/images/applications/pipelines.png" alt="Hello" width={1000} height={500}  />
+
+These pipelines can be manually triggered or automatically triggered based on the events like code push, pull request, or any other event that you configure.
+
+By default, the triggers for these pipelines are set from the trigger configuration you have saved per environment. You can customize the triggers as per your requirements in the pipeline configuration.
+
+When there is a new version for the pipeline template, SkyU will give you an option to update the pipeline template for the application. You can choose to update the pipeline template or keep the existing pipeline template.
+
+You can learn more about how to create and manage pipelines in the [Pipelines](/docs/concepts/pipelines) section.
+
+Inside the pipeline, you can edit the following configurations.
+
+
+## Pipeline Types
+
+There are few types of pipelines that you can create in SkyU:
+
+- **Environment Pipeline**: This pipeline is configured for each environment in the application. It is triggered when a new version of the application is deployed to the environment. The pipeline can be used to run tests, perform validations, and deploy the application to the environment.
+- **PR Pipeline**: This pipeline is triggered when a pull request is created for the application. It can be used to run tests, perform validations, and deploy the application to a temporary environment for testing.
+- **AI Suggested Code Pipeline**: This pipeline is there to fix your code by analyzing crash reports and logs. This pipeline needs to be enabled manually and triggered manually.
+
+
+## Rebuild Pipelines
+
+SkyU continuosly updates the pipeline templates for the applications. When there is a new version for the pipeline template, SkyU will give you an option to update the pipeline template for the application. You can choose to update the pipeline template or keep the existing pipeline template.
+
+If there are any issues with the pipeline, the recommended action is to rebuild the pipeline. This will update the pipeline template and fix the issues with the pipeline.

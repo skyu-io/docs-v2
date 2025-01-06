@@ -1,17 +1,6 @@
 {
   "index": "Getting Started",
-  "concepts": "Concepts",
-  "projects": "Projects",
-  "iam": "Identity and Access Management",
-  "clusters": "Clusters",
-  "applications": "Applications",
-  "releases": "Releases",
-  "helm": "Helm",
-  "configs": "Configs",
-  "environments": "Environments",
-  "observability": "Observability",
-  "infrastructure": "Infrastructure",
-  "insights": "Insights",
-  "integrations": "Integrations",
-  "alerts": "Alerts"
+  "features": "Features",
+  "insightsinfrastructures": "Insights and Infrastructures",
+  "concepts": "Concepts"
 }

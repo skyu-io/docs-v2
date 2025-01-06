@@ -1,10 +1,10 @@
 {
-    "heirachy": "Resource Heirachy",
+    "heirachy": "Resource Hierarchy",
     "secret-management": "Secret Management",
     "cluster-agent": "Cluster Agent",
-
     "gitops": "GitOps",
     "kustomize-transformer": "Kustomize Transformer",
     "continous-deployment": "Continous Deployment",
-    "ai": "Artificial Intelligence"
+    "ai": "Artificial Intelligence",
+    "pipelines": "Pipelines"
 }

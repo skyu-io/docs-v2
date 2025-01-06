@@ -1,0 +1,103 @@
+import { Callout } from "nextra/components";
+import { Steps } from "nextra/components";
+import Image from "../../../../../components/Image";
+
+# Source Code to AWS Serveless Application Model (SAM) Deployment
+
+This application type takes your AWS Serverless Application Model (SAM) templates and source code—designed for serverless architectures such as APIs, event-driven workflows, or background processing—and deploys it seamlessly within an AWS environment.
+
+## Application Features
+
+- **Application Overview**: This template deploys your AWS SAM applications, provisioning the necessary serverless resources and infrastructure.
+- **Pipelines**: The SAM application is built using the specified build command and deployed to AWS resources through the configured pipeline.
+- **Security Scans**: The built image is scanned for vulnerabilities.
+- **Resources**: The necessary AWS resources, such as IAM roles, Secrets Manager etc, are created as specified in the SAM deployment.
+
+## Getting Started
+
+<Steps>
+
+### Choose Application Type
+
+Navigate to the `Applications` section of your project. Click on the `+ Create Application` button to create a new application.
+Select `Source Code to AWS Serveless Application Model (SAM)` application type from the catalogue.
+
+<Image
+  src="/assets/images/tutorials/app-creation/sam-deployment/select-application.png"
+  width={1000}
+  height={500}
+/>
+
+### Fill General Details
+
+| Field       | Description                                                                                                   | Example                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Name        | Name of the Application. This has to be unique across your project and should not contain special characters. | test-application           |
+| Description | Provide a meaningful description for your application                                                         | this is a test application |
+
+### Authenticate
+
+This template needs the source code to build and deploy the application.
+Authenticate with GitHub to connect an existing repository for the application.
+
+This step will route you to the GitHub OAuth page where you can authenticate with your GitHub account and install the SkyU GitHub App to select an existing repository for GitOps.
+
+### Select Repository
+
+Select the repository which holds the application code.
+
+| Field          | Description                                                                                                 |
+| -------------- | ----------------------------------------------------------------------------------------------------------- |
+| Github Account | Your Github Organization / Account                                                                          |
+| Repository     | The repository which holds the application code                                                             |
+| Branch         | Default branch for the repository. `main` is usally the default branch. Pipeline yamls will be stored here. |
+
+<Image
+  src="/assets/images/applications/repo-selector.png"
+  width={500}
+  height={500}
+/>
+
+### Configure Pipeline Triggers
+
+You can configure the triggers per environment in this step defining the `branches/tags` in which the workflows are going to be Triggered. These will be prefilled with the standard conventions which you can override.
+
+| Field    | Description                                                    | Default |
+| -------- | -------------------------------------------------------------- | ------- |
+| On       | Pipeline Trigger Event                                         | push    |
+| Branches | Multiple inputs for branch names or a regex. (Optional)        | main    |
+| Tags     | Multiple inputs for tag names or a regex (Optional)            |         |
+| Paths    | To trigger on specific path changes in a repository (Optional) |         |
+
+<Callout type="info">
+  Each environment will have a different set of triggers. You can configure the
+  triggers for each environment. You can learn more about pipeline triggers in
+  the [Pipelines](/docs/concepts/pipeline) section.
+</Callout>
+
+### Environment Variables
+
+You can define custom environment variables that will be used during the pipeline execution. These variables can be leveraged to store sensitive information or configuration values, ensuring flexibility and customization for your deployment process.
+
+### Configure the Build Pipeline
+
+You can use this step to configure how the AWS Serverless Application Model (SAM) app is built and deployed.
+
+| Field                  | Description                                                                                                | Example                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| AWS Cloud Credential   | Choose the credential to use for deploying the SAM app.                                                    | sam-cred                                              |
+| Region                 | Specify the AWS region where the SAM app will be deployed.                                                 | us-east-1                                             |
+| YAML Path              | Path to the SAM template YAML file in the repository.                                                      | /template.yaml                                        |
+| SAM Deployment Command | The command used to deploy the SAM application. Default is `sam deploy`.                                   | sam deploy                                            |
+| SAM Build Command      | The command used to build the SAM application. Default is `sam build`.                                     | sam build                                             |
+| SAM Build Arguments    | Additional key-value pairs of arguments to pass to the sam build command (Optional).                       | key: --use-container value: true                      |
+| SAM Deploy Arguments   | Additional key-value pairs of arguments to pass to the sam deploy command. --stack-name is required.       | key: --stack-name value: my-stack                     |
+| Additional Steps       | Key-value pairs for any additional custom steps or scripts to run after building and deploying (Optional). | Name: post-deployment Run: echo "Deployment finished" |
+
+By selecting the "Create New Credential" option, you can link your AWS Cloud credential to the deployment process, enabling seamless access to AWS resources for building and deploying the SAM application. For a complete guide on linking Amazon Cloud, Look at the [Integrations](/docs/integrations/amazon-cloud) Section.
+
+### Create Application
+
+Once you have filled all the details, click on the `Create` button to create the application.
+
+</Steps>

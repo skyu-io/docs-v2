@@ -17,7 +17,7 @@
 ```
 import { Callout } from 'nextra/components'
 import { Steps } from 'nextra/components'
-import Image from '../../../components/Image'
+import Image from '../../../../components/Image'
 ```
 
 

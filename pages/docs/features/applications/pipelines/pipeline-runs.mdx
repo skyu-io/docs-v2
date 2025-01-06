@@ -1,0 +1,42 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../../../components/Image'
+
+# Pipeline Runs
+
+Pipeline Runs are the instances of a pipeline execution. Each pipeline run is a unique instance of a pipeline execution. Pipeline runs are created when a pipeline is triggered.
+
+There 2 types of pipeline runs:
+
+- **CI Runs**: A pipeline associated with build and test stages.
+- **CD Runs**: A job that is specifically for Kubernetes deployments.
+
+<Image src="/assets/images/applications/pipeline-types.png" alt="Hello" width={700} height={500}  />
+
+Normally, for any application type except for Kuberentes based applications, the pipeline runs will be CI runs. For Kubernetes based applications, after the CI runs are successful, the CD runs will be triggered to apply the changes to the Kubernetes Cluster. 
+
+This is designed to keep Kubernetes clusters completely private and secure, so github actions running CI jobs do not have access to the Kubernetes cluster.
+
+
+## CI Runs
+
+CI runs are based on Github Actions. When a pipeline is triggered, the CI runs are executed. The CI runs are responsible for building the application, running the tests, and generating the artifacts.
+
+You can view the CI runs in the pipeline runs section of the application. You can also view the logs of the CI runs in the pipeline runs section.
+
+
+## CD Runs
+
+CD runs are based on the SkyU Agent. When the CI runs are successful, the CD runs are triggered. The CD runs are responsible for deploying the application to the Kubernetes Cluster.
+
+You can view the CD runs in the pipeline runs section of the application. You can also view the logs of the CD runs in the pipeline runs section.
+
+<Callout type="info">
+The CD runs are triggered only if the CI runs are successful. If the CI runs fail, the CD runs will not be triggered.
+</Callout>
+
+<Callout type="warning">
+The logs for CD runs are only available for 24 hours. After 24 hours, the logs will be deleted.
+</Callout>
+
+If there are any issues with the CD runs, you can view the logs and debug the issue. You can also view the logs of the CD runs in the pipeline runs section.
+

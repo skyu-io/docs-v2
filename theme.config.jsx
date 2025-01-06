@@ -149,7 +149,7 @@ export default {
     ),
   },
   sidebar: {
-    defaultMenuCollapseLevel: 1,
+    defaultMenuCollapseLevel: 2,
     autoCollapse: false,
   },
   nextThemes: {
