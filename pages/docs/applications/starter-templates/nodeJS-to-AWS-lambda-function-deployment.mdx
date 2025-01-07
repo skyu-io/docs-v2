@@ -1,0 +1,106 @@
+import { Callout } from 'nextra/components';
+import { Steps } from 'nextra/components';
+import Image from '../../../../components/Image';
+
+# Node.js to AWS Lambda Function Deployment
+
+This application type is designed to deploy your Node.js source code as an AWS Lambda function, enabling a serverless environment to handle your application logic with scalability and cost efficiency.
+
+## Application Features
+
+- **Application Overview**: Deploy your Node.js source code as an AWS Lambda function using this template.
+- **Lambda Configs**: The lambda configs are added when creating the lambda function.
+- **Pipelines**: The Node.js application is built and packaged for deployment to Lambda.
+- **Security Scans**: The code is scanned for vulnerabilities before deployment.
+- **Environment Variables**: Configure Lambda-specific environment variables within the application settings.
+
+## Getting Started
+
+<Steps>
+
+### Choose Application Type
+
+Navigate to the `Applications` section of your project. Click on the `+ Create Application` button to create a new application. Select `Node.js to AWS Lambda Function` application type from the catalog.
+
+<Image src="/assets/images/tutorials/app-creation/nodejs-to-lambda/select-lambda-app.png" width={1000} height={500} />
+
+### Fill General Details
+
+| Field       | Description                                                                                                   | Example                    |
+| ----------- | ------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Name        | Name of the Application. This has to be unique across your project and should not contain special characters. | nodejs-lambda-app          |
+| Description | Provide a meaningful description for your application                                                        | This is a Lambda function. |
+
+### Authenticate
+
+This template needs the source code to build and deploy the application.
+Authenticate with GitHub to connect an existing repository for the application. 
+
+### Select Repository
+
+Select the GitHub repository containing your Node.js application code.
+
+| Field          | Description                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------- |
+| Github Account | Your Github Organization / Account                                                                      |
+| Repository     | The repository which holds the application code                                                         |
+| Branch         | Default branch for the repository. `main` is usually the default branch. Pipeline YAMLs will be stored here. |
+
+<Image src="/assets/images/applications/repo-selector.png" width={500} height={500} />
+
+### Configure Pipeline Triggers
+
+Set up the triggers for your deployment pipeline, including events such as `push` or specific branch updates.
+
+| Field    | Description                                                      | Default |
+| -------- | ---------------------------------------------------------------- | ------- |
+| On       | Pipeline Trigger Event                                           | push    |
+| Branches | Multiple inputs for branch names or a regex. (Optional)          | main    |
+| Tags     | Multiple inputs for tag names or a regex    (Optional)           |         |
+| Paths    | To trigger on specific path changes in a repository   (Optional) |         |
+
+<Callout type="info">
+Each environment will have a different set of triggers. You can configure the triggers for each environment. Learn more in the [Pipelines](/docs/concepts/pipeline) section.
+</Callout>
+
+### Add Lambda configurations
+
+Define any environment variables needed by your Lambda function. These variables will be securely stored and injected into the function at runtime.
+
+### AWS Lambda Function Configuration
+
+Provide the details for your Lambda deployment, including the runtime environment, handler, and memory allocation. Below are the fields with their descriptions and examples:
+
+
+| **Field**                      | **Description**                                                                                                   | **Example**                              |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **AWS Region**                 | The region where your Lambda function will be deployed.                                                          | `us-east-1`                              |
+| **List Integrations**          | Select or create a new credential to link your AWS account.                                                      | `Create New Credential`                  |
+| **Lambda Name**                | Provide a unique name for your Lambda function.                                                                  | `dsafasdfa`                              |
+| **Lambda Description**         | (Optional) Add a meaningful description for your Lambda function.                                                | `My test Lambda`                                    |
+| **Lambda Memory Size**         | Allocate memory (in MB) for the Lambda function.                                                                 | `512`                                    |
+| **Lambda Timeout**             | (Optional) Specify the maximum runtime duration (in seconds) for the function.                                   | `5`                                      |
+| **Lambda Ephemeral Storage**   | (Optional) Define storage space for the Lambda function.                                                         | `512`                                    |
+| **Lambda Function URL Auth Type** | (Optional) Select the authentication type for the Lambda function URL.                                         | `Select Function URL AuthType`           |
+| **Environment Variables**      | (Optional) Define key-value pairs for environment-specific configurations.                                        | `Add Environment Variable`               |
+| **Lambda Handler**             | Specify the entry point function for your application.                                                          | `eg: dist/src/lambda.handler`            |
+| **Dependency Manager**         | Select the package manager used for your Node.js application.                                                    | `npm`                                    |
+| **Build Environment**          | Choose the environment for building the application.                                                            | `Select Build Environment`               |
+| **Build Environment Version**  | Select the version of the build environment.                                                                    |                                          |
+| **Install Dependencies Command** | (Optional) Provide the command to install project dependencies.                                                | `eg: npm install`                        |
+| **Build Command**              | (Optional) Add the command to build your application.                                                           | `eg: npm run build`                      |
+| **Build Folder**               | Specify the folder that contains your built application.                                                        | `eg: build`                              |
+
+---
+
+
+<Image src="/assets/images/tutorials/app-creation/nodejs-to-lambda/configure-3.png" width={500} height={500} />
+<Image src="/assets/images/tutorials/app-creation/nodejs-to-lambda/configure-4.png" width={500} height={500} />
+
+### Create Application
+
+Once you have filled all the details, click on the `Create` button to create the application.
+
+<Image src="/assets/images/tutorials/app-creation/nodejs-to-lambda/create.png" width={500} height={500} />
+
+</Steps>
