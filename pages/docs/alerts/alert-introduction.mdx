@@ -1,0 +1,31 @@
+# Alerts
+
+Anything that you deploy in SkyU is an application. An application can be a microservice, a web application, a mobile application, or any other type of software that you want to deploy. Applications are the building blocks of your projects in SkyU.
+
+Application, in the context of SkyU is a set of CI/CD pipelines, configurations, and resources that are required to deploy your software. You can create, manage, and deploy applications in SkyU.
+
+## Pipelines
+
+Depending on the application type, following pipelines will be created.
+
+| Pipeline              | Description                                                                                                                                                                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Environment Pipelines | is pipeline is configured for each environment in the application. It is triggered when a new version of the application is deployed to the environment. The pipeline can be used to run tests, perform validations, and deploy the application to the environment. |
+| PR Pipelines          | For any application that connects to SkyU which requires PR checks would automatically have PR Pipelines                                                                                                                                                            |
+
+Each pipeline is specific to your application type and target environment. You can customize the pipelines as per your requirements.
+
+Pipelines can be triggered manually or automatically based on the events like code push, pull request, or any other event that you configure.
+
+## Application Catalog
+
+SkyU provides a wide range of application templates that you can use to build your projects. These applications are designed to help you get started quickly and easily. You can choose from a variety of templates like web applications, mobile applications, APIs, and more. You can view, manage, and deploy your applications from the Application Catalog. This enables you and your teams to discover, collaborate, and reuse applications across projects.
+
+You can learn more about the Application Catalog in the [Application Catalog](/docs/applications/application-catalog) section.
+
+## Security
+
+Applications in SkyU can have the following security resources associated with them:
+
+- **Image Vulnerability Reports**: SkyU scans the container images for vulnerabilities and provides a detailed report. You can view the vulnerabilities and take necessary actions to fix them.
+- **Code Quality Reports**: SkyU provides code quality reports for your applications. You can view the reports and take necessary actions to improve the code quality.

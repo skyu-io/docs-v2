@@ -1,3 +1,7 @@
 {
-  "connect-ms-teams": "Connect Microsoft Teams"
+  "alert-introduction": "Introduction",
+  "features": "Features",
+  "connect-ms-teams": "Connect Microsoft Teams",
+  "connect-slack": "Connect Slack",
+  "connect-google-chat": "Connect Google Chat"
 }
