@@ -1,0 +1,81 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Creating Custom Roles in SkyU
+
+The *Custom Roles* feature in the SkyU Identity and Access Management (IAM) section allows you to create tailored roles by selecting from a set of predefined static roles. This guide will take you through the process step-by-step.
+
+## Application Features
+
+- *Static Roles Selection*: Choose from a predefined set of roles to create a custom role.
+- *Role Configuration*: Define the name, description, and permissions for your custom role.
+- *Create and Manage Roles*: Add, edit, or delete custom roles as per your project’s needs.
+
+## Getting Started
+
+<Steps>
+
+### Navigate to IAM Roles Page
+
+Go to the *IAM* section of your SkyU project. Click on the *Roles* tab to manage user roles.
+
+<Image src="/assets/images/iam/custom-roles/add-role.png" width={1000} height={500} />
+
+---
+
+### Add Custom Role
+
+To create a new custom role, click on the *+ Add Role* button.
+
+<Image src="/assets/images/iam/custom-roles/add-role-button.png" width={1000} height={500} />
+
+---
+
+### Role Configuration
+
+Fill in the required fields in the role creation form. The following table provides the input field details:
+
+| Field       | Description                                         | Example                      |
+|-------------|-----------------------------------------------------|------------------------------|
+| Name        | Enter a name for your custom role.                 | Cluster Admin                   |
+| Description | Provide a brief description of the role's purpose. | This role has access to all the cluster features    |
+| Permissions | Select the static roles that will compose this role.| `DNS Admin`, `Cluster Editor`, `Agent Admin`, `Console Admin`, `Plugins Admin` |
+
+1. **Name**: Enter a unique name for the custom role.
+2. **Description**: Describe the purpose and privileges of this role.
+3. **Permissions**: Select the required static roles from the list.
+
+<Image src="/assets/images/iam/custom-roles/select-static-roles.png" width={1000} height={500} />
+
+---
+
+### Review and Save Role
+
+Once you've configured your role, review the details. Click on *Create Role* to save your custom role.
+
+<Image src="/assets/images/iam/custom-roles/save.png" width={1000} height={500} />
+
+---
+
+### Roles Listing Page
+
+After creating the custom role, you will be directed to the *Roles Listing Page*, where all existing roles are displayed along with the newly created role.
+
+<Image src="/assets/images/iam/custom-roles/list.png" width={1000} height={500} />
+
+---
+
+### Manage Custom Roles
+
+You can edit or delete existing custom roles directly from the Roles Listing Page using the respective buttons.
+
+<Image src="/assets/images/iam/custom-roles/edit.png" width={1000} height={500} />
+
+---
+
+### Summary
+
+By following the steps outlined above, you can successfully create custom roles in the IAM section of SkyU. This feature allows you to tailor permissions according to your requirements, enhancing user management and security.
+
+</Steps>
