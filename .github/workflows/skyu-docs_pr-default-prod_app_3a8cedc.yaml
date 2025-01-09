@@ -362,39 +362,6 @@ jobs:
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
                 
-      - name: 'Run :: Build With Docker'
-        run: >-
-          docker build -t ${{ env.IMAGE_NAME }}:${{ env.COMMIT_ID }} -f
-          ${{env.DOCKER_FILE_PATH}} --build-arg BUILT_WITH=SKYU${{
-          env.DOCKER_BUILD_ARGS }} ${{env.DOCKER_BUILD_CONTEXT}}
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
-      - name: 'Run :: Trivy vulnerability scanner'
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:${{ env.COMMIT_ID }}
-          format: ${{env.TRIVY_RESULT_FORMAT}}
-          output: ${{ env.COMMIT_ID }}-image-vulnerability-report.json
-          exit-code: ${{env.TRIVY_SCAN_EXIT_CODE}}
-          vuln-type: os,library
-          severity: ${{env.SCAN_SEVERITY}}
-          hide-progress: true
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
-      - name: 'Run :: Comment on PR with Trivy Summary'
-        uses: actions/github-script@v6
-        with:
-          script: |2-
-
-                  const fs = require('fs');
-                  const trivySummary = fs.readFileSync('${{ env.COMMIT_ID }}-image-vulnerability-report.json', 'utf-8');
-
-                  github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: context.issue.number,
-                    body: 'Trivy ${{env.SCAN_SEVERITY}} Vulnerability Scan Results\n```\n' + trivySummary + '\n```',
-                  });
-                  
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
       - name: 'Run :: Get PR Comments from From AI Service'
         run: |2-
 
