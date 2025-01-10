@@ -1,0 +1,81 @@
+---
+title: Enable Infrastructure as Code
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Enable Infrastructure as Code
+
+This guide outlines the steps to enable Infrastructure as Code (IaC) for your project on the SkyU Platform.
+
+## Prerequisites
+
+Ensure that you have already created a project in SkyU. If not, refer to the [Project Create](/docs/projects/project-create) guide before proceeding.
+
+---
+
+## Steps to Enable IaC on a Project
+
+<Steps>
+
+### 1. Go to Infrastructure
+
+1. Navigate to the `Infrastructure` tab in the left sidebar of the SkyU Console.
+2. Click `Go to Enable Infrastructure` to begin the process.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-1.png" alt="Infrastructure Feature" width={1000} height={500} />
+
+---
+
+### 2. Select Project Features
+
+1. You will be redirected to the **Project Features** page for your selected project.
+2. Locate the **Support Infrastructure Provisioning** feature and click `Enable`.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-2.png" alt="Project Features" width={1000} height={500} />
+
+---
+
+### 3. Set Up Git Repository
+
+1. A pop-up will appear requesting authorization for SkyU to access your GitHub account. Select the desired account and click `Continue`.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-3.png" alt="GitHub Authorization" width={1000} height={500} />
+
+2. Configure the repository with the following details:
+   - **GitHub Account**
+   - **Repository Name**
+   - **Branch Name**
+
+   Click `Enable Feature` to proceed.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-4.png" alt="Repository Settings" width={1000} height={500} />
+
+    <Callout type="info">
+    The repository creation process may take some time. Please be patient.
+    </Callout>
+
+3. Once successful, the **Support Infrastructure Provisioning** feature will display an `Enabled` status.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-6.png" alt="Feature Enabled" width={1000} height={500} />
+
+---
+
+### 4. Verify the Enabled Feature
+
+1. Return to the `Infrastructure` tab in the left sidebar of the SkyU Console.
+2. You will now see a page similar to the following:
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-7.png" alt="Infrastructure Dashboard" width={1000} height={500} />
+
+3. Click `Create Infrastructure` to access customizable infrastructure templates.
+
+    <Image src="/assets/images/tutorials/infrastructure/iac/iac-8.png" alt="Infrastructure Templates" width={1000} height={500} />
+
+---
+
+</Steps>
+
+**Congratulations!** You have successfully enabled Infrastructure as Code for your project on the SkyU Platform. You can now create and manage infrastructure using IaC templates.
