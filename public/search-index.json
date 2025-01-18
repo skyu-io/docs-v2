@@ -41,7 +41,7 @@
   },
   {
     "route": "/docs/applications/pipelines/introduction-pipelines",
-    "title": "Application Pipelines",
+    "title": "Pipeline Workflows",
     "description": "SkyU Application Pipelines are a powerful way to automate the deployment of your applications. They are a set of steps that define how your application is built, tested, and deployed. You can define your pipelines using a simple YAML file, and SkyU will take care of the rest."
   },
   {
@@ -50,9 +50,19 @@
     "description": "Pipeline Design is the place where you can define the steps for your pipeline. You can define the steps in the pipeline using the YAML configuration. You can also use the visual editor to define the steps in the pipeline."
   },
   {
+    "route": "/docs/applications/pipelines/pipeline-runs",
+    "title": "Pipeline Runs",
+    "description": "Pipeline Runs are the instances of a pipeline execution. Each pipeline run is a unique instance of a pipeline execution. Pipeline runs are created when a pipeline is triggered."
+  },
+  {
     "route": "/docs/applications/pipelines/pipeline-steps",
     "title": "Pipeline Steps",
     "description": "SkyU Pipelines have a few default steps that are executed in the pipeline. You can configure the build variables for those steps in this section."
+  },
+  {
+    "route": "/docs/applications/starter-templates/sam-deployment",
+    "title": "Source Code to AWS Serveless Application Model (SAM) Deployment",
+    "description": "This application type takes your AWS Serverless Application Model (SAM) templates and source code—designed for serverless architectures such as APIs, event-driven workflows, or background processing—and deploys it seamlessly within an AWS environment."
   },
   {
     "route": "/docs/applications/starter-templates/source-to-kubernetes-deployment",
@@ -130,6 +140,11 @@
     "description": "SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources."
   },
   {
+    "route": "/docs/helm/curated-charts/cert-manager",
+    "title": "Cert Manager",
+    "description": "Cert Manager is a Kubernetes add-on to automate the management and issuance of TLS certificates from various issuing sources. It will ensure certificates are valid and up to date, and attempt to renew certificates at a configured time before expiry."
+  },
+  {
     "route": "/docs/helm/helm-introduction",
     "title": "Helm Charts",
     "description": "SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources."
@@ -148,6 +163,11 @@
     "route": "/docs/infrastructure/deploy-rds",
     "title": "Deploy RDS instance - Postgres",
     "description": "In this guide, we will walk you through the process of deploying an RDS instance in AWS using SkyU Platform."
+  },
+  {
+    "route": "/docs/integrations/amazon-cloud",
+    "title": "Amazon Cloud",
+    "description": "SkyU allows linking AWS credentials to your project, enabling access to AWS resources for building and deploying your applications. This guide will walk you through the process of creating and linking AWS credentials to your SkyU project."
   },
   {
     "route": "/docs/integrations/amazon-ecr",
