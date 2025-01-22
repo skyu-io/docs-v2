@@ -135,6 +135,11 @@
     "description": "SkyU supports Helm charts for deploying applications to Kubernetes clusters. Helm is a package manager for Kubernetes that helps you define, install, and manage Kubernetes applications. Helm charts are a collection of files that describe a related set of Kubernetes resources."
   },
   {
+    "route": "/docs/helm/service-repositories",
+    "title": "Service Repositories",
+    "description": "Service Repositories are user created custom Helm Charts that are specific to an application. These  consist of a collection of microservices that are deployed together. These are typically used for deploying applications like Web Applications, APIs, etc."
+  },
+  {
     "route": "/docs/index",
     "title": "Getting Started",
     "description": "<Callout type=\"info\" >"

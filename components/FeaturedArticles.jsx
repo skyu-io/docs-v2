@@ -61,7 +61,7 @@ const FeatureArticles = ({ articles }) => {
             key={index}
             imageSrc={
               article.mainImage
-                ? urlFor(article.mainImage).url()
+                ? urlFor(article.mainImage)
                 : "/placeholder.png"
             }
             title={article.title}
