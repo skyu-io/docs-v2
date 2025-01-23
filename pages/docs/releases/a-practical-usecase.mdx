@@ -1,0 +1,30 @@
+import Image from "../../../components/Image";
+
+# "Bean & Brew" Coffee Shop
+
+Consider a project named "Bean & Brew," which includes a website and services for user authentication, orders, carts, and catalogues.
+With Project Releases, all these components can be managed and deployed together across various environments ( i.e. development, staging, production), ensuring that each service is up-to-date and functioning correctly.
+
+## Handling Deployment Challenges
+
+- **Tracking Application Updates:** SkyU compares commit SHAs to identify and highlight applications that are not up-to-date, providing visual indicators for quick assessment.
+  <Image
+    src="/assets/images/releases/release-colors.png"
+    alt="Hello"
+    width={1000}
+    height={500}
+  />
+- **Bulk Deployment:** Allows for the promotion of multiple applications simultaneously, giving release managers control over deploying all or selected applications at once.
+
+- **Deployment Verification:** Visually confirms the success of each application's deployment within the SkyU console, ensuring that all promoted applications have been successfully deployed.
+  <Image
+    src="/assets/images/releases/release-deployments.png"
+    alt="Hello"
+    width={1000}
+    height={500}
+  />
+- **Failure Management:** In the event of a deployment failure, the system provides detailed logs to identify the cause, and offers options to proceed with other deployments or address the issue before continuing.
+
+- **Rollback Capability:** Enables quick rollback to previous stable versions if issues are detected post-deployment, maintaining system stability and reliability.
+
+By integrating the Project Releases feature, SkyU enhances the deployment experience, making it more predictable, efficient, and aligned with modern DevOps practices.
