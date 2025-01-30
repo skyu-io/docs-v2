@@ -1,0 +1,45 @@
+import Image from "../../components/Image";
+import { Steps } from "nextra/components";
+
+# Logs
+
+Project-Level Logs provide a centralized view of logs across multiple Kubernetes-related and Lambda-related applications within a project. This feature enables seamless monitoring, troubleshooting, and comparison of logs from different services, all in one place. By aggregating logs from AWS CloudWatch, it allows teams to efficiently analyze application behavior, detect issues, and gain insights into system performance.
+
+#### Key Features
+
+- **Unified Log View**: Gain visibility into system-wide activities without switching between individual service logs.
+- **Multi-Application Selection**: Select multiple applications and view their logs at the same time.
+- **Keyword Search**: Search logs across different applications using specific keywords.
+
+<Image
+  src="/assets/images/applications/project-level-logs.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+### Setup: Pushing Application Logs to AWS CloudWatch
+
+To push logs from Kubernetes and Lambda-based applications to AWS CloudWatch for centralized monitoring and troubleshooting, the applications need to send logs to CloudWatch. This can be achieved using SkyU by installing Fluent Bit in the Kubernetes cluster. Fluent Bit is a lightweight log processor and forwarder that collects logs from various sources and sends them to AWS CloudWatch.
+
+<Steps>
+
+#### Navigate to the Cluster
+
+Go to the `Clusters` section in the SkyU Console, located in the left-hand side menu.
+Select the desired cluster where log forwarding needs to be configured.
+
+#### Install Fluent Bit Plugin
+
+After selecting the cluster, navigate to the `Plugins` section.
+Click on the `+ Plugins` button to add a new plugin.
+In the `All Plugins` tab, search for `aws-for-fluent-bit` and click on Install.
+
+<Image
+  src="/assets/images/applications/aws-fluent-bit.png"
+  alt="Hello"
+  width={700}
+  height={100}
+/>
+
+</Steps>
