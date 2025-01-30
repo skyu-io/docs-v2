@@ -1,0 +1,59 @@
+import Image from "../../../../components/Image";
+import { Callout } from "nextra/components";
+
+# Alerts Routing
+
+Alerts Routing allows you to control how alerts are directed to specific target groups based on criteria such as alert severity or specific labels. This feature ensures that the right teams or individuals are notified about relevant alerts, enabling quicker and more effective responses. By setting up alert routing, you can ensure alerts are sent to the appropriate target groups based on the conditions you specify.
+
+### View Alerts Routes
+
+Navigate to the `Alerts` section in the SkyU Console on the left-hand side menu. Navigate to `Alerts Routing` to view all existing alerts routes.
+
+<Image
+  src="/assets/images/alerts/list-alerts-routes.png"
+  alt="Hello"
+  width={700}
+  height={300}
+/>
+
+An individual alert route has the following key fields:
+
+- **Labels**: Alerts contain labels that provide context or categorization. In this field, if the defined labels match those in an alert, the alert will be selected and routed to the specified channel.
+  <Callout type="info">
+    Please note that in addition to the labels defined in the alerts, you can
+    also use the following labels for routing:
+    <br />- `environment`: Environment name (e.g., `prod`, `staging`, `dev`).
+  </Callout>
+- **Repeat Alerts**: This setting controls whether repeated alerts will trigger notifications. If an alert repeats after a certain period (e.g., 12 hours in Prometheus, which can be adjusted in the configuration), enabling this switch will send notifications for the repeated alerts. If you only want to receive notifications when an alert is first triggered, and not for subsequent repetitions, turn off this switch.
+- **Enable/Disable Alerts**: This setting determines whether notifications will be sent to the channel. If you want to temporarily stop receiving notifications, you can disable this option, and no alerts will be sent to that channel until it is enabled again.
+- **Target Groups**: These are the groups you want to notify when alerts meet the specified conditions.
+- **Specify Email Recipients**: In addition to notifying the target group, you can specify email addresses here to send alert notifications directly to specific recipients.
+
+### Add Alerts Route
+
+Click on `+ Route` to introduce a new Alert Route into your project.
+
+<Image
+  src="/assets/images/alerts/add-alerts-route.png"
+  alt="Hello"
+  width={700}
+  height={300}
+/>
+
+| Field                    | Description                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Labels                   | Defines the labels that match the alert for routing.                                |
+| Target Groups            | Select the appropriate target group                                                 |
+| Repeat Alerts            | Specify if repeated alerts should trigger notifications.                            |
+| Disable Alerts           | Option to disable notifications for alerts.                                         |
+| Specify Email Recipients | Email addresses of recipients designated to receive alert notifications. (Optional) |
+
+Finally click Save button to save it.
+
+### Update Alerts Route
+
+To update an existing alert route, click the three dots next to the route you want to edit. Then, click Edit, make the necessary changes, and click the Save button to apply the updates.
+
+### Remove Alerts Route
+
+To remove an alert route, click the three dots next to the route you want to delete. Select Delete, confirm the action, and then click Delete again to permanently remove the alert route.
