@@ -13,5 +13,6 @@
   "infrastructure": "Infrastructure",
   "insights": "Insights",
   "integrations": "Integrations",
-  "alerts": "Alerts"
+  "alerts": "Alerts",
+  "logs": "Logs"
 }

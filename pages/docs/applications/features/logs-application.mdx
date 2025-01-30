@@ -1,16 +1,10 @@
 import { Callout } from "nextra/components";
 import Image from "../../../../components/Image";
+import { Steps } from "nextra/components";
 
 # Application Logs
 
-In the Logs section of an application, AWS CloudWatch logs for Kubernetes and Lambda-based applications are displayed, offering visibility into the application's operation and helping with troubleshooting and performance monitoring.
-
-The Application Logs page provides the following information:
-
-- **Overview**: In the Overview tab, logs are displayed and can be filtered based on several criteria, such as time period and pod (for Kubernetes-related applications).
-- **Settings**: In the Settings tab, you can configure the log group. The default settings are aligned with AWS CloudWatch defaults, but you have the flexibility to edit the log group as needed.
-
-### Kubernetes Application Logs
+The Logs section displays AWS CloudWatch logs for Kubernetes and Lambda-based applications. This visibility offers insight into the application's operation and helps with troubleshooting and performance monitoring.
 
 <Image
   src="/assets/images/applications/logs.png"
@@ -18,4 +12,48 @@ The Application Logs page provides the following information:
   width={1000}
   height={500}
 />
-#### Overview
+
+The Application Logs page provides the following information:
+
+- **Overview**: In the Overview tab, logs are displayed and can be filtered based on several criteria, such as time period and pod (for Kubernetes-related applications).
+- **Settings**: In the Settings tab, you can configure the log group. The default settings are aligned with AWS CloudWatch defaults, but you have the flexibility to edit the log group as needed.
+
+<Callout type="info">
+  By default, all Kubernetes-related applications share a single log group.
+  Therefore, changing the log group for one Kubernetes application will affect
+  the log groups of all other Kubernetes-related applications. On the other
+  hand, Lambda applications have separate log groups.
+</Callout>
+
+<Image
+  src="/assets/images/applications/logs-settings.png"
+  alt="Hello"
+  width={700}
+  height={100}
+/>
+
+### Setup: Pushing Application Logs to AWS CloudWatch
+
+To push logs from Kubernetes and Lambda-based applications to AWS CloudWatch for centralized monitoring and troubleshooting, the applications need to send logs to CloudWatch. This can be achieved using SkyU by installing Fluent Bit in the Kubernetes cluster. Fluent Bit is a lightweight log processor and forwarder that collects logs from various sources and sends them to AWS CloudWatch.
+
+<Steps>
+
+#### Navigate to the Cluster
+
+Go to the `Clusters` section in the SkyU Console, located in the left-hand side menu.
+Select the desired cluster where log forwarding needs to be configured.
+
+#### Install Fluent Bit Plugin
+
+After selecting the cluster, navigate to the `Plugins` section.
+Click on the `+ Plugins` button to add a new plugin.
+In the `All Plugins` tab, search for `aws-for-fluent-bit` and click on Install.
+
+<Image
+  src="/assets/images/applications/aws-fluent-bit.png"
+  alt="Hello"
+  width={700}
+  height={100}
+/>
+
+</Steps>
