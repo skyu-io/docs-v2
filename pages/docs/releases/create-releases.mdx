@@ -1,0 +1,39 @@
+import Image from "../../../components/Image";
+import { Steps } from "nextra/components";
+import { Callout } from "nextra/components";
+
+# Create Releases
+
+Once you have a project configured with applications, Creating a release through SkyU is quite straightforward.
+
+<Steps>
+  ### Navigate to `Releases` page.
+
+The releases page will list all your applications and their deployments in each environment.
+
+  <Image
+    src="/assets/images/releases/releases-create.png"
+    alt="Hello"
+    width={1000}
+    height={500}
+  />
+</Steps>
+
+<Steps>
+  ### Promote Applications.
+
+Simply select the applications in the desired environment to promote. Provide optional release notes if needed. and click `Promote`
+
+  <Image
+    src="/assets/images/releases/releases-promote.png"
+    alt="Hello"
+    width={1000}
+    height={500}
+  />
+</Steps>
+
+<Callout type="info">
+  You can also select the application directly (from the leftmost column) and
+  deploy it to the `dev` environment (or whichever environment is configured as
+  the first one for the project).
+</Callout>

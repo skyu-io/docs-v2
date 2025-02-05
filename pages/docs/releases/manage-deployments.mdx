@@ -1,0 +1,32 @@
+import Image from "../../../components/Image";
+import { Callout } from "nextra/components";
+
+# Manage Deployments
+
+After creating a release, all releases will be listed under the release history.  
+If each application passes the `CI` process successfully, the deployment will be done automatically.
+
+<Image
+  src="/assets/images/releases/releases-intro.png"
+  alt="Release history screenshot"
+  width={1000}
+  height={500}
+/>
+
+The release status can be one of the following:
+
+- **`PENDING`**: The release is still pending. Application CI pipelines are still in progress.
+- **`SUCCESS`**: Deployment successful. All applications were deployed successfully.  
+  Applications that successfully passed the CI run will be deployed.
+- **`PARTIAL_SUCCESS`**: Not all applications were deployed.
+- **`FAILED`**: The release failed.
+- **`DEPLOYMENT_READY`**: The release was successful, but not all pipelines were successful. Deployment can be triggered manually for the applications that succeeded.
+- **`APPROVAL_PENDING`**: Awaiting approval for deployment.
+- **`APPROVAL_APPROVED`**: The release has been approved for deployment.
+- **`APPROVAL_DENIED`**: The release has been denied.
+
+<Callout type="info">
+  While releases with the status **`SUCCESS`** and **`PARTIAL_SUCCESS`** can be
+  re-deployed manually, releases with the status **`DEPLOYMENT_READY`** and
+  **`APPROVAL_APPROVED`** should be deployed manually after the release.
+</Callout>

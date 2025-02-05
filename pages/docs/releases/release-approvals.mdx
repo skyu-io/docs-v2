@@ -1,0 +1,26 @@
+import Image from "../../../components/Image";
+
+# Release Approvals
+
+When creating a release, SkyU provides the functionality to optionally add approvers to the release.
+Once approvers are added and the release is created, the deployment will not occur automatically and will require manual deployment after approval.
+
+<Image
+  src="/assets/images/releases/release-approvals.png"
+  alt="Release approvals screenshot"
+  width={1000}
+  height={500}
+/>
+
+- **`Partial Approval`**: The release will be approved when at least one person on the approvers list approves it.
+- **`Approval`**: Every person in the approval request must approve the release before it can be deployed.
+
+Approvals requested by the user and approvals created by the user can be found in the `Approvals` tab.
+Additionally, the SkyU system will send an email notification to the approvers when they are added to a release.
+
+<Image
+  src="/assets/images/releases/release-approvals-requested.png"
+  alt="Approvals tab screenshot"
+  width={1000}
+  height={500}
+/>

@@ -1,0 +1,117 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from "../../../components/Image";
+
+# AI Integration
+
+SkyU Platform uses three types of LLM Clients for the provided features:
+1. OpenAI
+2. Azure OpenAI
+3. Google Gemini
+
+To do a full AI integration, you need to provide your custom credentials for all three types of clients.
+
+## OpenAI Integration
+
+To integrate OpenAI, you need to provide the OpenAI Key.
+
+<Steps>
+
+### Navigate to Project Settings
+
+To initiate linking OpenAI integrations with your project, first, select a project within your organization. Navigate to `Settings` -> `Integrations` to view all existing credentials.
+
+Click on `+ Integration`, then navigate to `Other` -> `AI` to introduce a new OpenAI credential into your project.
+
+Chose ChatGPT from the `provider` dropdown.
+
+### Add Credential
+
+When linking an OpenAI resource, you are required to provide the following details:
+
+<Image src="/assets/images/integrations/openai.png" alt="OpenAI Integration" width={500} height={500} />
+
+| Field       | Description            |
+| ----------- | ---------------------- |
+| Name        | Name of the OpenAI Credential. This is for your reference. |
+| API Key  | Your OpenAI API Key    |
+
+Finally select `Save` button to save the credential.
+
+</Steps>
+
+## Azure OpenAI Integration
+
+To integrate Azure OpenAI, you need to provide the Base URL, API Key, and API Version.
+
+<Steps>
+
+### Precondition
+
+Before linking Azure OpenAI integrations with your project, ensure that you have deployed the following models with mentioned specs:
+
+| Model         | Model Version | Deployment Name     |
+|---------------|---------------|---------------------|
+| gpt-35-turbo  | 0613          | gpt-35-turbo        |
+| gpt-35-turbo  | 1106          | gpt-35-turbo-1106   |
+| gpt-4         | 1106-preview  | gpt-4               |
+
+### Navigate to Project Settings
+
+To initiate linking Azure OpenAI integrations with your project, first, select a project within your organization. Navigate to `Settings` -> `Integrations` to view all existing credentials.
+
+Click on `+ Integration`, then navigate to `Other` -> `AI` to introduce a new OpenAI credential into your project.
+
+Chose Azure from the `provider` dropdown.
+
+### Add Credential
+
+When linking an Azure OpenAI resource, you are required to provide the following details:
+
+<Image src="/assets/images/integrations/azure-openai.png" alt="Azure OpenAI Integration" width={500} height={500} />
+
+| Field       | Description            |
+| ----------- | ---------------------- |
+| Name        | Your Credential Name   |
+| Base URL    | Your Azure Base URL    |
+| API Key     | Your Azure API Key     |
+| API Version | Your Azure API Version |
+
+Finally select `Save` button to save the credential.
+
+</Steps>
+
+## Google Gemini Integration
+
+To integrate Google Gemini, you need to provide the Gemini Key.
+
+<Steps>
+
+### Navigate to Project Settings
+
+To initiate linking Google Gemini integrations with your project, first, select a project within your organization. Navigate to `Settings` -> `Integrations` to view all existing credentials.
+
+Click on `+ Integration`, then navigate to `Other` -> `AI` to introduce a new OpenAI credential into your project.
+
+Chose Google Gemini from the `provider` dropdown.
+
+### Add Credential
+
+When linking a Google Gemini resource, you are required to provide the following details:
+
+<Image src="/assets/images/integrations/google-gemini.png" alt="Google Gemini Integration" width={500} height={500} />
+
+| Field       | Description            |
+| ----------- | ---------------------- |
+| Name        | Your Credential Name   |
+| Base URL    | Your Gemini Base URL   |
+| API Key     | Your Gemini API Key    |
+| API Version | Your Gemini API Version |
+
+Finally select `Save` button to save the credential.
+
+</Steps>
+
+<Callout type="info">
+If you do not integrate your own credentials, the default credentials will be used for the features.
+</Callout>

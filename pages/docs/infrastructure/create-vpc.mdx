@@ -1,0 +1,127 @@
+---
+title: Create a VPC
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Create a VPC
+
+This guide outlines the steps to create a Virtual Private Cloud (VPC) in AWS using the SkyU Platform.
+
+## Prerequisites
+
+Before you begin, ensure the `Infrastructure` feature is enabled for your project. If not, refer to the [Enable Infrastructure as Code](/docs/infrastructure/enable-iac) guide.
+
+---
+
+## Steps to Create a VPC
+
+<Steps>
+
+### Select the Template
+
+1. Navigate to the `Infrastructure` tab in the left sidebar of the SkyU Console.
+2. Click `Create Infrastructure` to access customizable infrastructure templates.
+3. Select the `AWS VPC` template.
+
+---
+
+### Create the IAM Role
+
+1. After selecting the template, click `Launch`.
+2. Provide details for: **Name**, **Description** and **Region**.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-1.png" alt="VPC Template" width={1000} height={500} />
+
+3. Click `Generate ARN` to create the role on AWS. You’ll be redirected to the AWS console. Fill in the required fields and click `Create Stack`.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-2.png" alt="AWS Console Role Creation" width={1000} height={500} />
+
+   <Callout type="info">
+   Ensure you are logged into the AWS Management Console in the same browser as the SkyU console before clicking **Generate ARN**.
+   </Callout>
+
+4. Copy the generated Role ARN from the outputs section of the CloudFormation stack.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-3.png" alt="Role ARN Copy" width={1000} height={500} />
+
+5. Paste it into the **Role ARN** field in SkyU.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-4.png" alt="Role ARN Input" width={1000} height={500} />
+
+6. Click `Next` to proceed.
+
+---
+
+### Configure Template Parameters
+
+1. If you haven’t created an **Infra Cost API Credential**, do so now. Otherwise, use an existing credential.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-5.png" alt="API Credential Setup" width={1000} height={500} />
+
+2. Fill in the required template parameters to define your VPC configuration.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-6.png" alt="Template Parameters" width={1000} height={500} />
+
+3. Click `Request Review` to proceed.
+
+---
+
+### Review and Approve the Plan
+
+1. Wait for the infrastructure planning process to complete.
+
+   <Callout type="info">
+   The planning process may take some time. Please be patient.
+   </Callout>
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-7.png" alt="Infrastructure Planning" width={1000} height={500} />
+
+2. Review the plan and its associated graph. To make changes, click `Edit`, update the parameters, and regenerate the plan.
+
+3. Once satisfied, click `Approve` to launch the infrastructure.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-8.png" alt="Plan Review" width={1000} height={500} />
+
+4. Add a description if needed and click `Merge` to finalize.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-9.png" alt="Approve Plan" width={1000} height={500} />
+
+---
+
+### Launch the Infrastructure
+
+1. The infrastructure creation process will begin. 
+
+   <Callout type="info">
+   This process may take some time. Please be patient.
+   </Callout>
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-10.png" alt="Launch Infrastructure" width={1000} height={500} />
+
+2. Once the status shows **Success**, your VPC has been successfully created.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-11.png" alt="Success Status" width={1000} height={500} />
+
+---
+
+### Verify the Infrastructure
+
+1. Log in to the AWS Management Console.
+2. Confirm that the VPC has been created successfully.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-12.png" alt="Verify VPC" width={1000} height={500} />
+
+---
+
+</Steps>
+
+## Troubleshooting and Relaunching
+
+   If the infrastructure creation fails, view the logs to identify the issue. Correct any errors in the input values, then relaunch the infrastructure.
+
+   <Image src="/assets/images/tutorials/infrastructure/aws_vpc/vpc-13.png" alt="Troubleshooting" width={1000} height={500} />
+
+

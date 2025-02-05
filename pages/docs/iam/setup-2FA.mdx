@@ -1,0 +1,105 @@
+---
+title: "Two-Factor Authentication (2FA)"
+summary: "Step-by-step instructions for enabling 2FA for SkyU users."
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Two-Factor Authentication (2FA) Setup
+
+SkyU's 2FA feature adds an extra layer of security by requiring users to verify their identity using an authentication app during login. Follow the steps below to set up and enable 2FA.
+
+<Steps>
+
+### 1. Sign Up for a SkyU Account
+
+Open the **signup page** provided in the invitation email: `https://console.skyu.io/signup`.
+
+Fill in the following details to create your account:
+
+| Field               | Description                          | Example                  |
+| ------------------- | ------------------------------------ | ------------------------ |
+| First Name          | Enter your first name.              | John                     |
+| Last Name           | Enter your last name.               | Doe                      |
+| Email               | Enter your email address.           | john.doe@example.com     |
+| Password            | Create a strong password.           | ******                   |
+| Confirm Password    | Re-enter your password to confirm.  | ******                   |
+
+<Image src="/assets/images/iam/2fa/signup.png" width={1000} height={500} />
+
+Click on the **Create Account** button to proceed.
+
+---
+
+### 2. Email Verification
+
+Check your email inbox for a verification code from SkyU. Enter the following details on the verification page:
+
+| Field               | Description                          | Example                  |
+| ------------------- | ------------------------------------ | ------------------------ |
+| Email               | Enter your registered email.        | john.doe@example.com     |
+| Verification Code   | Enter the verification code sent.   | 123456                   |
+
+Click **Confirm** to complete email verification.
+
+<Image src="/assets/images/iam/2fa/verify.png" width={1000} height={500} />
+
+---
+
+### 3. Login to Your Account
+
+After successful email verification, you will be redirected to the login page. Enter the following details to log in:
+
+| Field               | Description                          | Example                  |
+| ------------------- | ------------------------------------ | ------------------------ |
+| Email               | Enter your registered email.        | john.doe@example.com     |
+| Password            | Enter your password.                | ******                   |
+
+<Image src="/assets/images/iam/2fa/signin.png" width={1000} height={500} />
+
+Click **Sign in** to proceed.
+
+---
+
+### 4. Set Up 2FA
+
+Upon login, you will see a QR code displayed on the setup page:
+
+1. Open your authenticator app and scan the QR code.
+   - If you cannot scan the QR code, use the **text code** provided below it to manually set up the authenticator.
+2. The app will generate a **six-digit code**.
+3. Enter the six-digit code into the designated field:
+
+| Field               | Description                          | Example                  |
+| ------------------- | ------------------------------------ | ------------------------ |
+| Six-Digit Code      | Enter the code from the app.         | 123456                   |
+
+<Image src="/assets/images/iam/2fa/2fa-config.png" width={1000} height={500} />
+
+Click **Confirm** to complete the 2FA setup.
+
+---
+
+### 5. Accept Access Request
+
+After confirming the 2FA code, you will be redirected to the **Pending Invites** page. Click on the **Accept** button to proceed.
+
+<Image src="/assets/images/iam/2fa/accept.png" width={1000} height={500} />
+
+---
+
+### 6. Dashboard Access
+
+Once the access request is accepted, you will be directed to the SkyU dashboard, where you can start using the platform.
+
+<Image src="/assets/images/iam/2fa/dashboard.png" width={1000} height={500} />
+
+<Callout type="info">
+Ensure that you securely save the QR code or text code for future authenticator setup or recovery.
+</Callout>
+
+---
+
+</Steps>
