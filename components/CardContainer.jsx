@@ -8,19 +8,21 @@ const cardData = [
     description:
       "Raise tickets, check ticket status and troubleshoot issues with our dedicated teams.",
     link: "https://insighture-help.freshdesk.com/support/home",
+    target: "_blank",
   },
   {
     icon: Settings,
     title: "Feature Guides",
     description: "Explore how to use our platform's key features effectively.",
     link: "https://skyu.io/blogs/introducing-project-releases-on-the-skyu-platform/",
+    target: "_blank",
   },
   {
     icon: Puzzle,
     title: "Insights & Extensions",
     description:
       "Discover tips and tools to enhance your development experience.",
-    link: "/",
+    link: "/docs/insights/github-configuration",
   },
 ];
 
@@ -58,7 +60,7 @@ const CardContainer = () => {
           return isClickable ? (
             <Link
               href={card.link}
-              target="_blank"
+              target={card.target}
               key={index}
               className="w-full md:w-1/3"
             >

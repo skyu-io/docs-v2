@@ -1,0 +1,110 @@
+import Image from "../../../components/Image";
+
+# Steps to Configure BitBucket insights
+
+Before you begin, ensure the BitBucket Integration feature is enabled for your project. Go to “Settings” in the left sidebar and under **“Features”**, enable the **“Support for BitBucket and GitLab”** feature.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-integration.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+#### 1. Select the provider your app is configured with.
+
+- Navigate to the Insights tab in the left sidebar of the SkyU Console.
+- Click **BitBucket** sidebar item.
+- If your BitBucket app is not configured, you will see the below box to configure insights.
+- Click the **+ Configurations** button.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-configurations.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- Now you will be directed to Insights’ Settings page. If you have your app added already, you will see it listed under BitBucket tab.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-tab.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- You will see your configured organization / workspace name, added apps and added custom apps for the insights configurations. ( Added apps through creating apps within the console and Custom apps through the “Add Custom Apps” button in Settings pages )
+- Click **“Configure Bitbucket"** button to start the insights configurations.
+
+#### 2. Configure BitBucket data collection ( For BitBucket connected apps )
+
+- **Create your BitBucket App Password** [How to get your App Password](https://support.atlassian.com/bitbucket-cloud/docs/create-an-app-password/) with the given permissions which are under “Included Permissions” and enter that App Password value in the “Password Verification” tab’s Password input.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-pat.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- After the validation is successful, You will be taken to the “Issues” tab and scroll down to click the “Next” button.
+- Click the “Next” button in the “Tags” tab.
+- Click the “Create” button in the “Cross-Domain” tab.
+- Once it's configured successfully, you will get the success message and “Done” button to complete the configurations.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-final-configurations.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- You will be redirected to the Settings page where you can see that the app is configured to use its insights.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-configured.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- Click the **“Sync With Devlake”** button to sync with the latest data in your configured repository.
+- Now you can check the Gitbub sidebar item.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-insights.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+#### 3. Custom BitBucket app configuration
+
+- Click **“+ Add Custom Apps”** button to create your custom app insights configuration in the “Insights Settings” page.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-custom.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- Click "Auth with BitBucket" and after the popup, scroll down where you can select the BitBucket workspaces, repositories and branches.
+
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-custom-repo1.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+<Image
+  src="/assets/images/insights/bitbucket/bitbucket-custom-repo2.png"
+  alt="Hello"
+  width={1000}
+  height={500}
+/>
+
+- If the workspace you want to proceed with exists on the dropdown, you can select it and proceed to selecting its repositories and branches.
+
+- Finally Click **"Create"** button to finish your configuration.
