@@ -5,5 +5,5 @@
   "github-ghcr": "GitHub Container Registry",
   "amazon-eks": "Amazon EKS",
   "sentry": "Sentry",
-  "AI": "AI"
+  "chatgpt": "ChatGPT"
 }
