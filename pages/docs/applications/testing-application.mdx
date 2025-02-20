@@ -1,0 +1,54 @@
+import Image from '../../../components/Image'
+import { Steps } from "nextra/components";
+
+# Application Testing
+
+This section provides information on the testing of the application. Currently, SkyU supports API testing.
+
+## API Testing
+
+To get started with API testing, you need to provide a Swagger file of the API. The Swagger file should be located in the source code repository of the application. If you don't have a Swagger file, you can generate one using AI Lab of SkyU. More information on how to generate a Swagger file using AI Lab can be found [here](/docs/applications/ai-lab).
+
+<Image src="/assets/images/applications/api-getting-started.png" alt="Hello" width={1000} height={500}  />
+
+Alternatively you can create one using the Swagger Editor as well. You can learn more about the Swagger Editor [here](https://editor.swagger.io/).
+
+<Steps>
+
+### Import Swagger File
+
+To import a Swagger file, click on the `Import Swagger File` button. You will be prompted to select the Swagger file from your local machine. You will be prompted to select the Swagger file from your local machine.
+
+You can either provide a folder path in your repository where the Swagger file is located or provide the URL of the Swagger file.
+
+| Field                  | Description                                        |
+| ---------------------- | -------------------------------------------------- |
+| Spec Name              | A name for the Swagger file.                       |
+| Folder Path (Optional) | The folder path where the Swagger file is located. |
+| URL  (Optional)        | The URL of the Swagger file.                       |
+
+### Create Execution Config
+
+After importing the Swagger file, you need to create an execution config. The execution config is a set of configurations that you need to provide to run the API tests.
+
+| Field              | Description                                                                                                                                                                         |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name               | A name for the execution config.                                                                                                                                                    |
+| URL                | The URL of the API.  If this is a Kubernetes Service, you have the opportunity to use the Internal URL to test the service within kubernetes without exposing the service to public |
+| Additional Headers | Additional headers that you want to pass to the API.                                                                                                                                |
+
+</Steps>
+
+### Run API Tests
+
+
+
+Once you have created the execution config, you can run the API tests. Click on the `Test all endpoints with AI` button to run the tests.
+
+<Image src="/assets/images/applications/api-swagger.png" width={1000} height={500}  />
+
+This will automatically create test cases for all the endpoints in the Swagger file and will run the tests.
+
+<Image src="/assets/images/applications/test-results.png" width={500} height={500}  />
+
+Once the tests are completed, you can save the test results by clicking on the `Save Test Results` button.

@@ -1,9 +1,9 @@
 {
+  "amazon-cloud": "Amazon Cloud",
   "docker-registry": "Docker Registry",
   "amazon-ecr": "Amazon ECR",
   "github-ghcr": "GitHub Container Registry",
   "amazon-eks": "Amazon EKS",
-  "amazon-cloud": "Amazon Cloud",
   "sentry": "Sentry",
-  "AI": "AI"
+  "chatgpt": "ChatGPT"
 }

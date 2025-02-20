@@ -1,7 +1,6 @@
 {
     "application-introduction": "Introduction",
     "application-catalog": "Catalog",
-    "features": "Features",
     "kubernetes": {
         "title": "Kubernetes"
         
@@ -10,6 +9,12 @@
         "title": "Pipelines"
         
     },
+    "security-application": "Security",
+    "testing-application": "Testing",
+    "logs-application": "Logs",
+    "ai-lab": "AI lab",
+    "gitops-application": "GitOps",
+    "metrics-application": "Metrics",
     "starter-templates": {
         "title": "Starter Templates"
     },

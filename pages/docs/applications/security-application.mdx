@@ -1,0 +1,23 @@
+import { Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Application Security
+
+This section provides vulnerability information of the application. You can view the vulnerabilities, and security reports of the application.
+
+## Code Quality
+
+In every application that has a source code, SkyU automatically runs a code quality check on the source code. The code quality check is done using Semgrep. You can learn more about Semgrep [here](https://github.com/semgrep/semgrep). 
+
+The code quality check provides information on the code quality, security, and maintainability of the source code.
+
+**Explain with AI** functionality enables you to let the AI analyze the code quality report and provide you with the most probable root cause of the issue.
+
+<Image src="/assets/images/applications/app-security-code-quality.png" alt="Hello" width={1000} height={500}  />
+
+
+
+
+## Image Vulnerabilities
+
+SkyU automatically scans the docker images of the application for vulnerabilities. The image vulnerabilities are scanned using Trivy. You can learn more about Trivy [here](https://trivy.dev/latest/)
