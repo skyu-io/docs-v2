@@ -60,15 +60,41 @@ jobs:
         run: >-
           docker run -i -v "${PWD}:/src" semgrep/semgrep semgrep /src --json
           --quiet > semgrep_results.json
-      - name: 'Run :: Upload Code Scan Report'
+      - name: 'Run :: Trivy Filesystem Scan'
         run: |2-
 
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet > trivy_results.json
+                  # Minifying Json
+                  jq -c '.' trivy_results.json > trivy_results.min.json
+                  
+      - name: 'Run :: Evaluate Trivy Results'
+        run: |2-
+             
+                  if jq -e '.Results | map(select(.Vulnerabilities)) | length > 0' trivy_results.min.json >/dev/null; then
+                    echo "Vulnerabilities detected!"
+                    jq '.Results[] | {Target: .Target, Vulnerabilities: .Vulnerabilities[] | {ID: .VulnerabilityID, Severity: .Severity, Description: .Description}}' trivy_results.min.json
+                    exit 1
+                  fi
+                  
+      - name: 'Run :: Trivy Filesystem Scan (Including Trivy Ignores)'
+        run: |2-
+
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet --list-all-pkgs > trivy_results.json
+                  # Minifying Json
+                  jq -c '.' trivy_results.json > trivy_results.min.json
+                  
+      - name: 'Run :: Upload Code Scan Reports'
+        env:
+          RUN_ID: ${{ github.run_id }}
+        run: |2-
+
+                  echo "Uploading Code Scan Report" 
                   SARIF_FILE="semgrep_results.json"
                   if [ -n "$SARIF_FILE" ]; then
                     cat "$SARIF_FILE" > ${{ env.COMMIT_ID }}-code-scan-report.sarif
-                    echo "Uploading CodeQL Results to S3 :: ${{ env.COMMIT_ID }}-code-scan-report.sarif"
+                    echo "Uploading Code Quality Results to S3 :: ${{ env.COMMIT_ID }}-code-scan-report.sarif"
            
-                    response=$(curl -X POST -F 'file=@${{ env.COMMIT_ID }}-code-scan-report.sarif' -F 'provider=aws' -F 'resourceType=code-scan-report' -F 'cloudStoragePath=/${{ env.PIPELINE_APPLICATION_ID }}/code-scan-reports/'  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-auth-by: sa' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'Content-Type: multipart/form-data'  "${{ env.S3_UPLOAD_ENDPOINT }}")
+                    response=$(curl -X POST -F 'file=@${{ env.COMMIT_ID }}-code-scan-report.sarif' -F 'provider=aws' -F 'resourceType=code-scan-report' -F 'cloudStoragePath=/${{ env.PIPELINE_APPLICATION_ID }}/code-scan-reports/' -F 'pipelineRunId=${{ env.RUN_ID }}'  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-auth-by: sa' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'Content-Type: multipart/form-data'  "${{ env.S3_UPLOAD_ENDPOINT }}")
 
                     if echo "$response" | grep -q '"success":true'; then
                       echo "SUCCESS :: $response"
@@ -79,13 +105,41 @@ jobs:
                   else
                       echo "SARIF file not found."
                   fi
+
+                  echo "Uploading Code Vulnerability Report" 
+                  SARIF_FILE="trivy_results.min.json"
+                  if [ -n "$SARIF_FILE" ]; then
+                    cat "$SARIF_FILE" > ${{ env.COMMIT_ID }}-code-vulnerability-report.sarif
+                    echo "Uploading Code Vulnerability Results to S3 :: ${{ env.COMMIT_ID }}-code-vulnerability-report.sarif"
+           
+                    response=$(curl -X POST -F 'file=@${{ env.COMMIT_ID }}-code-vulnerability-report.sarif' -F 'provider=aws' -F 'resourceType=code-vulnerability-report' -F 'cloudStoragePath=/${{ env.PIPELINE_APPLICATION_ID }}/code-vulnerability-reports/' -F 'pipelineRunId=${{ env.RUN_ID }}'  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-auth-by: sa' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'Content-Type: multipart/form-data'  "${{ env.S3_UPLOAD_ENDPOINT }}")
+
+                    if echo "$response" | grep -q '"success":true'; then
+                      echo "SUCCESS :: $response"
+                    else
+                      echo "FAILED :: $response"
+                    fi
+
+                  else
+                      echo "SARIF file not found."
+                  fi
+                  
+                  echo "Uploading Trivy Ignore File" 
+                  if [ -f ".trivyignore" ]; then
+                    response=$(curl -X POST -F 'file=@.trivyignore' -F 'provider=aws' -F 'resourceType=trivy-ignore' -F 'cloudStoragePath=/${{ env.PIPELINE_APPLICATION_ID }}/trivy-ignore-file/${{ env.COMMIT_ID }}/' -F 'pipelineRunId=$RUN_ID'  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: multipart/form-data'  "${{ env.S3_UPLOAD_ENDPOINT }}")
+
+                    if echo "$response" | grep -q '"success":true'; then
+                      echo "SUCCESS :: $response"
+                    else
+                      echo "FAILED :: $response"
+                    fi
+
+                  else
+                      echo ".trivyignore file not found"
+                  fi
+                  
   _status-pending:
-    name: ' Status Pending'
-    permissions: write-all
-    env:
-      CONTEXT_JSON: ${{ toJson(github) }}
-    runs-on: ubuntu-latest
-    needs: []
+    name: _status-pending
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -141,19 +195,20 @@ jobs:
         run: |2-
 
               context=$(echo "$CONTEXT_JSON" | jq --arg sha "$COMMIT_ID" '.sha = $sha' | jq -c . | base64)
-              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/PENDING?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context&appId=${{ github.event.client_payload.externalRepo.appId }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/PENDING?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
               if echo "$response" | grep -q '"success":true'; then
                 echo "SUCCESS :: $response"
               else
                 echo "FAILED :: $response"
               fi
               
-  _status_testing:
-    name: ' Status Testing'
+    needs: []
     permissions: write-all
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
     runs-on: ubuntu-latest
-    needs:
-      - _status-pending
+  _status_testing:
+    name: _status_testing
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -209,12 +264,12 @@ jobs:
               # NOTE: Do not remove this job even if you don't have tests at the moment.
               echo "Hello Tests from SkyU"
               
-  _release-info:
-    name: ' Release Info'
+    needs:
+      - _status-pending
     permissions: write-all
     runs-on: ubuntu-latest
-    needs: []
-    if: ${{ github.event.client_payload.releaseData }}
+  _release-info:
+    name: _release-info
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -297,19 +352,19 @@ jobs:
               echo "containerName     : ${{ env.DEPLOYMENT_CONTAINER_NAME }}"
               echo "imageRegistryURL  : ${{ env.IMAGE_NAME }}",
               # Storing Release Information for Deployment
-              response=$(curl -X POST -d "releaseId=$RELEASE_ID&pipelineId=$PIPELINE_ID&pipelineRunId=$RUN_ID&versionId=${{ env.DEPLOYMENT_APP_VERSION_ID }}&applicationId=${{ github.event.client_payload.releaseData.appId }}&credentialId=${{ env.PIPELINE_CREDENTIAL_ID }}&userName=$USER_NAME&repositoryName=$REPOSITORY&commitId=${{ env.COMMIT_ID }}&commitData[commitHash]=${{ env.COMMIT_ID }}&commitData[commitAvatar]=https://github.com/$COMMIT_USER.png&commitData[commitTime]=$COMMIT_TIME&commitData[commitMessage]=$COMMIT_MESSAGE&commitData[commitUser]=$COMMIT_USER&shouldDeploy=${{ env.DEPLOY_STEP_SHOULD_DEPLOY }}&containerName=${{ env.DEPLOYMENT_CONTAINER_NAME }}&imageRegistryURL=${{ env.IMAGE_NAME }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/release/pipeline")
+              response=$(curl -X POST -d "releaseId=$RELEASE_ID&pipelineId=$PIPELINE_ID&pipelineRunId=$RUN_ID&versionId=${{ env.DEPLOYMENT_APP_VERSION_ID }}&applicationId=${{ github.event.client_payload.releaseData.appId }}&credentialId=${{ env.PIPELINE_CREDENTIAL_ID }}&userName=$USER_NAME&repositoryName=$REPOSITORY&commitId=${{ env.COMMIT_ID }}&commitData[commitHash]=${{ env.COMMIT_ID }}&commitData[commitAvatar]=https://github.com/$COMMIT_USER.png&commitData[commitTime]=$COMMIT_TIME&commitData[commitMessage]=$COMMIT_MESSAGE&commitData[commitUser]=$COMMIT_USER&shouldDeploy=${{ env.DEPLOY_STEP_SHOULD_DEPLOY }}&containerName=${{ env.DEPLOYMENT_CONTAINER_NAME }}&imageRegistryURL=${{ env.IMAGE_NAME }}&externalRepo[repositoryName]=${{ github.event.client_payload.externalRepo.externalRepoName }}&externalRepo[credentialId]=${{ github.event.client_payload.externalRepo.externalRepoCredId }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/release/pipeline")
               if echo "$response" | grep -q '"success":true'; then
                 echo "SUCCESS :: $response"
               else
                 echo "FAILED :: $response"
               fi
               
-  build-ssr-web-app:
-    name: Build Ssr Web App
+    needs: []
     permissions: write-all
+    if: ${{ github.event.client_payload.releaseData }}
     runs-on: ubuntu-latest
-    needs:
-      - _status_testing
+  build-ssr-web-app:
+    name: build-ssr-web-app
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -487,18 +542,12 @@ jobs:
               echo "Starting Amplify Job"
               aws amplify start-job --app-id $appId --branch-name $BRANCH_NAME --job-type RELEASE
               
-  _status-success:
-    name: ' Status Success'
-    permissions: write-all
-    env:
-      CONTEXT_JSON: ${{ toJson(github) }}
-    runs-on: ubuntu-latest
     needs:
-      - code-scan
       - _status_testing
-      - build-ssr-web-app
-      - deploy
-    if: ${{ !(failure() || cancelled()) }}
+    permissions: write-all
+    runs-on: ubuntu-latest
+  _status-success:
+    name: _status-success
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -554,59 +603,21 @@ jobs:
         run: |2-
 
               context=$(echo "$CONTEXT_JSON" | jq --arg sha "$COMMIT_ID" '.sha = $sha' | jq -c . | base64)
-              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/SUCCESS?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context&appId=${{ github.event.client_payload.externalRepo.appId }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/SUCCESS?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
               
-  _status-failed:
-    name: ' Status Failed'
-    permissions: write-all
-    env:
-      CONTEXT_JSON: ${{ toJson(github) }}
-    runs-on: ubuntu-latest
     needs:
       - code-scan
       - _status_testing
       - build-ssr-web-app
       - deploy
-    if: ${{ failure() || cancelled() }}
+    permissions: write-all
+    if: ${{ !(failure() || cancelled()) }}
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
+    runs-on: ubuntu-latest
+  _status-failed:
+    name: _status-failed
     steps:
-      - name: 'Run :: Start'
-        run: |2-
-
-              echo " Starting GitHub Action!" && 
-              echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
-        env:
-          COMMIT_ID: ${{ github.event.client_payload.commitId }}
-          BRANCH_NAME: ${{ github.event.client_payload.branchName }}
-        if: >-
-          ${{ github.event.client_payload.commitId != null ||
-          github.event.client_payload.branchName != null }}
-        run: |2-
-
-              echo "Starting the checkout process..."
-              git fetch --all
-              if [ -n "$COMMIT_ID" ]; then
-                echo "Commit ID provided: $COMMIT_ID"
-                git checkout $COMMIT_ID || true
-                echo "Checked out to commit ID: $COMMIT_ID"
-              elif [ -n "$BRANCH_NAME" ]; then
-                echo "Branch name provided: $BRANCH_NAME"
-                git checkout $BRANCH_NAME || true
-                echo "Checked out to branch: $BRANCH_NAME"
-
-                #Updating the commit Id
-                ACTUAL_COMMIT_ID=$(git rev-parse HEAD)
-                echo "Changing CommitId: $ACTUAL_COMMIT_ID"
-                echo "COMMIT_ID=$ACTUAL_COMMIT_ID" >> $GITHUB_ENV
-              else
-                echo "Skipping checkout..."
-              fi
-            
       - name: 'Run :: Decoding Secrets'
         run: |2-
 
@@ -623,10 +634,10 @@ jobs:
         run: |2-
 
               context=$(echo "$CONTEXT_JSON" | jq --arg sha "$COMMIT_ID" '.sha = $sha' | jq -c . | base64)
-              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/FAILED?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
+              response=$(curl -X PUT -d "runId=$RUN_ID&context=$context&appId=${{ github.event.client_payload.externalRepo.appId }}"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.PIPELINE_SERVICE_EP }}/${{ env.PIPELINE_ID }}/FAILED?releaseId=${{ github.event.client_payload.releaseData.releaseId }}")
 
               # Triggering SkyU Alerts
-              response=$(curl -X POST -d "labels[alertname]=pipelineFailed&labels[pipelineId]=${{ env.PIPELINE_ID }}&message=Pipeline Failed&messageTitle=Pipeline ${{ env.PIPELINE_ID }} Failed&status=firing"  -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.FIRE_SKYU_ALERT_EP }}?organizationId=${{ env.PIPELINE_ORGANIZATION_ID }}&projectId=${{ env.PIPELINE_PROJECT_ID }}&environmentId=${{ env.PIPELINE_ENVIRONMENT_ID }}&token=${{ env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}&authBy=sa")
+              response=$(curl -X POST -d "labels[alertname]=pipelineFailed&labels[pipelineId]=${{ env.PIPELINE_ID }}&labels[system]=skyu&message=Pipeline Failed&messageTitle=Pipeline ${{ env.PIPELINE_ID }} Failed&status=firing"  -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.FIRE_SKYU_ALERT_EP }}?organizationId=${{ env.PIPELINE_ORGANIZATION_ID }}&projectId=${{ env.PIPELINE_PROJECT_ID }}&environmentId=${{ env.PIPELINE_ENVIRONMENT_ID }}&token=${{ env.SERVICE_ACC_ACCESS_TOKEN_STRIPPED }}&authBy=sa")
 
               if echo "$response" | grep -q '"success":true'; then
                 echo "SUCCESS :: $response"
@@ -634,13 +645,18 @@ jobs:
                 echo "FAILED :: $response"
               fi
               
-  deploy:
-    name: Deploy
-    permissions: write-all
-    runs-on: ubuntu-latest
     needs:
+      - code-scan
+      - _status_testing
       - build-ssr-web-app
-    if: github.event.client_payload.releaseData == null
+      - deploy
+    permissions: write-all
+    if: ${{ failure() || cancelled() }}
+    env:
+      CONTEXT_JSON: ${{ toJson(github) }}
+    runs-on: ubuntu-latest
+  deploy:
+    name: deploy
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -699,7 +715,13 @@ jobs:
             ${{ github.event.head_commit.message ||
             github.event.client_payload.commitMessage }}
         run: |2-
-              
+
+              if [ -z "$COMMIT_MESSAGE" ]; then
+                COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+                echo "Fetched commit message: $COMMIT_MESSAGE"
+                echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+              fi
+            
               response=$(curl -X PATCH -d "imageRegistryURL=${{ env.IMAGE_NAME }}&appVersionId=${{ env.DEPLOYMENT_APP_VERSION_ID }}&tag=${{ env.COMMIT_ID }}&containerName=${{ env.DEPLOYMENT_CONTAINER_NAME }}&shouldDeploy=${{env.DEPLOY_STEP_SHOULD_DEPLOY}}&pipelineRunId=$RUN_ID&commitDetails[commitHash]=${{ env.COMMIT_ID }}&commitDetails[commitAvatar]=https://github.com/$COMMIT_USER.png&commitDetails[commitTime]=$COMMIT_TIME&commitDetails[commitMessage]=$COMMIT_MESSAGE&commitDetails[commitUser]=$COMMIT_USER"  -H 'Authorization: ${{ env.SERVICE_ACC_ACCESS_TOKEN }}' -H 'x-organization-id: ${{ env.PIPELINE_ORGANIZATION_ID }}' -H 'x-project-id: ${{ env.PIPELINE_PROJECT_ID }}' -H 'x-environment-id: ${{ env.PIPELINE_ENVIRONMENT_ID }}' -H 'x-application-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-trace-id: ${{ env.PIPELINE_TRACE_ID }}' -H 'x-resource-id: ${{ env.PIPELINE_APPLICATION_ID }}' -H 'x-auth-by: sa' -H 'Content-Type: application/x-www-form-urlencoded'  "${{ env.DEPLOYMENT_ENDPOINT }}")
               
               status_code=$?
@@ -716,3 +738,9 @@ jobs:
                 exit 1
               fi
             
+    needs:
+      - build-ssr-web-app
+      - _status_testing
+    permissions: write-all
+    if: github.event.client_payload.releaseData == null
+    runs-on: ubuntu-latest
