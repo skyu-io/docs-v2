@@ -1,0 +1,60 @@
+import Image from "../../../../components/Image";
+
+# Steps to update the GitHub PAT token in DevLake
+
+#### 1. Verify the current PAT token connectivity.
+
+- Navigate to the Insights tab in the left sidebar of the SkyU Console.
+- Click **Settings** sidebar item.
+- If GitHub apps are linked to your projects, they'll appear under the GitHub tab.
+- You'll see the configured organization/user name, the added apps, and any custom apps for insights configurations.
+- If the organization/user isn’t configured, a **Configure GitHub** button will be visible in the row.
+- Follow the [Configure GitHub insights](/docs/insights/github-configuration) guide to set up GitHub applications.
+
+<Image
+  src="/assets/images/insights/github/github-tab.png"
+  alt="github-tab"
+  width={1000}
+  height={500}
+/>
+
+- Once configured, it will be displayed as listed below.
+
+<Image
+  src="/assets/images/insights/github/github-configured.png"
+  alt="github-configured"
+  width={1000}
+  height={500}
+/>
+
+- Click on the organization/user row to check the availability of the GitHub PAT token in DevLake.
+- You will be directed to the UI below, where you can view the GitHub connection (organization/user) and the PAT token connectivity.
+- If the PAT token is valid and has all necessary permissions, it will appear as connected. Otherwise, it will appear as disconnected.
+
+<Image
+  src="/assets/images/insights/github/github-scopes-table-connected.png"
+  alt="github-scopes-table-connected"
+  width={1000}
+  height={500}
+/>
+
+#### 2. Update GitHub PAT token
+
+- To update the GitHub connection PAT token, click on the **Update PAT Token** button. This will open a new modal as shown below.
+
+<Image
+  src="/assets/images/insights/github/update-github-pat-token-modal.png"
+  alt="update-github-pat-token-modal"
+  width={1000}
+  height={500}
+/>
+
+- To add a new GitHub token, ensure it has the **repo**, **read:user** and **read:org** permissions, then click the Save button.
+- After validation, the PAT token will be updated in the DevLake connection, and it will show as connected in the UI.
+
+<Image
+  src="/assets/images/insights/github/github-scopes-table-connected.png"
+  alt="github-scopes-table-connected"
+  width={1000}
+  height={500}
+/>

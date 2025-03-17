@@ -1,4 +1,6 @@
 {
-    "github-configuration": "Github",
-    "bitbucket-configuration": "Bitbucket"
+  "github-configuration": "Github",
+  "bitbucket-configuration": "Bitbucket",
+  "update-tokens": { "title": "Update PAT Token/App Password" },
+  "update-scope-config": { "title": "Update Scope Configuration" }
 }

@@ -1,0 +1,5 @@
+{
+  "update-github-scope-config": "GitHub",
+  "update-bitbucket-scope-config": "Bitbucket",
+  "update-gitlab-scope-config": "GitLab"
+}
