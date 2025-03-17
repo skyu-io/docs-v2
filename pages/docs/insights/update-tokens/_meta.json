@@ -1,0 +1,5 @@
+{
+  "update-github-pat-token": "Github",
+  "update-bitbucket-app-password": "Bitbucket",
+  "update-gitlab-pat-token": "Gitlab"
+}
