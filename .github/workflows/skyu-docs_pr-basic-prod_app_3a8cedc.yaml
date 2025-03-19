@@ -1,4 +1,4 @@
-name: skyu-docs_pr_app_3a8cedc Pipeline (Skyu Generated)
+name: skyu-docs_pr-basic-prod_app_3a8cedc Pipeline (Skyu Generated)
 'on':
   pull_request:
     types:
@@ -6,9 +6,9 @@ name: skyu-docs_pr_app_3a8cedc Pipeline (Skyu Generated)
       - synchronize
   workflow_dispatch: {}
   repository_dispatch:
-    types: pipeline_208e64bc-5b8b-4f77-b4b6-10ba7d3721f3
+    types: pipeline_5aad8be0-98e1-46cd-88a5-f0451f78be8f
 env:
-  ENCODED_PIPELINE_SECRET: ${{secrets.DOCSV2_SKYUDOCS_PR_APP_3A8CEDC}}
+  ENCODED_PIPELINE_SECRET: ${{secrets.DOCSV2_SKYUDOCS_PRBASICPROD_APP_3A8CEDC}}
   COMMIT_ID: ${{github.event.client_payload.commitId || github.sha || github.run_id}}
   BRANCH_NAME: >-
     ${{github.event.client_payload.branchName || github.event.branch ||
@@ -366,8 +366,8 @@ jobs:
     permissions: write-all
     if: ${{ github.event.client_payload.releaseData }}
     runs-on: ubuntu-latest
-  build-and-scan:
-    name: build-and-scan
+  ai-code-review:
+    name: ai-code-review
     steps:
       - name: 'Run :: Start'
         run: |2-
@@ -417,41 +417,6 @@ jobs:
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
                 
-      - name: 'Run :: Build With Docker'
-        run: >-
-          docker build -t ${{ env.IMAGE_NAME }}:${{ env.COMMIT_ID }} -f
-          ${{env.DOCKER_FILE_PATH}} --build-arg BUILT_WITH=SKYU${{
-          env.DOCKER_BUILD_ARGS }} ${{env.DOCKER_BUILD_CONTEXT}}
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
-      - name: 'Run :: Trivy vulnerability scanner'
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:${{ env.COMMIT_ID }}
-          format: ${{env.TRIVY_RESULT_FORMAT}}
-          output: ${{ env.COMMIT_ID }}-image-vulnerability-report.json
-          exit-code: ${{env.TRIVY_SCAN_EXIT_CODE}}
-          vuln-type: os,library
-          severity: ${{env.SCAN_SEVERITY}}
-          hide-progress: true
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
-      - name: 'Run :: Comment on PR with Trivy Summary'
-        uses: actions/github-script@v6
-        with:
-          script: |2-
-
-                  const fs = require('fs');
-                  const trivySummary = fs.readFileSync('${{ env.COMMIT_ID }}-image-vulnerability-report.json', 'utf-8');
-
-                  github.rest.issues.createComment({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: context.issue.number,
-                    body: 'Trivy ${{env.SCAN_SEVERITY}} Vulnerability Scan Results\n```\n' + trivySummary + '\n```',
-                  }).catch(error => {
-                    console.log("Error occurred while commenting on PR with Trivy summary:", error);
-                  });
-                  
-        if: ${{ env.STEPS_CAN_PROCEED == 'true' }}
       - name: 'Run :: Get PR Comments from From AI Service'
         run: |2-
 
@@ -642,7 +607,7 @@ jobs:
     needs:
       - code-scan
       - _status_testing
-      - build-and-scan
+      - ai-code-review
     permissions: write-all
     if: ${{ !(failure() || cancelled()) }}
     env:
@@ -681,7 +646,7 @@ jobs:
     needs:
       - code-scan
       - _status_testing
-      - build-and-scan
+      - ai-code-review
     permissions: write-all
     if: ${{ failure() || cancelled() }}
     env:
