@@ -1,0 +1,151 @@
+import Image from "../../../../components/Image";
+
+# Steps to Update the GitLab Scope Configurations in DevLake
+
+#### 1. Access Existing Scope Configurations.
+
+- Navigate to the Insights tab in the left sidebar of the SkyU Console.
+- Click **Settings** sidebar item.
+- If GitLab apps are linked to your projects, they'll appear under the GitLab tab.
+- You'll see the configured organization/user name, the added apps, and any custom apps for insights configurations.
+- If the organization/user isn’t configured, a **Configure GitLab** button will be visible in the row.
+
+<Image
+  src="/assets/images/insights/gitlab/gitlab-tab.png"
+  alt="gitlab-tab"
+  width={1000}
+  height={500}
+/>
+
+- Once configured, it will be displayed as listed below.
+
+<Image
+  src="/assets/images/insights/gitlab/gitlab-configured.png"
+  alt="gitlab-configured"
+  width={1000}
+  height={500}
+/>
+
+- Click on the organization/user row to view all configured applications and scopes, each in its own tab. Navigate to the Scopes tab to see the configured scopes in DevLake.
+
+<Image
+  src="/assets/images/insights/gitlab/gitlab-scopes-table-edit.png"
+  alt="gitlab-scopes-table-edit"
+  width={1000}
+  height={500}
+/>
+
+#### 2. Update GitLab scope configuration
+
+- Select the scope you want to update and click the edit icon. You will be redirected to the GitLab scope configuration update UI.
+
+<Image
+  src="/assets/images/insights/gitlab/gitlab-pipelines-update.png"
+  alt="gitlab-pipelines-update"
+  width={1000}
+  height={500}
+/>
+
+- The first step involves configuring the pipelines related settings.
+
+  #### Deployment Pattern
+
+  - DevLake converts a workflow run into a DevLake deployment by defining two regular expressions (regex).
+  - The provided regex should match the name of the GitLab workflow run or one of its jobs for it to be considered a deployment.
+  - SkyU pipelines follow the format `skyu-<app_name>-<env>_<app_id>_<env_id>`. For example, a pipeline might be named `skyu-console_web-dev_app_d4367b4_env_71c861f`, and its corresponding pipeline run would be `skyu-console_web-dev_app_d4367b4_env_71c861f Pipeline (Skyu Generated)`. To match this format, we can apply the regex pattern `.*_app_(?P<id1>[A-Za-z0-9]+)_env_(?P<id2>[A-Za-z0-9]+)`.
+
+---
+
+- The next step is to configure the settings related to GitLab issues.
+
+  <Image
+    src="/assets/images/insights/gitlab/gitlab-issues-update.png"
+    alt="gitlab-issues-update"
+    width={1000}
+    height={500}
+  />
+
+  #### Requirement
+
+  - The Requirement setting in DevLake classifies issues as "Requirement" based on their labels, ensuring consistent categorization across repositories, regardless of the naming conventions used in each repo. For example, you can use the regex pattern `(feat|feature|proposal|requirement)` to match labels associated with requirements.
+
+  #### Bug
+
+  - The Bug setting functions similarly to Requirement, but it categorizes the issue type as "Bug" instead. For example, you can use the regex pattern `(bug|broken)` to match relevant labels.
+
+  #### Incident
+
+  - The Incident setting functions similarly to Requirement, but it categorizes the issue type as "Incident" instead. For example, you can use the regex pattern `(incident|failure)` to match relevant labels.
+
+  #### Severity
+
+  - DevLake can extract the severity level of issues based on their labels. If the labels follow the format `severity/p0`, `severity/p1`, or `severity/p2`, you can use the regex pattern `severity/(.\*)$`, which captures everything after `severity/` and treats it as the severity level (e.g., p0, p1, p2). However, if the labels are simply `p0`, `p1`, or `p2`, you can use the regex pattern `(p0|p1|p2)$` to directly match these values at the end of the label.
+
+  #### Component
+
+  - The Component setting functions exactly like Severity, allowing you to extract the component name from issue labels using a regex pattern. For example, using the pattern `component(.\*)`, DevLake captures everything after "component" as the component name.
+
+  #### Priority
+
+  - The Priority setting in DevLake works the same way as Severity, allowing priority levels to be extracted from issue labels using a regex pattern. By applying the pattern `(highest|high|medium|low|p0|p1|p2|p3)`, DevLake can categorize issues based on their priority, ensuring better organization and tracking.
+
+---
+
+- The next step is to configure the settings related to pull requests.
+
+  <Image
+    src="/assets/images/insights/gitlab/gitlab-prs-update.png"
+    alt="gitlab-prs-update"
+    width={1000}
+    height={500}
+  />
+
+  #### Pull Request Type
+
+  - The type of pull requests can be extracted from labels using a regular expression.
+  - If your PR labels are formatted like `type/feature-development`, `type/bug-fixing`, and `type/docs`, you should use the regex pattern `type/(.\*)$`. This pattern captures everything after `type/` as the PR type (e.g., feature-development, bug-fixing, docs).
+  - If your PR labels are simply `feature-development`, `bug-fixing`, and `docs` without the `type/` prefix, use the regex pattern `(feature-development|bug-fixing|docs)$` to match those labels.
+
+  #### Pull Request Component
+
+  - Similar to Type, the Component of pull requests will be parsed from the labels using a specified regular expression. This allows DevLake to categorize PRs based on their associated components, helping with analysis and tracking. You can use the regex pattern `component(.*)` to capture and extract the component from the PR labels.
+
+---
+
+- The next step is to configure the settings related to GitLab tags.
+
+  <Image
+    src="/assets/images/insights/gitlab/gitlab-tags-update.png"
+    alt="gitlab-tags-update"
+    width={1000}
+    height={500}
+  />
+
+  #### Tags Limit
+
+  - This setting controls how many pairs of tags DevLake compares to calculate the differences between them, defaulting to the last 10 pairs, with commit diff showing the changes in code and issue diff highlighting the issues solved by the new commits in the current tag compared to the previous one.
+
+  #### Tags Pattern
+
+  - The Tags Pattern setting allows you to specify a regular expression to filter which tags should be included in the diff analysis, enabling you to focus on specific types of tags (like release tags) and ignore those that aren't relevant to your analysis.
+  - You can use the pattern `/vd+.d+(.d+(-rc)*d*)*$/` for the Tags Pattern to filter version tags, including those with release tags, ensuring only tags that follow this specific versioning format are counted in the diff analysis. This tag pattern is typically used to match version tags, especially in a versioning scheme like Semantic Versioning (e.g., v1.2.3), along with release tags(e.g., v1.2.3-rc1).
+
+---
+
+- The next step is to configure the settings related to GitLab cross domains.
+
+  <Image
+    src="/assets/images/insights/gitlab/gitlab-cross-domain-update.png"
+    alt="gitlab-token"
+    width={1000}
+    height={500}
+  />
+
+  #### Connect PRs and issues by
+
+  - This setting is a regular expression pattern used to identify PR body text that contains keywords indicating an issue is being closed, resolved, or fixed. This pattern ensures that when a PR mentions specific keywords, it automatically links to the relevant issue numbers for closure.
+  - We can use this pattern `(?mi)(fix|close|resolve|fixes|closes|resolves|fixed|closed|resolved)[s]*.*(((and )?(#|https://gitlab.com/%s/%s/issues/)\\d+[ ]*)+)` to identify PR body text that mentions keywords like "fix", "close", "resolve", etc., followed by issue references (e.g., #123 or a full issue URL). This pattern helps automate the detection of PRs that are meant to close or resolve specific issues. It’s case-insensitive and works across multiple lines.
+
+---
+
+- Click the Update button to apply the changes to the scope configuration in DevLake.
