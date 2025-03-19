@@ -22,7 +22,7 @@
     "gray-matter": "^4.0.3",
     "groq": "^3.60.0",
     "lucide-react": "^0.447.0",
-    "next": "^14.2.6",
+    "next": "^14.2.15",
     "nextjs-google-analytics": "^2.3.7",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
@@ -38,5 +38,12 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13"
+  },
+  "pnpm": {
+    "overrides": {
+      "cross-spawn@<6.0.6": ">=6.0.6",
+      "next@>=14.0.0 <14.2.21": ">=14.2.21",
+      "dompurify@<3.2.4": ">=3.2.4"
+    }
   }
 }
