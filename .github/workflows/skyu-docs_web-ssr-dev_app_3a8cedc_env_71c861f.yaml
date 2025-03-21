@@ -63,7 +63,7 @@ jobs:
       - name: 'Run :: Trivy Filesystem Scan'
         run: |2-
 
-                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet > trivy_results.json
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity CRITICAL --format json --quiet > trivy_results.json
                   # Minifying Json
                   jq -c '.' trivy_results.json > trivy_results.min.json
                   
@@ -79,7 +79,7 @@ jobs:
       - name: 'Run :: Trivy Filesystem Scan (Including Trivy Ignores)'
         run: |2-
 
-                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet --list-all-pkgs > trivy_results.json
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity CRITICAL --format json --quiet --list-all-pkgs > trivy_results.json
                   # Minifying Json
                   jq -c '.' trivy_results.json > trivy_results.min.json
                   
@@ -189,6 +189,10 @@ jobs:
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
                 
+      - name: 'Run :: Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: 'Run :: Pipeline Started'
         env:
           RUN_ID: ${{ github.run_id }}
@@ -210,44 +214,6 @@ jobs:
   _status_testing:
     name: _status_testing
     steps:
-      - name: 'Run :: Start'
-        run: |2-
-
-              echo " Starting GitHub Action!" && 
-              echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
-        env:
-          COMMIT_ID: ${{ github.event.client_payload.commitId }}
-          BRANCH_NAME: ${{ github.event.client_payload.branchName }}
-        if: >-
-          ${{ github.event.client_payload.commitId != null ||
-          github.event.client_payload.branchName != null }}
-        run: |2-
-
-              echo "Starting the checkout process..."
-              git fetch --all
-              if [ -n "$COMMIT_ID" ]; then
-                echo "Commit ID provided: $COMMIT_ID"
-                git checkout $COMMIT_ID || true
-                echo "Checked out to commit ID: $COMMIT_ID"
-              elif [ -n "$BRANCH_NAME" ]; then
-                echo "Branch name provided: $BRANCH_NAME"
-                git checkout $BRANCH_NAME || true
-                echo "Checked out to branch: $BRANCH_NAME"
-
-                #Updating the commit Id
-                ACTUAL_COMMIT_ID=$(git rev-parse HEAD)
-                echo "Changing CommitId: $ACTUAL_COMMIT_ID"
-                echo "COMMIT_ID=$ACTUAL_COMMIT_ID" >> $GITHUB_ENV
-              else
-                echo "Skipping checkout..."
-              fi
-            
       - name: 'Run :: Decoding Secrets'
         run: |2-
 
@@ -658,44 +624,6 @@ jobs:
   deploy:
     name: deploy
     steps:
-      - name: 'Run :: Start'
-        run: |2-
-
-              echo " Starting GitHub Action!" && 
-              echo "STEPS_CAN_PROCEED=true" >> $GITHUB_ENV
-              
-      - name: 'Run :: Checkout repository'
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: 'Run :: Checkout Specific Commit'
-        env:
-          COMMIT_ID: ${{ github.event.client_payload.commitId }}
-          BRANCH_NAME: ${{ github.event.client_payload.branchName }}
-        if: >-
-          ${{ github.event.client_payload.commitId != null ||
-          github.event.client_payload.branchName != null }}
-        run: |2-
-
-              echo "Starting the checkout process..."
-              git fetch --all
-              if [ -n "$COMMIT_ID" ]; then
-                echo "Commit ID provided: $COMMIT_ID"
-                git checkout $COMMIT_ID || true
-                echo "Checked out to commit ID: $COMMIT_ID"
-              elif [ -n "$BRANCH_NAME" ]; then
-                echo "Branch name provided: $BRANCH_NAME"
-                git checkout $BRANCH_NAME || true
-                echo "Checked out to branch: $BRANCH_NAME"
-
-                #Updating the commit Id
-                ACTUAL_COMMIT_ID=$(git rev-parse HEAD)
-                echo "Changing CommitId: $ACTUAL_COMMIT_ID"
-                echo "COMMIT_ID=$ACTUAL_COMMIT_ID" >> $GITHUB_ENV
-              else
-                echo "Skipping checkout..."
-              fi
-            
       - name: 'Run :: Decoding Secrets'
         run: |2-
 
