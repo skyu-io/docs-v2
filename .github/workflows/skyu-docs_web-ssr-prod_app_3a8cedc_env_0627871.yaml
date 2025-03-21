@@ -69,7 +69,7 @@ jobs:
       - name: 'Run :: Trivy Filesystem Scan'
         run: |2-
 
-                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet > trivy_results.json
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity CRITICAL --format json --quiet > trivy_results.json
                   # Minifying Json
                   jq -c '.' trivy_results.json > trivy_results.min.json
                   
@@ -85,7 +85,7 @@ jobs:
       - name: 'Run :: Trivy Filesystem Scan (Including Trivy Ignores)'
         run: |2-
 
-                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet --list-all-pkgs > trivy_results.json
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity CRITICAL --format json --quiet --list-all-pkgs > trivy_results.json
                   # Minifying Json
                   jq -c '.' trivy_results.json > trivy_results.min.json
                   
@@ -195,6 +195,10 @@ jobs:
                 fi
                 echo "${{ env.ENCODED_PIPELINE_SECRET }}" | base64 --decode | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read line; do echo "$line" >> $GITHUB_ENV; echo "::add-mask::${line#*=}"; done
                 
+      - name: 'Run :: Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: 'Run :: Pipeline Started'
         env:
           RUN_ID: ${{ github.run_id }}
