@@ -21,7 +21,11 @@ export default function Header() {
         </Link>
         <ul className={styles.navLinks}>
           <li className="font-medium text-sm sm:block hidden">
-            <Link href="/">Home</Link>
+            {currentPath === "/" ? (
+              <span className="text-neutral-200 cursor-default">Home</span>
+            ) : (
+              <Link href="/">Home</Link>
+            )}
           </li>
           <li className={`text-sm ${currentPath === "/" ? "font-normal" : "font-medium"}`}>
             <Link href="/docs">Documentation</Link>
