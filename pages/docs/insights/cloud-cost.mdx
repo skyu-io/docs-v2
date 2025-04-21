@@ -1,0 +1,70 @@
+---
+title: Cloud Cost
+---
+
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Cloud Cost Reports
+
+This guide walks you through creating a Cloud Cost Report for AWS accounts using the SkyU platform.
+
+## Prerequisites
+
+Before you begin, ensure you are logged into the AWS account for which you want to generate the report. Keep the AWS console open in another browser tab.
+
+---
+
+## Steps to Create a Report
+
+<Steps>
+
+### Navigate to the Cloud Cost Section
+
+Go to the `Cloud Cost` section under the `Insights` tab. Make sure you are operating at the **Organization level**.
+
+<Image src="/assets/images/insights/cloudcost/cc-1.png" alt="Cloud Cost Management" width={1000} height={500} />
+
+Click the **Create New Report** button.
+
+### Add a Cost Report
+
+You’ll be redirected to a form where you can select an existing credential or create a new one.
+
+<Image src="/assets/images/insights/cloudcost/cc-2.png" alt="Add Cost Report" width={1000} height={500} />
+
+Let’s go ahead and create a new credential.
+
+### Create New Credential
+
+A popup will appear prompting you to add a new credential.
+
+<Image src="/assets/images/insights/cloudcost/cc-3.png" alt="Create New Credential" width={1000} height={500} />
+
+- Enter a **name** and the **AWS Account ID** for which you want to create the report.
+- Under the **Permissions** section, select **Cloud Cost Access**.
+
+Before clicking **Create**, click the **Create Role on AWS** button. This will redirect you to the AWS CloudFormation console for the account you opened earlier.
+
+> Deploy the provided CloudFormation stack — it will create the necessary IAM role within your AWS account.
+
+Once the stack is successfully created, return and click the **Create** button.
+
+<Image src="/assets/images/insights/cloudcost/cc-4.png" alt="Credential Created" width={1000} height={500} />
+
+### Select the Credential and Create the Report
+
+You’ll be redirected back to the cost report form. Select the newly created credential and click **Create** to generate the report.
+
+<Image src="/assets/images/insights/cloudcost/cc-5.png" alt="Credential Created" width={1000} height={500} />
+
+<Callout type="info">
+Report generation may take up to 24 hours. AWS budget exports require time to process, and our system retrieves data via a daily scheduled job.
+</Callout>
+
+</Steps>
+
+## Final Notes
+
+Once the report has been successfully created, it will appear in the **Cloud Cost** dashboard, providing detailed insights into your AWS spending patterns.
