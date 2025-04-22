@@ -1,5 +1,13 @@
 name: skyu-docs_web-ssr-dev_app_3a8cedc_env_71c861f Pipeline (Skyu Generated)
 'on':
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - .github/workflows/**
+      - .trivyignore
+      - Readme.md
+      - README.md
   workflow_dispatch: {}
   repository_dispatch:
     types: pipeline_f1f6eeee-31b8-4432-a6b9-7f99512d7007
@@ -72,7 +80,7 @@ jobs:
              
                   if jq -e '.Results | map(select(.Vulnerabilities)) | length > 0' trivy_results.min.json >/dev/null; then
                     echo "Vulnerabilities detected!"
-                    jq '.Results[] | {Target: .Target, Vulnerabilities: .Vulnerabilities[] | {ID: .VulnerabilityID, Severity: .Severity, Description: .Description}}' trivy_results.min.json
+                    jq '.Results[] | select(.Vulnerabilities?) | {Target: .Target, Vulnerabilities: .Vulnerabilities[] | {ID: .VulnerabilityID, Severity: .Severity, Description: .Description}}' trivy_results.min.json
                     exit 1
                   fi
                   
@@ -296,8 +304,33 @@ jobs:
           COMMIT_USER: ${{ github.event.head_commit.author.name }}
           COMMIT_MESSAGE: ${{ github.event.client_payload.commitMessage }}
           COMMIT_TIME: ${{ github.event.head_commit.timestamp }}
+          PROJECT_RELEASE_DATA: >-
+            ${{
+            toJson(github.event.client_payload.releaseData.projectReleaseData)
+            }}
         run: |2-
 
+              if [[ "$PROJECT_RELEASE_DATA" != "{}" && -n "$PROJECT_RELEASE_DATA" ]]; then
+                echo "////////////////////////////"
+                echo "Project Release Information"
+                echo "////////////////////////////"
+                echo "Project Release Tag  : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.releaseTag')"
+                echo "Previous Commit ID   : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.preCommitId')"
+                echo "New Commit ID        : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.newCommitId')"
+                echo "From                 : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.envFrom')"
+                echo "To                   : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.envTo')"
+              fi
+              
+              if [[ -n "${{ github.event.client_payload.releaseData.tag }}" ]]; then
+                echo "////////////////////////////"
+                echo "Application Release Information"
+                echo "////////////////////////////"
+                echo "Tag        : ${{ github.event.client_payload.releaseData.tag }}"
+                echo "Title      : ${{ github.event.client_payload.releaseData.title }}"
+              fi
+
+
+              echo "////////////////////////////"
               echo "Pipeline Release Information"
               echo "////////////////////////////"
               echo "releaseId         : $RELEASE_ID"
@@ -645,7 +678,7 @@ jobs:
         run: |2-
 
               if [ -z "$COMMIT_MESSAGE" ]; then
-                COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+                COMMIT_MESSAGE=$(git log -1 --pretty=%B | tr '\n' ' ')
                 echo "Fetched commit message: $COMMIT_MESSAGE"
                 echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
               fi
