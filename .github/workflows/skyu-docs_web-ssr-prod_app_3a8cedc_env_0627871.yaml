@@ -81,7 +81,7 @@ jobs:
                   if jq -e '.Results | map(select(.Vulnerabilities)) | length > 0' trivy_results.min.json >/dev/null; then
                     echo "Vulnerabilities detected!"
                     jq '.Results[] | select(.Vulnerabilities?) | {Target: .Target, Vulnerabilities: .Vulnerabilities[] | {ID: .VulnerabilityID, Severity: .Severity, Description: .Description}}' trivy_results.min.json
-                    exit 1
+                    echo "IS_TRIVY_VULNERABILITIES_DETECTED=true" >> $GITHUB_ENV
                   fi
                   
       - name: 'Run :: Trivy Filesystem Scan (Including Trivy Ignores)'
@@ -144,6 +144,12 @@ jobs:
 
                   else
                       echo ".trivyignore file not found"
+                  fi
+                  trivyVulnFound=${{ env.IS_TRIVY_VULNERABILITIES_DETECTED }}
+                  if [ -n "$trivyVulnFound" ]; then
+                    echo "Trivy vulnerabilities were detected."
+                    echo "The job failed after uploading the code scan reports."
+                    exit 1
                   fi
                   
   _status-pending:
