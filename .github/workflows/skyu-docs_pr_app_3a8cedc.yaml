@@ -82,7 +82,7 @@ jobs:
       - name: 'Run :: Trivy Filesystem Scan (Including Trivy Ignores)'
         run: |2-
 
-                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --severity HIGH --format json --quiet --list-all-pkgs > trivy_results.json
+                  docker run --rm -v "${PWD}:/src" aquasec/trivy fs /src --format json --quiet --report summary --dependency-tree > trivy_results.json
                   # Minifying Json
                   jq -c '.' trivy_results.json > trivy_results.min.json
                   
@@ -141,7 +141,7 @@ jobs:
                       echo ".trivyignore file not found"
                   fi
                   trivyVulnFound=${{ env.IS_TRIVY_VULNERABILITIES_DETECTED }}
-                  if [ -n "$trivyVulnFound" ]; then
+                  if [ -n "$trivyVulnFound" ] && [ "HIGH" != "NONE" ]; then
                     echo "Trivy vulnerabilities were detected."
                     echo "The job failed after uploading the code scan reports."
                     exit 1
@@ -354,8 +354,8 @@ jobs:
                 echo "Project Release Information"
                 echo "////////////////////////////"
                 echo "Project Release Tag  : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.releaseTag')"
-                echo "Previous Commit ID   : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.preCommitId')"
-                echo "New Commit ID        : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.newCommitId')"
+                echo "Previous Commit ID   : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.commitData.preCommitId')"
+                echo "New Commit ID        : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.commitData.newCommitId')"
                 echo "From                 : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.envFrom')"
                 echo "To                   : $(echo "$PROJECT_RELEASE_DATA" | jq -r '.envTo')"
               fi
