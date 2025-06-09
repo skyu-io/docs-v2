@@ -1,0 +1,89 @@
+---
+title: Create an Incoming Webhook on Slack
+---
+
+import Image from "../../../../components/Image";
+import { Callout } from "nextra/components";
+import { Steps } from 'nextra/components'
+
+# Create an Incoming Webhook on Slack
+
+Incoming Webhooks let you send messages from external systems directly into a Slack channel. This guide will walk you through every step, from setting up your Slack app to testing your webhook and adding it to the Skyu console.
+
+---
+
+# Steps to Create an Incoming Webhook
+
+<Steps>
+
+### Create a Channel for Alerts
+1. Open Slack.
+2. In the sidebar, next to **Channels**, click the **+** button.
+3. Select **Create a channel**.
+4. Give your channel a descriptive name (e.g., `#alerts` or `#skyu-notifications`).
+5. Set the channel to **private** or **public** as needed.
+6. Click **Create**.
+
+<Callout type="info">
+You can use an existing channel if you prefer, but creating a dedicated channel helps keep alerts organized.
+</Callout>
+
+---
+
+### Create a Slack App
+
+1. Go to [Slack API: Create New App](https://api.slack.com/apps/new).
+2. Select **From scratch**.
+    <Image src="/assets/images/slack/slack-2.png" alt="Slack Create App from Scratch" width={1000} height={500} />
+3. Enter a name for your app (e.g., `Skyu Alerts`).
+4. Choose the workspace where you want to install the app.
+    <Image src="/assets/images/slack/slack-3.png" alt="Slack Select Workspace" width={1000} height={500} />
+5. Click **Create App**.
+
+---
+
+### Add Description and Iconc (Optional) 
+
+1. In your app’s **Basic Information** page, you can add:
+   - **Short Description:** Explain what your app does.
+   - **App Icon:** Upload a custom image to make your app easily recognizable in Slack.
+    <Image src="/assets/images/slack/slack-4.png" alt="Slack Add App Description and Icon" width={1000} height={500} />
+2. Click **Save Changes**.
+
+---
+
+### Enable Incoming Webhooks
+
+1. In the left sidebar, click **Incoming Webhooks** under **Features**.
+2. Toggle the switch to **On** to enable incoming webhooks.
+    <Image src="/assets/images/slack/slack-6.png" alt="Slack Enable Incoming Webhooks" width={1000} height={500} />
+3. Read the information provided to understand how webhooks work.
+
+---
+
+### Add a New Webhook to Your Workspace
+
+1. On the **Incoming Webhooks** page, scroll down to **Webhook URLs for Your Workspace**.
+2. Click **Add New Webhook to Workspace**.
+    <Image src="/assets/images/slack/slack-7.png" alt="Slack Add New Webhook to Workspace" width={1000} height={500} />
+3. Slack will prompt you to choose a channel. Select the channel you created in Step 1.
+    <Image src="/assets/images/slack/slack-8.png" alt="Slack Select Channel for Webhook" width={1000} height={500} />
+4. Click **Allow** to grant the app permission to post in that channel.
+5. You’ll be redirected back to the webhooks page, where you’ll see your new webhook URL listed under **Webhook URLs for Your Workspace**.
+
+---
+
+### Copy the Webhook URL
+
+1. The webhook URL will look like this:  
+   `https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX`
+2. Click **Copy** next to the URL.
+
+<Callout type="info">
+Keep this URL secure. Anyone with this link can post messages to your Slack channel.
+</Callout>
+
+---
+
+**Congratulations!** You’ve successfully set up an Incoming Webhook for Slack. Your alerts will now flow directly into your chosen channel, keeping your team informed and responsive. Great job!
+</Steps>
