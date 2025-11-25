@@ -1,0 +1,215 @@
+---
+title: Scrape Uptime
+description: Monitor the health and uptime of Prometheus scrape targets across your clusters
+---
+
+# Scrape Uptime
+
+The Scrape Uptime page provides real-time monitoring of Prometheus scrape target health across your Kubernetes clusters. It helps you identify and troubleshoot issues with metric collection by showing which targets are successfully being scraped and which are experiencing problems.
+
+## Overview
+
+Scrape Uptime allows you to:
+- Monitor the health status of all Prometheus scrape targets
+- View uptime statistics and target availability
+- Identify failing scrape targets quickly
+- Group targets by job for better organization
+- Track target labels and endpoints
+
+## Getting Started
+
+### Accessing Scrape Uptime
+
+1. Navigate to **Alerts** in the main menu
+2. Select **Scrape Uptime** from the Prometheus section
+3. Choose a cluster from the dropdown
+
+### Understanding the Dashboard
+
+The Scrape Uptime page displays:
+
+#### Summary Statistics
+- **Total Targets**: Total number of scrape targets configured
+- **Healthy**: Number of targets successfully being scraped (UP status)
+- **Unhealthy**: Number of targets failing to be scraped (DOWN status)
+- **Uptime**: Overall percentage of healthy targets
+
+#### Target Details
+Each scrape target shows:
+- **Status Icon**: Visual indicator (green checkmark for UP, red error for DOWN)
+- **Endpoint**: The URL being scraped for metrics
+- **Labels**: Kubernetes labels associated with the target
+- **Health Chip**: Current status (UP/DOWN)
+
+## Target Grouping
+
+Targets are automatically grouped by their **job** label, which typically represents:
+- **kube-state-metrics**: Kubernetes cluster state metrics
+- **node-exporter**: Node-level system metrics
+- **cadvisor**: Container metrics
+- **Custom exporters**: Application-specific metrics
+
+Each group displays the number of targets it contains.
+
+## Health Status
+
+### UP Status
+A target shows **UP** status when:
+- Prometheus successfully connects to the endpoint
+- Metrics are being scraped without errors
+- The target responds within the timeout period
+
+### DOWN Status
+A target shows **DOWN** status when:
+- The endpoint is unreachable
+- Authentication fails
+- The target times out
+- Network connectivity issues occur
+- The service is not running
+
+## Common Scrape Targets
+
+### Kubernetes System Targets
+
+#### kube-state-metrics
+Provides cluster-level metrics about Kubernetes objects:
+- Pod states and conditions
+- Deployment status
+- Node information
+- Resource quotas
+
+#### node-exporter
+Exposes hardware and OS metrics:
+- CPU usage
+- Memory utilization
+- Disk I/O
+- Network statistics
+
+#### cadvisor
+Container-level metrics:
+- Container CPU and memory usage
+- Network traffic per container
+- Filesystem usage
+
+### Application Targets
+
+Custom application exporters that expose:
+- Application-specific metrics
+- Business metrics
+- Custom performance indicators
+
+## Troubleshooting
+
+### Target is DOWN
+
+If a target shows DOWN status:
+
+1. **Check Service Availability**
+   - Verify the service is running: `kubectl get pods -n <namespace>`
+   - Check service endpoints: `kubectl get endpoints -n <namespace>`
+
+2. **Verify Network Connectivity**
+   - Ensure the Prometheus pod can reach the target
+   - Check network policies and firewall rules
+
+3. **Review Service Configuration**
+   - Confirm the service is exposing metrics on the correct port
+   - Verify the metrics path (usually `/metrics`)
+
+4. **Check Authentication**
+   - Ensure proper ServiceAccount permissions
+   - Verify TLS certificates if using HTTPS
+
+5. **Review Prometheus Logs**
+   ```bash
+   kubectl logs -n monitoring prometheus-xxx
+   ```
+
+### All Targets are DOWN
+
+If all targets show DOWN status:
+
+1. **Check Prometheus Status**
+   - Verify Prometheus is running
+   - Check Prometheus pod logs for errors
+
+2. **Verify Service Discovery**
+   - Ensure Kubernetes service discovery is configured
+   - Check ServiceMonitor or PodMonitor resources
+
+3. **Review RBAC Permissions**
+   - Confirm Prometheus has proper ClusterRole permissions
+   - Verify ServiceAccount bindings
+
+### Intermittent Failures
+
+For targets that alternate between UP and DOWN:
+
+1. **Check Resource Limits**
+   - Target pod may be experiencing CPU/memory throttling
+   - Review pod resource requests and limits
+
+2. **Network Stability**
+   - Look for network congestion or packet loss
+   - Check for DNS resolution issues
+
+3. **Scrape Timeout**
+   - Target may be slow to respond
+   - Consider increasing scrape timeout in Prometheus config
+
+## Best Practices
+
+### Monitoring Strategy
+
+1. **Regular Checks**: Review scrape uptime daily to catch issues early
+2. **Set Alerts**: Create alerts for when targets go down
+3. **Track Trends**: Monitor uptime percentage over time
+4. **Document Targets**: Maintain documentation of what each target monitors
+
+### Target Configuration
+
+1. **Consistent Labeling**: Use consistent labels across targets for easier filtering
+2. **Meaningful Names**: Use descriptive job names that indicate the target's purpose
+3. **Health Endpoints**: Ensure all services expose a `/metrics` endpoint
+4. **Timeout Settings**: Configure appropriate scrape intervals and timeouts
+
+### Performance Optimization
+
+1. **Scrape Intervals**: Balance between data freshness and system load
+2. **Metric Cardinality**: Avoid high-cardinality labels that increase storage
+3. **Target Count**: Monitor the number of targets to prevent overload
+4. **Resource Allocation**: Ensure Prometheus has adequate resources
+
+## Integration with Alerts
+
+Use Scrape Uptime data to:
+
+1. **Create Alert Rules**: Set up alerts for target failures
+   ```promql
+   up == 0
+   ```
+
+2. **Monitor SLOs**: Track uptime as part of service level objectives
+
+3. **Incident Response**: Quickly identify affected services during outages
+
+4. **Capacity Planning**: Use uptime trends to plan infrastructure changes
+
+## Refresh and Updates
+
+- **Auto-refresh**: Data is fetched when you select a cluster
+- **Manual Refresh**: Click the "Refresh" button to get the latest status
+- **Last Refreshed**: Timestamp shows when data was last updated
+
+## Next Steps
+
+- Configure [Alert Rules](/docs/alerts/prometheus/rules) for target failures
+- Set up [Probes](/docs/alerts/prometheus/probes) for additional health checks
+- Use [PromQL Playground](/docs/alerts/prometheus/promql-playground) to query target metrics
+- Configure [Alert Routing](/docs/alerts/alerts-routing) for notifications
+
+## Learn More
+
+- [Prometheus Monitoring Best Practices](https://prometheus.io/docs/practices/naming/)
+- [Kubernetes Service Discovery](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#kubernetes_sd_config)
+- [Troubleshooting Prometheus](https://prometheus.io/docs/prometheus/latest/troubleshooting/)

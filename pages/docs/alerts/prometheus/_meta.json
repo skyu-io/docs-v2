@@ -1,5 +1,6 @@
 {
   "rules": "Rules",
   "probes": "Probes",
-  "promql-playground": "PromQL Playground"
+  "promql-playground": "PromQL Playground",
+  "scrape-uptime": "Scrape Uptime"
 }
