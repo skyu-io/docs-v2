@@ -1,0 +1,104 @@
+---
+title: Create an Incoming Webhook on Microsoft Teams
+---
+
+import Image from "../../../../components/Image";
+import { Callout } from "nextra/components";
+import { Steps } from 'nextra/components'
+
+# Create an Incoming Webhook on Microsoft Teams
+
+Incoming Webhooks allow you to send messages from external systems directly into a Microsoft Teams channel. This guide will walk you through every step, from setting up your Teams channel to configuring your webhook and adding it to the SkyU console.
+
+---
+
+# Steps to Create an Incoming Webhook
+
+<Steps>
+
+### Create or Select a Channel for Alerts
+
+1. Open Microsoft Teams.
+2. Navigate to the team where you want to receive alerts.
+3. Either select an existing channel or create a new one:
+   - Click the **···** (More options) next to the team name.
+   - Select **Add channel**.
+   - Give your channel a descriptive name (e.g., `alerts` or `skyu-notifications`).
+   - Set the privacy level as needed (Standard or Private).
+   - Click **Add**.
+
+<Callout type="info">
+Creating a dedicated channel for alerts helps keep your notifications organized and separate from regular team conversations.
+</Callout>
+
+---
+
+### Access Channel Settings
+
+1. Navigate to the channel where you want to receive alerts.
+2. Click the **···** (More options) next to the channel name.
+3. Select **Connectors** (in older Teams) or **Manage channel** → **Connectors** (in newer Teams).
+
+<Callout type="warning">
+If you don't see the Connectors option, you may need to use the **Workflows** feature instead (see note below for New Teams).
+</Callout>
+
+---
+
+### Add Incoming Webhook Connector
+
+#### For Classic Teams:
+
+1. In the Connectors page, search for **Incoming Webhook**.
+2. Click **Add** or **Configure** next to Incoming Webhook.
+3. Provide a name for your webhook (e.g., `SkyU Alerts`).
+4. Optionally, upload a custom image to identify the webhook.
+5. Click **Create**.
+6. Copy the webhook URL that appears. It will look like:  
+   `https://your-org.webhook.office.com/webhookb2/...`
+7. Click **Done**.
+
+#### For New Teams (Workflows):
+
+1. Click the **···** (More options) next to the channel name.
+2. Select **Workflows**.
+3. Search for **Post to a channel when a webhook request is received**.
+4. Click on the workflow and select **Add workflow**.
+5. Choose the team and channel where you want to post messages.
+6. Click **Add workflow**.
+7. Copy the webhook URL provided. It will look like:  
+   `https://prod-xx.region.logic.azure.com:443/workflows/...`
+8. Click **Done**.
+
+<Callout type="info">
+Microsoft is transitioning from the classic Incoming Webhook connector to the Workflows feature in New Teams. Both methods work with SkyU.
+</Callout>
+
+---
+
+### Copy and Secure the Webhook URL
+
+1. The webhook URL will look similar to:  
+   `https://your-org.webhook.office.com/webhookb2/GUID@GUID/IncomingWebhook/HASH/GUID`
+2. Copy this URL and store it securely.
+
+<Callout type="warning">
+Keep this URL secure. Anyone with this link can post messages to your Teams channel.
+</Callout>
+
+---
+
+### Test the Webhook (Optional)
+
+You can test the webhook using a simple curl command:
+
+```bash
+curl -H "Content-Type: application/json" -d '{"text": "Hello from SkyU!"}' YOUR_WEBHOOK_URL
+```
+
+If successful, you should see a message appear in your Teams channel.
+
+---
+
+**Congratulations!** You've successfully set up an Incoming Webhook for Microsoft Teams. Your alerts will now flow directly into your chosen channel, keeping your team informed and responsive. Great job!
+</Steps>

@@ -1,0 +1,134 @@
+import { Steps, Callout } from "nextra/components";
+
+# Target Groups
+
+Target Groups define the notification destinations for your alerts. Each target group is a reusable collection of communication channels and email recipients that receive alert notifications when routing rules match.
+
+## Overview
+
+Target groups serve as the final destination in SkyU's alerting pipeline. They contain:
+
+- **Communication Channels**: Slack, Microsoft Teams, or Google Chat webhooks
+- **Email Recipients**: Individual email addresses for direct notifications
+
+A single target group can be referenced by multiple alert routing rules, allowing you to manage notification destinations centrally without duplication.
+
+## How Target Groups Work
+
+Target groups integrate with the alerting flow:
+
+1. **Prometheus Alert Fires**: An alert rule in Prometheus triggers and sends the alert to SkyU
+2. **Alert Routing Matches**: SkyU's alerting service evaluates the alert's labels against your routing rules
+3. **Target Group Selection**: Matching routing rules identify which target groups should receive the alert
+4. **Notification Delivery**: All channels and email recipients in the selected target groups receive notifications
+
+### Benefits of Target Groups
+
+- **Centralized Management**: Update notification destinations in one place
+- **Reusability**: Use the same target group across multiple routing rules
+- **Flexibility**: Mix and match channels (Slack + email, Teams only, etc.)
+- **Team Organization**: Create target groups per team, severity level, or service
+
+## Accessing Target Groups
+
+To access the Target Groups section:
+
+1. Open the **SkyU Console**
+2. Select your **Organization** from the top navigation
+3. Select your **Project** 
+4. Click on **Alerts** in the left-hand sidebar
+5. Click on the **Target Groups** tab
+
+You'll see a list of all configured target groups with their channels and email recipients.
+
+## Managing Target Groups
+
+### View Target Groups
+
+The Target Groups page displays all your configured target groups, showing:
+- Group name
+- Configured channel (Slack, MS Teams, or Google Chat)
+- Webhook URL (masked for security)
+- Email recipients (if configured)
+### Create a Target Group
+
+To create a new target group:
+
+1. Click the **+ Target Group** button
+2. Choose your notification channel (Slack, MS Teams, or Google Chat)
+3. Configure the channel-specific settings
+4. Optionally add email recipients
+5. Click **Save**
+
+<Steps>
+
+#### Slack Configuration
+
+To configure a Slack target group, provide the following:
+
+| Field                    | Description                                                                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Group Name               | A descriptive name for this target group (e.g., "Backend Team", "Critical Alerts", "Production Ops")                                                                                 |
+| Alert Channel            | Select **Slack**                                                                                                                        |
+| Slack Webhook URL        | Your Slack incoming webhook URL. See [Slack Webhook Setup](/docs/alerts/webhook-setup/slack) for instructions |
+| Email Recipients (Optional) | Additional email addresses to receive notifications alongside the Slack channel                                                   |
+
+Click **Save** to create the target group.
+
+#### Microsoft Teams Configuration
+
+To configure a Microsoft Teams target group, provide the following:
+
+| Field                    | Description                                                                                                                                                                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Group Name               | A descriptive name for this target group (e.g., "DevOps Team", "High Priority", "Platform Alerts")                                                                                                                                                                                           |
+| Alert Channel            | Select **Microsoft Teams**                                                                                                                                                                                                                        |
+| MS Teams Webhook URL     | Your Microsoft Teams incoming webhook URL. See [MS Teams Webhook Setup](/docs/alerts/webhook-setup/ms-teams) for instructions |
+| Email Recipients (Optional) | Additional email addresses to receive notifications alongside the Teams channel                                                                                                                                                             |
+
+Click **Save** to create the target group.
+
+#### Google Chat Configuration
+
+To configure a Google Chat target group, provide the following:
+
+| Field                    | Description                                                                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Group Name               | A descriptive name for this target group (e.g., "SRE Team", "Incident Response", "Monitoring Alerts")                                                                                                  |
+| Alert Channel            | Select **Google Chat**                                                                                                                                   |
+| Google Chat Webhook URL  | Your Google Chat space webhook URL. See [Google Chat Webhook Setup](/docs/alerts/webhook-setup/google-chat) for instructions |
+| Email Recipients (Optional) | Additional email addresses to receive notifications alongside the Google Chat space                                                                    |
+
+Click **Save** to create the target group.
+
+</Steps>
+
+### Edit a Target Group
+
+To modify an existing target group:
+
+1. Locate the target group in the list
+2. Click the **Edit** icon
+3. Update the configuration (webhook URL, email recipients, etc.)
+4. Click **Save** to apply changes
+
+### Delete a Target Group
+
+To remove a target group:
+
+1. Locate the target group in the list
+2. Click the **Delete** icon
+3. Confirm the deletion in the dialog
+4. Click **Delete** to permanently remove it
+
+<Callout type="warning">
+**Note**: You cannot delete a target group that is currently referenced by active alert routing rules. Remove the target group from all routing rules first.
+</Callout>
+
+## Best Practices
+
+- **Descriptive Names**: Use clear names that indicate the team or purpose (e.g., "Backend-Critical", "Frontend-Team", "Security-Alerts")
+- **Organize by Team**: Create target groups aligned with your team structure
+- **Separate by Severity**: Consider different target groups for critical vs. warning alerts
+- **Test Webhooks**: Verify webhook URLs work before creating target groups
+- **Document Recipients**: Keep track of who should be in each target group

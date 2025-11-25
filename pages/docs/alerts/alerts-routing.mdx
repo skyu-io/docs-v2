@@ -1,0 +1,229 @@
+import { Callout } from "nextra/components";
+
+# Alerts Routing
+
+Alerts Routing controls how alerts are directed to specific target groups based on label matching. This intelligent routing ensures the right teams receive relevant alerts, enabling faster incident response and reducing notification noise.
+
+## Overview
+
+Alert routing rules act as a decision layer between Prometheus alerts and your notification channels. Each routing rule:
+
+- **Matches alerts** based on label selectors (e.g., `severity: critical`, `team: backend`)
+- **Routes to target groups** that contain your notification channels
+- **Can be enabled/disabled** without deleting the configuration
+- **Controls repeat notifications** for recurring alerts
+
+## How Alerts Routing Works
+
+The complete alerting flow from Prometheus to notification delivery:
+
+1. **Prometheus Fires Alert**: An alert rule in Prometheus triggers based on metrics and sends the alert to SkyU with labels and annotations
+2. **SkyU Receives Alert**: The alerting service receives the alert with all its metadata (labels, severity, annotations)
+3. **Label Matching**: SkyU evaluates each routing rule to find matches based on the alert's labels
+4. **Target Group Selection**: Matching routing rules identify which target groups should receive the alert
+5. **Notification Delivery**: All channels (Slack, MS Teams, Google Chat) and email recipients in the selected target groups receive notifications
+
+### Key Benefits
+
+- **Separation of Concerns**: Define alerts in Prometheus, manage routing in SkyU
+- **Flexible Routing**: Change notification destinations without modifying Prometheus rules
+- **Label-Based Logic**: Route alerts based on any label (severity, team, environment, service)
+- **Multi-Target Support**: Send the same alert to multiple target groups
+- **Centralized Control**: Manage all routing logic in one place
+
+## Accessing Alerts Routing
+
+To access the Alerts Routing section:
+
+1. Open the **SkyU Console**
+2. Select your **Organization** from the top navigation
+3. Select your **Project**
+4. Click on **Alerts** in the left-hand sidebar
+5. Click on the **Alerts Routing** tab
+
+You'll see a list of all configured routing rules with their label matchers, target groups, and status.
+
+## Managing Alert Routes
+
+### View Alert Routes
+
+The Alerts Routing page displays all your configured routing rules, showing:
+- Label matchers (e.g., `severity: critical`)
+- Target groups assigned to the rule
+- Repeat alerts setting (enabled/disabled)
+- Rule status (enabled/disabled)
+- Additional email recipients (if configured)
+
+## Understanding Routing Rules
+
+Each alert routing rule consists of several components:
+
+### Label Matchers
+
+Labels are key-value pairs that identify and categorize alerts. Routing rules use label matchers to determine which alerts to route.
+
+**Common Label Examples:**
+- `severity: critical` - Match critical alerts
+- `team: backend` - Match alerts for the backend team
+- `service: api` - Match alerts from the API service
+- `environment: production` - Match production environment alerts
+
+<Callout type="info">
+**Available Labels for Routing:**
+
+In addition to labels defined in your Prometheus alert rules, you can also use:
+- `environment`: Environment name (e.g., `prod`, `staging`, `dev`) - automatically added by SkyU
+- `alertname`: The name of the alert from Prometheus
+- Any custom labels you've defined in your Prometheus rules
+</Callout>
+
+**Label Matching Logic:**
+- All labels in a routing rule must match for the rule to trigger
+- If you specify `severity: critical` and `team: backend`, both must match
+- Empty label matchers will match all alerts (use with caution)
+
+### Target Groups
+
+Select one or more target groups to receive notifications when alerts match. Each target group contains:
+- Communication channels (Slack, MS Teams, or Google Chat)
+- Email recipients
+
+You can select multiple target groups to send the same alert to different teams or channels.
+
+### Repeat Alerts
+
+Controls whether repeated alerts trigger new notifications:
+
+- **Enabled**: Send notifications every time the alert repeats (useful for ongoing issues)
+- **Disabled**: Only send notification when the alert first fires (reduces noise for known issues)
+
+Prometheus typically repeats alerts every 12 hours by default (configurable in Alertmanager).
+
+### Enable/Disable Toggle
+
+Temporarily enable or disable a routing rule without deleting it:
+
+- **Enabled**: Alerts matching this rule will be routed to target groups
+- **Disabled**: Alerts matching this rule will be ignored (useful during maintenance)
+
+### Additional Email Recipients
+
+Specify extra email addresses to receive notifications in addition to the target groups. Useful for:
+- Escalation contacts
+- Management visibility
+- External stakeholders
+
+### Create an Alert Route
+
+To create a new alert routing rule:
+
+1. Click the **+ Route** button
+2. Configure the label matchers
+3. Select target groups
+4. Set repeat alert preferences
+5. Optionally add email recipients
+6. Click **Save**
+
+
+| Field                    | Description                                                                         |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| Labels                   | Key-value pairs to match alerts (e.g., `severity: critical`, `team: backend`)                                |
+| Target Groups            | One or more target groups to receive notifications                                                 |
+| Repeat Alerts            | Enable to receive notifications for repeated alerts                            |
+| Enable/Disable           | Toggle to activate or deactivate this routing rule                                         |
+| Email Recipients (Optional) | Additional email addresses to notify beyond target groups |
+
+Click **Save** to create the routing rule.
+
+## Routing Examples
+
+Here are common routing patterns:
+
+### Example 1: Route Critical Alerts to On-Call Team
+
+```
+Labels: severity=critical
+Target Groups: [On-Call Team]
+Repeat Alerts: Enabled
+```
+
+This routes all critical alerts to the on-call team with repeat notifications.
+
+### Example 2: Route Backend Alerts to Backend Team
+
+```
+Labels: team=backend
+Target Groups: [Backend Team Slack]
+Repeat Alerts: Disabled
+```
+
+This routes backend team alerts to their Slack channel, notifying only on first occurrence.
+
+### Example 3: Route Production Critical Alerts to Multiple Teams
+
+```
+Labels: severity=critical, environment=production
+Target Groups: [On-Call Team, Management, SRE Team]
+Repeat Alerts: Enabled
+Email Recipients: cto@company.com
+```
+
+This routes production critical alerts to multiple teams and an executive email.
+
+### Example 4: Route Specific Service Alerts
+
+```
+Labels: service=payment-api, severity=warning
+Target Groups: [Payment Team]
+Repeat Alerts: Disabled
+```
+
+This routes payment API warnings to the payment team without repeats.
+
+### Edit an Alert Route
+
+To modify an existing alert routing rule:
+
+1. Locate the routing rule in the list
+2. Click the **three dots** (⋯) menu
+3. Select **Edit**
+4. Update the configuration
+5. Click **Save** to apply changes
+
+### Delete an Alert Route
+
+To remove an alert routing rule:
+
+1. Locate the routing rule in the list
+2. Click the **three dots** (⋯) menu
+3. Select **Delete**
+4. Confirm the deletion
+5. Click **Delete** to permanently remove it
+
+## Best Practices
+
+### Routing Strategy
+
+- **Start Specific, Then General**: Create specific rules first (e.g., `severity=critical, team=backend`), then broader rules
+- **Avoid Overlapping Rules**: Be careful with rules that might match the same alerts to prevent duplicate notifications
+- **Use Descriptive Labels**: Ensure your Prometheus rules have clear, consistent labels
+- **Test New Rules**: Create rules in disabled state, then enable after verification
+
+### Label Organization
+
+- **Standardize Labels**: Use consistent label names across all Prometheus rules (e.g., always `team`, not sometimes `squad`)
+- **Document Label Schema**: Maintain documentation of available labels and their values
+- **Use Hierarchical Labels**: Consider labels like `severity`, `priority`, `environment` for flexible routing
+
+### Target Group Assignment
+
+- **Match Severity to Teams**: Route critical alerts to on-call, warnings to team channels
+- **Consider Time Zones**: For global teams, route to appropriate regional target groups
+- **Escalation Paths**: Use multiple target groups for escalation (team + management)
+
+### Maintenance
+
+- **Regular Review**: Periodically review routing rules to ensure they're still relevant
+- **Clean Up Unused Rules**: Delete or disable rules that are no longer needed
+- **Monitor Alert Volume**: Watch for rules generating too many notifications
+- **Update Target Groups**: Keep target group membership current as teams change

@@ -7,6 +7,17 @@ Alert rules are designed to monitor specific conditions within your system, such
 
 In this section, you can create Prometheus Rules to define custom alerting conditions suited to your needs, giving you greater control over how your environment is monitored and how critical events are communicated.
 
+## How It Works
+
+The SkyU alerting system integrates with Prometheus to provide a complete monitoring and notification pipeline:
+
+1. **Prometheus Monitoring**: Prometheus continuously evaluates the alert rules you define against your cluster metrics
+2. **Alert Triggering**: When a rule condition is met, Prometheus fires an alert and pushes it to SkyU's alerting service
+3. **Alert Routing**: SkyU's alerting service receives the alert and routes it to the appropriate target groups based on your configured alert routing rules (matching labels, severity, etc.)
+4. **Notification Delivery**: The alert is delivered to your configured channels (Slack, MS Teams, Google Chat) and email recipients
+
+This architecture separates alert definition (Prometheus rules) from alert routing (SkyU alert routes), giving you flexibility in how alerts are monitored and where they are delivered.
+
 ### View Alert Rules
 
 Navigate to the `Alerts` section in the SkyU Console on the left-hand side menu. Navigate to `Rules` in the Kubernetes section to view all existing alert rules.
