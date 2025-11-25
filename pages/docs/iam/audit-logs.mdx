@@ -1,0 +1,125 @@
+import { Steps, Callout } from 'nextra/components'
+import Image from '../../../components/Image'
+
+# Audit Logs
+
+Audit Logs provide a comprehensive record of all user actions and API requests within your SkyU platform. This feature enables security monitoring, compliance tracking, and troubleshooting by capturing detailed information about who did what, when, and whether the action was authorized.
+
+<Callout type="info">
+Audit logs are automatically updated every 6 hours. Recent activity may take up to 6 hours to appear in the logs.
+</Callout>
+
+## Accessing Audit Logs
+
+Navigate to **Organization Settings** → **Security** → **Audit Logs** to view all recorded activities within your organization.
+
+## Understanding Audit Log Entries
+
+Each audit log entry shows:
+
+| Field               | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| Timestamp           | Exact date and time of the action                                    |
+| Method              | Type of request (GET, POST, PUT, PATCH, DELETE)                      |
+| Path                | The specific API endpoint that was accessed                          |
+| Service             | Which SkyU service handled the request                               |
+| Status              | Whether the action was Authorized or Unauthorized                    |
+| User                | The user who performed the action                                    |
+
+### Viewing Detailed Information
+
+Click on any log entry to expand it and view additional details:
+
+| Field                    | Description                                                          |
+| ------------------------ | -------------------------------------------------------------------- |
+| Trace ID                 | Unique identifier for tracking the request                           |
+| Organization & Project   | Context where the action occurred                                    |
+| Authorization Details    | Information about the access control decision                        |
+
+## Filtering Audit Logs
+
+### Basic Filters
+
+| Filter               | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| Search               | Enter keywords to search across API paths and trace IDs              |
+| Date Range           | Select a specific time period using the date picker                  |
+
+### Advanced Filters
+
+Click **Show Advanced Filters** to access additional filtering options:
+
+| Filter               | Options                                                              |
+| -------------------- | -------------------------------------------------------------------- |
+| Method               | GET, POST, PUT, PATCH, DELETE                                        |
+| Status               | Authorized, Unauthorized                                             |
+| Service              | Auth Service, Resource Service, Cluster Service, Credential Service, File Service |
+| User                 | Select from the dropdown list of users in your organization          |
+
+ 
+
+## Use Cases
+
+### Security Monitoring
+
+**Track Unauthorized Access**
+- Filter by Status: "Unauthorized" to see failed access attempts
+- Monitor for suspicious patterns or repeated failures
+- Identify potential security threats
+
+<Callout type="info">
+Regularly review unauthorized access attempts to identify potential security issues early.
+</Callout>
+
+**Monitor User Activity**
+- Filter by specific users to review their actions
+- Verify compliance with access policies
+- Investigate unusual behavior
+
+### Compliance & Auditing
+
+**Generate Audit Reports**
+- Use date range filters to export logs for specific time periods
+- Review all actions for compliance verification
+- Provide audit trails for regulatory requirements
+
+<Callout type="info">
+Audit logs can help demonstrate compliance with GDPR, HIPAA, SOC 2, and other regulatory frameworks.
+</Callout>
+
+**Track Data Access**
+- Monitor who accessed sensitive resources
+- Demonstrate compliance with data protection regulations
+- Maintain records for external audits
+
+### Troubleshooting
+
+**Debug Issues**
+- Use the Trace ID to track specific requests across services
+- Filter by Method and Path to find failed operations
+- Identify patterns in error occurrences
+
+**Analyze User Problems**
+- Filter by user to see their recent activity
+- Identify where authorization failures occur
+- Help users resolve access issues
+
+## Best Practices
+
+### Regular Monitoring
+
+- Review audit logs periodically for unusual activity
+- Set up a routine to check for unauthorized access attempts
+- Monitor high-privilege user actions
+
+### Effective Filtering
+
+- Use date ranges to focus on recent activity
+- Combine multiple filters for precise results
+- Start with broad searches, then narrow down
+
+<Callout type="tip">
+Combine filters for better results. For example: specific user + date range + service to find exactly what you're looking for.
+</Callout>
+ 
+ 
