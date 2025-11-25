@@ -1,4 +1,5 @@
 {
   "rules": "Rules",
-  "probes": "Probes"
+  "probes": "Probes",
+  "promql-playground": "PromQL Playground"
 }

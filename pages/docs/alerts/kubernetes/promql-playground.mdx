@@ -1,0 +1,247 @@
+---
+title: PromQL Playground
+description: Interactive PromQL query interface for exploring Prometheus metrics
+---
+
+# PromQL Playground
+
+The PromQL Playground provides an interactive interface to query and explore Prometheus metrics from your Kubernetes clusters. It allows you to write, test, and execute PromQL (Prometheus Query Language) queries in real-time.
+
+## Overview
+
+The PromQL Playground is designed to help you:
+- Explore available metrics in your clusters
+- Test and validate PromQL queries before creating alert rules
+- Debug metric collection and labeling
+- Learn PromQL syntax with immediate feedback
+
+## Getting Started
+
+### Accessing the Playground
+
+1. Navigate to **Alerts** in the main menu
+2. Select **PromQL Playground** from the Kubernetes section
+3. Choose a cluster from the dropdown
+
+### Basic Usage
+
+1. **Select a Cluster**: Choose the Kubernetes cluster you want to query
+2. **Write Your Query**: Enter a PromQL expression in the query input
+3. **Execute**: Click "Execute Query" or press `Cmd/Ctrl + Enter`
+4. **View Results**: Results are displayed in a table format with metric names, labels, and values
+
+## Sample Queries
+
+### Basic Queries
+
+#### Check Pod Status
+```promql
+up
+```
+Returns the up/down status (1/0) of all monitored targets.
+
+#### CPU Usage by Pod
+```promql
+container_cpu_usage_seconds_total
+```
+Shows cumulative CPU time consumed by containers.
+
+#### Memory Usage
+```promql
+container_memory_usage_bytes
+```
+Displays current memory usage in bytes for all containers.
+
+### Filtering Queries
+
+#### Metrics for Specific Namespace
+```promql
+up{namespace="kube-system"}
+```
+Returns metrics only for pods in the `kube-system` namespace.
+
+#### Metrics for Specific Pod
+```promql
+container_cpu_usage_seconds_total{pod="my-app-pod"}
+```
+Shows CPU usage for a specific pod.
+
+#### Multiple Label Filters
+```promql
+container_memory_usage_bytes{namespace="production",container="app"}
+```
+Filters by multiple labels simultaneously.
+
+### Aggregation Queries
+
+#### Total CPU Usage per Namespace
+```promql
+sum by (namespace) (rate(container_cpu_usage_seconds_total[5m]))
+```
+Aggregates CPU usage rate over 5 minutes, grouped by namespace.
+
+#### Average Memory Usage
+```promql
+avg(container_memory_usage_bytes) by (namespace)
+```
+Calculates average memory usage per namespace.
+
+#### Pod Count per Namespace
+```promql
+count(kube_pod_info) by (namespace)
+```
+Counts the number of pods in each namespace.
+
+### Rate and Increase Queries
+
+#### HTTP Request Rate
+```promql
+rate(http_requests_total[5m])
+```
+Calculates the per-second rate of HTTP requests over the last 5 minutes.
+
+#### Network Traffic Rate
+```promql
+rate(container_network_receive_bytes_total[1m])
+```
+Shows the rate of network bytes received per second.
+
+#### Disk I/O Operations
+```promql
+rate(container_fs_writes_total[5m])
+```
+Displays the rate of filesystem write operations.
+
+### Advanced Queries
+
+#### CPU Usage Percentage
+```promql
+100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])))
+```
+Calculates CPU usage as a percentage.
+
+#### Memory Usage Percentage
+```promql
+100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))
+```
+Shows memory usage as a percentage of total memory.
+
+#### Top 5 Pods by CPU Usage
+```promql
+topk(5, sum by (pod) (rate(container_cpu_usage_seconds_total[5m])))
+```
+Returns the top 5 pods with highest CPU usage.
+
+#### Pods with High Memory Usage
+```promql
+container_memory_usage_bytes > 1000000000
+```
+Lists containers using more than 1GB of memory.
+
+## Helper Labels
+
+The playground provides quick access to common label values through the **Helper Labels** drawer:
+
+- **Organization ID**: Your organization identifier
+- **Project ID**: Current project identifier  
+- **Environment IDs**: All environment identifiers in your project
+
+These can be used in your queries for filtering:
+
+```promql
+up{organization_id="<your-org-id>"}
+```
+
+## Query Tips
+
+### Time Ranges
+
+Use square brackets to specify time ranges:
+- `[5m]` - Last 5 minutes
+- `[1h]` - Last 1 hour
+- `[1d]` - Last 1 day
+
+### Functions
+
+Common PromQL functions:
+- `rate()` - Calculate per-second rate
+- `increase()` - Calculate increase over time range
+- `sum()` - Sum values
+- `avg()` - Average values
+- `max()` / `min()` - Maximum/minimum values
+- `count()` - Count number of time series
+- `topk()` / `bottomk()` - Top/bottom K values
+
+### Operators
+
+- Arithmetic: `+`, `-`, `*`, `/`, `%`, `^`
+- Comparison: `==`, `!=`, `>`, `<`, `>=`, `<=`
+- Logical: `and`, `or`, `unless`
+
+## Best Practices
+
+1. **Start Simple**: Begin with basic metric queries and add filters gradually
+2. **Use Time Ranges**: Always specify appropriate time ranges for rate/increase functions
+3. **Filter Early**: Apply label filters to reduce the data set before aggregation
+4. **Test Before Alerting**: Validate queries in the playground before creating alert rules
+5. **Monitor Performance**: Complex queries may take longer to execute
+
+## Common Use Cases
+
+### Debugging Application Issues
+
+```promql
+# Check if pods are running
+up{namespace="my-app"}
+
+# View recent error logs count
+sum(rate(log_messages_total{level="error"}[5m])) by (pod)
+```
+
+### Capacity Planning
+
+```promql
+# Current resource usage
+sum(container_memory_usage_bytes{namespace="production"}) / 1024 / 1024 / 1024
+
+# Trend over time
+avg_over_time(container_cpu_usage_seconds_total[1h])
+```
+
+### Performance Monitoring
+
+```promql
+# Request latency
+histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))
+
+# Error rate
+rate(http_requests_total{status=~"5.."}[5m])
+```
+
+## Troubleshooting
+
+### No Results Returned
+
+- Verify the cluster is connected and metrics are being collected
+- Check that the metric name is spelled correctly
+- Ensure label filters match existing labels
+- Try a simpler query without filters first
+
+### Query Timeout
+
+- Reduce the time range
+- Add more specific label filters
+- Simplify aggregations
+- Consider breaking complex queries into smaller parts
+
+## Next Steps
+
+- Use validated queries to create [Alert Rules](/docs/alerts/kubernetes/rules)
+- Set up [Probes](/docs/alerts/kubernetes/probes) for health checks
+- Configure [Alert Routing](/docs/alerts/features/system-alert) for notifications
+
+## Learn More
+
+- [Prometheus Query Language Documentation](https://prometheus.io/docs/prometheus/latest/querying/basics/)
+- [PromQL Examples](https://prometheus.io/docs/prometheus/latest/querying/examples/)
+- [Best Practices for PromQL](https://prometheus.io/docs/practices/naming/)
