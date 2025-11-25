@@ -1,0 +1,101 @@
+---
+title: Create an Incoming Webhook on Google Chat
+---
+
+import Image from "../../../../components/Image";
+import { Callout } from "nextra/components";
+import { Steps } from 'nextra/components'
+
+# Create an Incoming Webhook on Google Chat
+
+Incoming Webhooks allow you to send messages from external systems directly into a Google Chat space. This guide will walk you through every step, from setting up your Chat space to configuring your webhook and adding it to the SkyU console.
+
+---
+
+# Steps to Create an Incoming Webhook
+
+<Steps>
+
+### Create or Select a Space for Alerts
+
+1. Open Google Chat (chat.google.com or via Gmail).
+2. Either select an existing space or create a new one:
+   - Click the **+** button next to **Spaces**.
+   - Select **Create space**.
+   - Give your space a descriptive name (e.g., `SkyU Alerts` or `Infrastructure Notifications`).
+   - Add members if needed (optional for webhook-only spaces).
+   - Click **Create**.
+
+<Callout type="info">
+Creating a dedicated space for alerts helps keep your notifications organized and separate from regular conversations.
+</Callout>
+
+---
+
+### Access Space Settings
+
+1. Navigate to the space where you want to receive alerts.
+2. Click the space name at the top to open the space menu.
+3. Select **Apps & integrations** from the dropdown menu.
+
+---
+
+### Create a Webhook
+
+1. In the **Apps & integrations** page, look for the **Webhooks** section.
+2. Click **Add webhooks** or **Manage webhooks**.
+3. Click **+ Add another** or **Create webhook**.
+4. Provide the following details:
+   - **Name:** Give your webhook a descriptive name (e.g., `SkyU Alerts`).
+   - **Avatar URL (Optional):** You can provide a URL to a custom image to identify the webhook.
+5. Click **Save**.
+
+---
+
+### Copy the Webhook URL
+
+1. After creating the webhook, you'll see the webhook URL displayed.
+2. The webhook URL will look like:  
+   `https://chat.googleapis.com/v1/spaces/SPACE_ID/messages?key=KEY&token=TOKEN`
+3. Click **Copy** to copy the URL to your clipboard.
+
+<Callout type="warning">
+Keep this URL secure. Anyone with this link can post messages to your Google Chat space.
+</Callout>
+
+---
+
+### Test the Webhook (Optional)
+
+You can test the webhook using a simple curl command:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"text": "Hello from SkyU!"}' \
+  YOUR_WEBHOOK_URL
+```
+
+If successful, you should see a message appear in your Google Chat space.
+
+---
+
+### Managing Webhooks
+
+To view, edit, or delete webhooks:
+
+1. Go to the space and click the space name.
+2. Select **Apps & integrations**.
+3. In the **Webhooks** section, you can:
+   - View all configured webhooks
+   - Edit webhook names or avatars
+   - Delete webhooks you no longer need
+   - Copy webhook URLs
+
+<Callout type="info">
+You can create multiple webhooks for the same space if you need different integrations or want to organize alerts by source.
+</Callout>
+
+---
+
+**Congratulations!** You've successfully set up an Incoming Webhook for Google Chat. Your alerts will now flow directly into your chosen space, keeping your team informed and responsive. Great job!
+</Steps>

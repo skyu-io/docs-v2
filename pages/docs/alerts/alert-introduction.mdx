@@ -3,11 +3,22 @@ import Image from "../../../components/Image";
 
 # Alerts
 
-The alerting feature within SkyU is designed to provide real-time notifications for a variety of system events, ensuring prompt awareness and enabling proactive management of your infrastructure and services. This helps teams stay informed about including critical issues, performance metrics, system health, and operational updates. Additionally, alerts are sent to the configured notification channels, ensuring that the right people are notified at the right time.
+The alerting feature within SkyU is designed to provide real-time notifications for a variety of system events, ensuring prompt awareness and enabling proactive management of your infrastructure and services. This helps teams stay informed about critical issues, performance metrics, system health, and operational updates.
 
-SkyU supports multiple alert sources to cover various monitoring needs: `Prometheus`, `SkyU Alerts`, and `Third-party Alerts`. Each source is tailored to different use cases, allowing you to customize the alerting flow according to your operational needs.
+## How SkyU Alerting Works
+
+SkyU's alerting system acts as a centralized routing layer that receives alerts from various sources and delivers them to your configured notification channels:
+
+1. **Alert Sources**: Alerts are generated from Prometheus (based on your alert rules), SkyU system events, or third-party services
+2. **Alert Ingestion**: When an alert fires, it is pushed to SkyU's alerting service with labels and annotations
+3. **Alert Routing**: The alerting service matches the alert's labels against your configured routing rules
+4. **Notification Delivery**: Matched alerts are routed to the appropriate target groups, which deliver notifications to Slack, MS Teams, Google Chat, or email recipients
+
+This architecture separates alert generation from alert routing, giving you flexibility to change notification destinations without modifying your monitoring rules.
 
 ## Sources of Alerts
+
+SkyU supports multiple alert sources to cover various monitoring needs: `Prometheus`, `SkyU Alerts`, and `Third-party Alerts`. Each source is tailored to different use cases, allowing you to customize the alerting flow according to your operational needs.
 
 ### Prometheus
 

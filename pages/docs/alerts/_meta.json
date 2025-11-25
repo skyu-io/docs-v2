@@ -1,5 +1,7 @@
 {
   "alert-introduction": "Introduction",
-  "features": "Features",
-  "kubernetes": "Kubernetes"
+  "target-groups": "Target Groups",
+  "alerts-routing": "Alerts Routing",
+  "webhook-setup": "Webhook Setup",
+  "prometheus": "Prometheus"
 }
