@@ -1,4 +1,5 @@
 {
+  "sentry": "Sentry",
   "github-configuration": "Github",
   "bitbucket-configuration": "Bitbucket",
   "update-tokens": { "title": "Update PAT Token/App Password" },

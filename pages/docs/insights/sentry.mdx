@@ -1,0 +1,236 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+
+# Sentry Insights
+
+Sentry Insights provides comprehensive performance monitoring for your applications, helping you identify and resolve performance bottlenecks in both API endpoints and page loads.
+
+## Overview
+
+SkyU's Sentry integration offers real-time performance metrics powered by Sentry's monitoring capabilities. The Insights dashboard gives you visibility into:
+
+- API endpoint response times
+- Page load performance
+- Performance trends over time
+- Environment-specific metrics
+
+<Callout type="info">
+Before using Sentry Insights, ensure you have [configured your Sentry integration](/docs/integrations/sentry) in your project settings.
+</Callout>
+
+## Performance Metrics
+
+### API Calls
+
+Monitor your backend API performance with detailed metrics:
+
+| Metric | Description | Use Case |
+|--------|-------------|----------|
+| **P50 (ms)** | Median response time | Understand typical user experience |
+| **P95 (ms)** | 95th percentile response time | Identify worst-case performance |
+| **Endpoint URL** | API endpoint path | Track specific endpoints |
+
+### Page Loads
+
+Track frontend performance for your web applications:
+
+| Metric | Description | Use Case |
+|--------|-------------|----------|
+| **P50 (ms)** | Median page load time | Measure typical page performance |
+| **P95 (ms)** | 95th percentile load time | Catch slow page loads |
+| **Page Route** | Frontend route path | Monitor specific pages |
+
+## Using Filters
+
+### Sentry Projects
+
+Select one or multiple Sentry projects to focus your analysis:
+
+- View performance across all projects
+- Compare metrics between different applications
+- Isolate issues to specific projects
+
+### Environments
+
+Filter by environment to analyze performance in different contexts:
+
+- **Production**: Monitor real user performance
+- **Staging**: Validate changes before deployment
+- **Development**: Track performance during development
+
+### Stats Period
+
+Choose the time range for your analysis:
+
+- **24h**: Recent performance trends
+- **7d**: Weekly patterns
+- **14d**: Two-week overview
+- **30d**: Monthly trends
+- **All Time**: Historical data
+
+### P95 Duration Threshold
+
+Filter endpoints or pages by minimum P95 response time:
+
+- Focus on slow endpoints exceeding your performance budget
+- Prioritize optimization efforts
+- Track improvements after optimization
+
+## Interpreting Results
+
+### Understanding Percentiles
+
+<Callout type="warning">
+**Why P95 matters**: While P50 shows the median experience, P95 reveals performance issues affecting 5% of your users. For a high-traffic application, this could represent thousands of users experiencing slow performance.
+</Callout>
+
+**Example**:
+- P50 = 200ms: Half of your requests complete in under 200ms
+- P95 = 1500ms: 5% of requests take longer than 1.5 seconds
+
+### Performance Benchmarks
+
+General guidelines for web performance:
+
+| Response Time | User Experience | Action |
+|---------------|----------------|--------|
+| < 100ms | Instant | Excellent |
+| 100-300ms | Slight delay | Good |
+| 300-1000ms | Noticeable | Acceptable |
+| 1000-3000ms | Slow | Needs improvement |
+| > 3000ms | Very slow | Critical issue |
+
+## Common Use Cases
+
+### 1. Identifying Performance Bottlenecks
+
+<Steps>
+
+### Filter by High P95
+
+Set the P95 duration filter to identify slow endpoints (e.g., > 1000ms)
+
+### Analyze Patterns
+
+Look for common characteristics:
+- Specific endpoints or pages
+- Particular environments
+- Time-based patterns
+
+### Prioritize Fixes
+
+Focus on endpoints with:
+- Highest P95 values
+- Most frequent usage
+- Critical user paths
+
+</Steps>
+
+### 2. Validating Optimizations
+
+<Steps>
+
+### Baseline Measurement
+
+Record P50 and P95 values before optimization
+
+### Deploy Changes
+
+Release your performance improvements to staging or production
+
+### Compare Metrics
+
+Use the same time period and filters to measure improvement
+
+### Monitor Trends
+
+Track metrics over several days to ensure consistent improvement
+
+</Steps>
+
+### 3. Environment Comparison
+
+Compare performance across environments to:
+
+- Validate that staging matches production performance
+- Identify environment-specific issues
+- Ensure optimizations work in all environments
+
+## Best Practices
+
+### Regular Monitoring
+
+- Check Sentry Insights daily for production environments
+- Set up alerts for performance degradation (via Sentry)
+- Review weekly trends to catch gradual performance decline
+
+### Performance Budgets
+
+Establish performance budgets for your application:
+
+```
+API Endpoints:
+- P50 < 200ms
+- P95 < 500ms
+
+Page Loads:
+- P50 < 1000ms
+- P95 < 2000ms
+```
+
+Use the P95 duration filter to quickly identify violations.
+
+### Investigation Workflow
+
+When you identify a slow endpoint:
+
+1. **Check Sentry**: Click through to Sentry for detailed traces
+2. **Review Code**: Examine the endpoint implementation
+3. **Check Dependencies**: Look for slow database queries or external API calls
+4. **Test Locally**: Reproduce the issue in your development environment
+5. **Optimize**: Implement improvements (caching, query optimization, etc.)
+6. **Validate**: Use Sentry Insights to confirm improvement
+
+### Cross-Team Collaboration
+
+Share insights with your team:
+
+- **Developers**: Identify code-level optimizations
+- **DevOps**: Investigate infrastructure issues
+- **Product**: Prioritize performance improvements
+- **QA**: Validate performance in testing
+
+## Troubleshooting
+
+### No Data Showing
+
+If you don't see any data in Sentry Insights:
+
+1. Verify Sentry integration is configured correctly
+2. Ensure your application is sending performance data to Sentry
+3. Check that you've selected the correct Sentry project
+4. Verify the selected time period has data
+
+### Unexpected Performance Metrics
+
+If metrics seem incorrect:
+
+1. Verify you're looking at the correct environment
+2. Check for recent deployments that might affect performance
+3. Review Sentry directly for detailed transaction traces
+4. Ensure your application's Sentry SDK is up to date
+
+### Missing Endpoints or Pages
+
+If expected endpoints don't appear:
+
+1. Ensure Sentry is configured to track performance for those endpoints
+2. Verify the endpoint has received traffic in the selected time period
+3. Check that the P95 duration filter isn't excluding the endpoint
+4. Confirm the endpoint is part of the selected Sentry project
+
+## Related Documentation
+
+- [Sentry Integration Setup](/docs/integrations/sentry)
+- [Sentry Official Documentation](https://docs.sentry.io/)
+- [Performance Monitoring Best Practices](https://docs.sentry.io/product/performance/)
